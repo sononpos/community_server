@@ -18,6 +18,7 @@ var Community = function(key, name, link) {
 var CommunityList = [];
 CommunityList.push(new Community('clien', '클리앙', 'https://communityall.herokuapp.com/clien/1'));
 CommunityList.push(new Community('ruliweb', '루리웹', 'https://communityall.herokuapp.com/ruliweb/1'));
+CommunityList.push(new Community('slr', 'SLR', 'https://communityall.herokuapp.com/slr/1'));
 
 app.get('/', function (req, res) {
   res.send('community!');
@@ -108,6 +109,60 @@ app.get('/ruliweb/:page', function(req, res) {
 
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
     });
+
+    result.push({recent_url:recent_url, next_url:next_url, list:list});
+    res.contentType('application/json');
+    res.send(JSON.stringify(result));
+  });
+});
+
+// SLR 인기글
+app.get('/slr/:page', function(req, res) {
+  var page = req.params.page;
+  var recent_url = null;
+  var next_url = null;
+
+  if(page == 1) {
+    recent_url = "http://www.slrclub.com/bbs/zboard.php?id=hot_article";
+    next_url = "http://www.slrclub.com/bbs/zboard.php?id=hot_article&page=2";
+  } else {
+    recent_url = "http://www.slrclub.com/bbs/zboard.php?id=hot_article&page="+page;
+    next_url = "http://www.slrclub.com/bbs/zboard.php?id=hot_article&page="+(parseInt(page)-1);
+  }
+
+  request(recent_url, function(error, response, body) {
+    var result = [];
+    var list = [];
+    if (error) throw error;
+
+    var $ = cheerio.load(body);
+
+    $("tbody tr").each(function() {
+
+      var title = $(this).find(".sbj a").text().trim();
+      var link = $(this).find(".sbj a").attr("href").trim();
+      var username = $(this).find(".list_name").text().trim();
+      var regdate = $(this).find(".list_date").text().trim();
+      var viewcnt = $(this).find(".list_click").text().trim();
+      var commentcnt = $(this).find(".sbj").text().replace($(this).find(".sbj a").text(), "").trim();
+      commentcnt = commentcnt.replace("[", "");
+      commentcnt = commentcnt.replace("]", "");
+
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    });
+
+    var next_page_num = $(".pageN tr td").find("a").eq(9).text();
+
+    console.log((parseInt(next_page_num)-1));
+
+    if(page == 1) {
+      next_url = "http://www.slrclub.com/bbs/zboard.php?id=hot_article&page="+(parseInt(next_page_num)-1);
+    } else {
+      next_url = "http://www.slrclub.com/bbs/zboard.php?id=hot_article&page="+(parseInt(page)-1);
+    }
+
+    console.log("recent_url : " + recent_url);
+    console.log("next_url : " + next_url);
 
     result.push({recent_url:recent_url, next_url:next_url, list:list});
     res.contentType('application/json');
