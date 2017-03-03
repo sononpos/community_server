@@ -13,18 +13,23 @@ var community = {
   clien : {
     name : "클리앙",
     server_url : "https://communityall.herokuapp.com/clien/1",
-    site_url : "http://www.clien.net/cs2/bbs/board.php?bo_table=park"
+    site_url : "http://www.clien.net/cs2/bbs/board.php?bo_table=park&page="
   },
   ruliweb : {
     name : "루리웹",
     server_url : "https://communityall.herokuapp.com/ruliweb/1",
-    site_url : "http://bbs.ruliweb.com/best"
+    site_url : "http://bbs.ruliweb.com/best&page="
   },
   slr : {
     name : "SLR",
     server_url : "https://communityall.herokuapp.com/slr/1",
-    site_url : "http://www.slrclub.com/bbs/zboard.php?id=hot_article"
-  }
+    site_url : "http://www.slrclub.com/bbs/zboard.php?id=hot_article&page="
+  },
+  bullpen : {
+    name : "불펜",
+    server_url : "https://communityall.herokuapp.com/bullpen/1",
+    site_url : "http://mlbpark.donga.com/mlbpark/b.php?b=bullpen2&p="
+  },
 };
 
 app.get('/', function (req, res) {
@@ -50,25 +55,25 @@ app.get('/:key/:page', function(req, res) {
 
 var getListData = function(key, page, callback) {
 
-  // 페이지가 1로 들어오면 가장 최신리스트를 가져옴
+  // 호출할 커뮤니티 URL
   if(page == 1) {
-    recent_url = community[key].site_url;
+    url = community[key].site_url;
   } else {
-    recent_url = community[key].site_url + "&page="+page;
+    url = community[key].site_url + page;
   }
 
   // URL 호출부
-  request(recent_url, function(error, response, body) {
+  request(url, function(error, response, body) {
     var $ = cheerio.load(body);
 
-    var result = eval(key)($, key, page, recent_url);
+    var result = eval(key)($, key, page, url);
 
     callback(result);
   });
 };
 
 // 클리앙 모두의 공원
-function clien($, key, page, recent_url) {
+function clien($, key, page, url) {
   var result = [];
   var list = [];
 
@@ -84,9 +89,9 @@ function clien($, key, page, recent_url) {
     list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
   });
 
-  var next_url = community[key].site_url + "&page="+(parseInt(page)+1);
+  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
 
-  result.push({recent_url:recent_url, next_url:next_url, list:list});
+  result.push({next_url:next_url, list:list});
 
   return result;
 }
@@ -108,9 +113,9 @@ function ruliweb($, key, page, recent_url) {
     list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
   });
 
-  var next_url = community[key].site_url + "&page="+(parseInt(page)+1);
+  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
 
-  result.push({recent_url:recent_url, next_url:next_url, list:list});
+  result.push({next_url:next_url, list:list});
 
   return result;
 }
@@ -137,13 +142,43 @@ function slr($, key, page, recent_url) {
   var next_page_num = $(".pageN tr td").find("a").eq(9).text();
   var next_url = null;
 
+  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+
+
+
   if(page == 1) {
-    next_url = community[key].site_url + "&page=" + (parseInt(next_page_num)-1);
+    next_url = community[key].server_url.replace("1", parseInt(next_page_num)-1);
   } else {
-    next_url = community[key].site_url + "&page=" + (parseInt(page)-1);
+    next_url = community[key].server_url.replace("1", parseInt(page)-1);
   }
 
-  result.push({recent_url:recent_url, next_url:next_url, list:list});
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 엠팍 불펜
+function bullpen($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $("tbody tr").each(function(i) {
+
+    var title = $(this).find("td").eq(1).find("a").attr("title");
+    var link = $(this).find("td").eq(1).find("a").attr("href");
+    var username = $(this).find(".nick").text().trim();
+    var regdate = $(this).find(".date").text().trim();
+    var viewcnt = $(this).find(".viewV").text().trim();
+    var commentcnt = $(this).find(".replycnt").text().trim();
+    commentcnt = commentcnt.replace("[", "");
+    commentcnt = commentcnt.replace("]", "");
+
+    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+  });
+
+  var next_url = community[key].server_url.replace("1", parseInt(page)+30);
+
+  result.push({next_url:next_url, list:list});
 
   return result;
 }
