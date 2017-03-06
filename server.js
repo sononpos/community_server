@@ -5,7 +5,6 @@ var iconv  = require('iconv-lite');
 
 var app = express();
 
-
 app.listen(process.env.PORT || 3000, function () {
   console.log('start!');
 });
@@ -102,8 +101,14 @@ var community = {
     page_param : "&page=",
     encoding : "UTF-8",
   },
+  // dcinside : {
+  //   name : "디씨",
+  //   server_url : "http://www.4seasonpension.com:3000/dcinside/1",
+  //   site_url : "http://gall.dcinside.com/board/lists/?id=superidea",
+  //   page_param : "&page=",
+  //   encoding : "UTF-8",
+  // },
 };
-
 
 app.get('/', function (req, res) {
   res.send('community!');
@@ -120,10 +125,15 @@ app.get('/:key/:page', function(req, res) {
   var key = req.params.key;
   var page = req.params.page;
 
-  // 보내줄 리스트 데이터
-  getListData(key, page, function(result) {
-    res.send(result);
-  });
+  try {
+    // 보내줄 리스트 데이터
+    getListData(key, page, function(result) {
+      res.send(result);
+    });
+  } catch(err) {
+    console.log(err);
+    res.end(err);
+  }
 });
 
 var getListData = function(key, page, callback) {
@@ -149,16 +159,25 @@ var getListData = function(key, page, callback) {
 
   // URL 호출부
   request(requestOptions, function(error, response, body) {
-    if (error) throw error;
+    try {
 
-    var strContents = new Buffer(body);
- 	  //console.log(iconv.decode(strContents, community[key].encoding).toString());
+      if (error) {
+        console.log(err);
+        callback(err);
+      }
 
-    var $ = cheerio.load(iconv.decode(strContents, community[key].encoding).toString());
+      var strContents = new Buffer(body);
+   	  //console.log(iconv.decode(strContents, community[key].encoding).toString());
 
-    var result = eval(key)($, key, page, url);
+      var $ = cheerio.load(iconv.decode(strContents, community[key].encoding).toString());
 
-    callback(result);
+      var result = eval(key)($, key, page, url);
+
+      callback(result);
+    } catch(err) {
+      console.log(err);
+      callback(err);
+    }
   });
 };
 
@@ -182,7 +201,7 @@ function clien($, key, page, url) {
     var title = $(this).find("td").eq(1).find("a").text().trim();
     var link = "http://m.clien.net/cs3/board?bo_table=park&bo_style=view&wr_id=" + id;
     var username = $(this).find("td").eq(2).find(".member").text().trim();
-    var regdate = $(this).find("td").eq(3).find("span").attr("title").trim();
+    var regdate = $(this).find("td").eq(3).find("span").attr("title");
     var viewcnt = $(this).find("td").eq(4).text().trim();
     var commentcnt = $(this).find("td").eq(1).find("span").text().trim();
     commentcnt = commentcnt.replace("[", "");
@@ -548,8 +567,41 @@ function pann($, key, page, recent_url) {
 
     var username = "" //$(this).find(".nick").text().trim();
     var regdate = "" //$(this).attr("data-sort-date");
-    var viewcnt = ""; // 추천수가 존재
-    var commentcnt = $(this).find(".sub").find("span").eq(0).text().trim();
+    var viewcnt = $(this).find(".sub").find("span").eq(0).text().trim();
+    var commentcnt = $(this).find(".count").text().trim();
+    commentcnt = commentcnt.replace("(", "");
+    commentcnt = commentcnt.replace(")", "");
+
+    if(title != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 디씨인사이드 초개념 갤러리
+function dcinside($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".list_tbody tr").each(function(i) {
+
+    var title = $(this).find(".t_subject a").eq(0).text().trim();
+    var link = $(this).find(".t_subject a").attr("href");
+    var id = getParameterByName("no", link);
+    link = "http://m.dcinside.com/view.php?id=superidea&no=101298" + id;
+
+    var username = $(this).find(".user_nick_nm").text().trim();
+    var regdate = $(this).attr(".t_date");
+    var viewcnt = $(this).find(".t_hits").eq(0).text().trim();
+    var commentcnt = $(this).find(".t_subject a em").text().trim();
+    commentcnt = commentcnt.replace("[", "");
+    commentcnt = commentcnt.replace("]", "");
 
     if(title != "") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
