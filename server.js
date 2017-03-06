@@ -61,13 +61,36 @@ var community = {
     encoding : "EUC-KR",
   },
   bestiz : {
-    name : "베스티지",
+    name : "베스티즈",
     server_url : "http://www.4seasonpension.com:3000/bestiz/1",
     site_url : "http://besthgc.cafe24.com/zboard/zboard.php?id=ghm2b",
     page_param : "&page=",
     encoding : "EUC-KR",
   },
+  humoruniv : {
+    name : "웃대",
+    server_url : "http://www.4seasonpension.com:3000/humoruniv/1",
+    site_url : "http://web.humoruniv.com/board/humor/list.html?table=pds",
+    page_param : "&pg=",
+    encoding : "EUC-KR",
+  },
+  ygosu : {
+    name : "와이고수",
+    server_url : "http://www.4seasonpension.com:3000/ygosu/1",
+    site_url : "http://www.ygosu.com/community/real_article",
+    page_param : "/?page=",
+    encoding : "UTF-8",
+  },
+  ppomppu : {
+    name : "뽐뿌",
+    server_url : "http://www.4seasonpension.com:3000/ppomppu/1",
+    site_url : "http://www.ppomppu.co.kr/hot.php?category=2&id=humor",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
 };
+
+
 
 app.get('/', function (req, res) {
   res.send('community!');
@@ -346,7 +369,7 @@ function rgr($, key, page, recent_url) {
   return result;
 }
 
-// 베스티지 게스트천국
+// 베스티즈 게스트천국
 function bestiz($, key, page, recent_url) {
   var result = [];
   var list = [];
@@ -366,6 +389,98 @@ function bestiz($, key, page, recent_url) {
     commentcnt = commentcnt.replace("]", "");
 
     if(title != "" && username != "Best" && username != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 웃대 웃긴자료
+function humoruniv($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $("tr").each(function(i) {
+
+    var title = $(this).find(".li_sbj a").text();
+    title = title.substring(0, title.indexOf("\r\n\t\t\t\t"));
+
+    var link = $(this).find(".li_sbj a").attr("href");
+    var id = getParameterByName("number", link);
+    link =  "http://m.humoruniv.com/board/read.html?table=pds&pg=0&number=" + id;
+
+    var username = $(this).find(".hu_nick_txt").text().trim();
+    var regdate = $(this).find(".w_date").text().trim() + " " + $(this).find(".w_time").text().trim();
+    var viewcnt = $(this).find(".li_und").eq(0).text().trim();
+    var commentcnt = $(this).find(".list_comment_num").text().trim();
+    commentcnt = commentcnt.replace("[", "");
+    commentcnt = commentcnt.replace("]", "");
+
+    if(title != "" && username != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 와이고수 실시간 인기게시물
+function ygosu($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".bd_list tbody tr").each(function(i) {
+
+    var title = $(this).find(".tit a").text().trim();
+    var link = $(this).find(".tit a").attr("href");
+    var category = link.replace("http://www.ygosu.com/community/real_article/", "").split("/")[0];
+    var id = link.replace("http://www.ygosu.com/community/real_article/", "").split("/")[1];
+    link = "http://m.ygosu.com/board/?bid="+category+"&idx="+id+"&m3=real_article&frombest=Y&page=";
+
+    var username = $(this).find(".name a").text().trim();
+    var regdate = $(this).find(".date").text().trim() + " " + $(this).find(".w_time").text().trim();
+    var viewcnt = $(this).find(".read").text().trim();
+    var commentcnt = $(this).find(".tit span strong").text().trim();
+
+    if(title != "" && username != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 뽐뿌 유저 HOT게시글
+function ppomppu($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $("tr").each(function(i) {
+
+    var title = $(this).find("td").eq(3).find("a").text().trim();
+    var link = $(this).find("td").eq(3).find("a").attr("href");
+    var id = getParameterByName("no", link);
+    link = "http://m.ppomppu.co.kr/new/bbs_view.php?id=humor&no=" + id;
+
+    var username = $(this).find("td").eq(1).text().trim();
+    var regdate = $(this).find("td").eq(4).text().trim();
+    var viewcnt = "";
+    var commentcnt = $(this).find(".list_comment2").text().trim();
+
+    if(title != "" && username != "") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
     }
   });
