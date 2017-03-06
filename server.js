@@ -1,6 +1,7 @@
 var express = require('express');
 var request = require("request");
 var cheerio = require("cheerio");
+var iconv  = require('iconv-lite');
 
 var app = express();
 
@@ -15,34 +16,58 @@ var community = {
     server_url : "http://www.4seasonpension.com:3000/clien/1",
     site_url : "http://www.clien.net/cs2/bbs/board.php?bo_table=park",
     page_param : "&page=",
+    encoding : "UTF-8",
   },
   ruliweb : {
     name : "루리웹",
     server_url : "http://www.4seasonpension.com:3000/ruliweb/1",
     site_url : "http://bbs.ruliweb.com/best",
     page_param : "&page=",
+    encoding : "UTF-8",
   },
   slr : {
     name : "SLR",
     server_url : "http://www.4seasonpension.com:3000/slr/1",
     site_url : "http://www.slrclub.com/bbs/zboard.php?id=hot_article",
     page_param : "&page=",
+    encoding : "UTF-8",
   },
   bullpen : {
     name : "불펜",
     server_url : "http://www.4seasonpension.com:3000/bullpen/1",
     site_url : "http://mlbpark.donga.com/mp/b.php?b=bullpen",
     page_param : "&p=",
+    encoding : "UTF-8",
   },
   todayhumor : {
     name : "오유",
     server_url : "http://www.4seasonpension.com:3000/todayhumor/1",
     site_url : "http://www.todayhumor.co.kr/board/list.php?table=bestofbest",
     page_param : "&page=",
+    encoding : "UTF-8",
+  },
+  bobaedream : {
+    name : "보배드림",
+    server_url : "http://www.4seasonpension.com:3000/bobaedream/1",
+    site_url : "http://m.bobaedream.co.kr/board/new_writing/best",
+    page_param : "/",
+    encoding : "UTF-8",
+  },
+  rgr : {
+    name : "알지롱",
+    server_url : "http://www.4seasonpension.com:3000/rgr/1",
+    site_url : "http://te31.com/rgr/zboard.php?id=rare2014",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  bestiz : {
+    name : "베스티지",
+    server_url : "http://www.4seasonpension.com:3000/bestiz/1",
+    site_url : "http://besthgc.cafe24.com/zboard/zboard.php?id=ghm2b",
+    page_param : "&page=",
+    encoding : "EUC-KR",
   },
 };
-
-
 
 app.get('/', function (req, res) {
   res.send('community!');
@@ -81,13 +106,19 @@ var getListData = function(key, page, callback) {
 		,uri: url
 		,headers: {
       "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      //"User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36",
     }
 		,encoding: null
 	};
 
   // URL 호출부
   request(requestOptions, function(error, response, body) {
-    var $ = cheerio.load(body);
+    if (error) throw error;
+
+    var strContents = new Buffer(body);
+ 	  //console.log(iconv.decode(strContents, 'EUC-KR').toString());
+
+    var $ = cheerio.load(iconv.decode(strContents, community[key].encoding).toString());
 
     var result = eval(key)($, key, page, url);
 
@@ -200,7 +231,7 @@ function bullpen($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  $("tbody tr").each(function(i) {
+  $(".tbl_type01 tbody tr").each(function(i) {
 
     var title = $(this).find("td").eq(1).find("a").attr("title");
     var link = $(this).find("td").eq(1).find("a").attr("href");
@@ -217,6 +248,7 @@ function bullpen($, key, page, recent_url) {
     if(username != "담당자") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
     }
+
   });
 
   var next_url = community[key].server_url.replace("1", parseInt(page)+30);
@@ -246,6 +278,94 @@ function todayhumor($, key, page, recent_url) {
     commentcnt = commentcnt.replace("]", "");
 
     if(title != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 보배드림 베스트글
+function bobaedream($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".content .rank li").each(function(i) {
+
+    var title = $(this).find(".txt .cont").text().trim();
+    var link = $(this).find(".info a").attr("href");
+    link =  "http://m.bobaedream.co.kr" + link;
+
+    var username = $(this).find(".txt2 span").eq(0).text().trim();
+    var regdate = $(this).find(".txt2 span").eq(1).text().trim();
+    var viewcnt = $(this).find(".txt2 span").eq(2).text().trim();
+    viewcnt = viewcnt.replace("조회", "").trim();
+    var commentcnt = $(this).find(".txt5 .num").text().trim();
+
+    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+
+  });
+
+  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 알지롱 레어 유머
+function rgr($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $("#revolution_main_table tr").each(function(i) {
+
+    var title = $(this).find(".title a").text().trim();
+    var link = $(this).find(".title a").attr("href");
+    var id = getParameterByName("no", link);
+    link =  "http://te31.com/m/view.php?id=rare2014&no=" + id;
+
+    var username = $(this).find(".list_name").text().trim();
+    var regdate = $(this).find("td").eq(1).text().trim();
+    var viewcnt = $(this).find("td").eq(2).text().trim();
+    var commentcnt = $(this).find("td").eq(3).text().trim();
+
+    if(title != "" && username != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 베스티지 게스트천국
+function bestiz($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $("tr").each(function(i) {
+
+    var title = $(this).find("td").eq(1).find("a").text().trim();
+    var link = $(this).find("td").eq(1).find("a").attr("href");
+    var id = getParameterByName("no", link);
+    link =  "http://besthgc.cafe24.com/zboard/view.php?id=ghm2b&no=" + id;
+
+    var username = $(this).find("td").eq(2).find("span").text().trim();
+    var regdate = $(this).find("td").eq(3).find("span").text().trim();
+    var viewcnt = $(this).find("td").eq(4).text().trim();
+    var commentcnt = $(this).find(".commentnum").text().trim();
+    commentcnt = commentcnt.replace("[", "");
+    commentcnt = commentcnt.replace("]", "");
+
+    if(title != "" && username != "Best" && username != "") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
     }
   });
