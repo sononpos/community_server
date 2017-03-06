@@ -88,8 +88,21 @@ var community = {
     page_param : "&page=",
     encoding : "EUC-KR",
   },
+  bboom : {
+    name : "네이버뿜",
+    server_url : "http://www.4seasonpension.com:3000/bboom/1",
+    site_url : "http://m.bboom.naver.com/best/moreList.json?likeBandNo=&&viewTypeNo=2&length=100&limit=0",
+    page_param : "&page=",
+    encoding : "UTF-8",
+  },
+  pann : {
+    name : "네이트판",
+    server_url : "http://www.4seasonpension.com:3000/pann/1",
+    site_url : "http://m.pann.nate.com/talk/talker",
+    page_param : "&page=",
+    encoding : "UTF-8",
+  },
 };
-
 
 
 app.get('/', function (req, res) {
@@ -139,7 +152,7 @@ var getListData = function(key, page, callback) {
     if (error) throw error;
 
     var strContents = new Buffer(body);
- 	  //console.log(iconv.decode(strContents, 'EUC-KR').toString());
+ 	  //console.log(iconv.decode(strContents, community[key].encoding).toString());
 
     var $ = cheerio.load(iconv.decode(strContents, community[key].encoding).toString());
 
@@ -477,10 +490,68 @@ function ppomppu($, key, page, recent_url) {
 
     var username = $(this).find("td").eq(1).text().trim();
     var regdate = $(this).find("td").eq(4).text().trim();
-    var viewcnt = "";
+    var viewcnt = ""; // 추천수가 존재
     var commentcnt = $(this).find(".list_comment2").text().trim();
 
     if(title != "" && username != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 네이버 뿜
+function bboom($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $("li").each(function(i) {
+
+    var title = $(this).find("strong.tit").text().trim();
+    var link = $(this).find("td").eq(3).find("a").attr("href");
+    var id = $(this).attr("data-post-no");
+    link = "http://m.bboom.naver.com/best/get.nhn?boardNo=9&entrance=&postNo=" + id;
+
+    var username = $(this).find(".nick").text().trim();
+    var regdate = $(this).attr("data-sort-date");
+    var viewcnt = ""; // 추천수가 존재
+    var commentcnt = $(this).find(".btn_cmnt").text().replace("댓글 수", "").trim();
+
+    if(title != "" && username != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = "" //community[key].server_url.replace("1", parseInt(page)+1);
+  // 뿜은 100개까지만 가져오자
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 네이트 판
+function pann($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".list_type2 li").each(function(i) {
+
+    var title = $(this).find("span.tit").text().trim();
+    var link = $(this).find("a").attr("href");
+    link = "http://m.pann.nate.com" + link;
+
+    var username = "" //$(this).find(".nick").text().trim();
+    var regdate = "" //$(this).attr("data-sort-date");
+    var viewcnt = ""; // 추천수가 존재
+    var commentcnt = $(this).find(".sub").find("span").eq(0).text().trim();
+
+    if(title != "") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
     }
   });
