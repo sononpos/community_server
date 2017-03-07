@@ -108,6 +108,13 @@ var community = {
     page_param : "&page=",
     encoding : "UTF-8",
   },
+  instiz : {
+    name : "인스티즈",
+    server_url : "http://www.4seasonpension.com:3000/instiz/1",
+    site_url : "https://www.instiz.net/bbs/list.php?id=pt&srt=3&k=&srd=1",
+    page_param : "&page=",
+    encoding : "UTF-8",
+  },
 };
 
 app.get('/', function (req, res) {
@@ -608,6 +615,35 @@ function dcinside($, key, page, recent_url) {
     commentcnt = commentcnt.replace("]", "");
 
     if(title != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 인스티즈 인티포털 인기글
+function instiz($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".mainboard tr").each(function(i) {
+
+    var title = $(this).find(".listsubject a").eq(0).text().trim();
+    var link = $(this).find(".listsubject a").eq(0).attr("href");
+
+    var id = getParameterByName("no", link);
+    link = "http://www.instiz.net/pt?id=pt&srt=3&k=&srd=1&no=" + id;
+    var username = $(this).find(".minitext2").text().trim();
+    var regdate = $(this).find(".listno").eq(1).text().trim();
+    var viewcnt = $(this).find(".listno").eq(2).text().trim();
+    var commentcnt = $(this).find(".cmt").text().trim();
+
+    if(title != "" && id != null) {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
     }
   });
