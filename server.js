@@ -101,13 +101,13 @@ var community = {
     page_param : "&page=",
     encoding : "UTF-8",
   },
-  // dcinside : {
-  //   name : "디씨",
-  //   server_url : "http://www.4seasonpension.com:3000/dcinside/1",
-  //   site_url : "http://gall.dcinside.com/board/lists/?id=superidea",
-  //   page_param : "&page=",
-  //   encoding : "UTF-8",
-  // },
+  dcinside : {
+    name : "디씨",
+    server_url : "http://www.4seasonpension.com:3000/dcinside/1",
+    site_url : "http://gall.dcinside.com/board/lists/?id=superidea",
+    page_param : "&page=",
+    encoding : "UTF-8",
+  },
 };
 
 app.get('/', function (req, res) {
@@ -207,10 +207,12 @@ function clien($, key, page, url) {
     commentcnt = commentcnt.replace("[", "");
     commentcnt = commentcnt.replace("]", "");
 
-    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    if(title != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
   });
 
-  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+  var next_url = parseInt(page)+1;
 
   result.push({next_url:next_url, list:list});
 
@@ -232,11 +234,12 @@ function ruliweb($, key, page, recent_url) {
     var viewcnt = $(this).find(".hit").text().trim();
     var commentcnt = $(this).find(".recomd").text().trim();
 
-
-    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    if(title != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
   });
 
-  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+  var next_url = parseInt(page)+1;
 
   result.push({next_url:next_url, list:list});
 
@@ -260,20 +263,18 @@ function slr($, key, page, recent_url) {
     commentcnt = commentcnt.replace("[", "");
     commentcnt = commentcnt.replace("]", "");
 
-    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    if(title != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
   });
 
   var next_page_num = $(".pageN tr td").find("a").eq(9).text();
   var next_url = null;
 
-  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
-
-
-
   if(page == 1) {
-    next_url = community[key].server_url.replace("1", parseInt(next_page_num)-1);
+    next_url = parseInt(next_page_num)-1;
   } else {
-    next_url = community[key].server_url.replace("1", parseInt(page)-1);
+    next_url = parseInt(page)-1;
   }
 
   result.push({next_url:next_url, list:list});
@@ -300,13 +301,13 @@ function bullpen($, key, page, recent_url) {
     commentcnt = commentcnt.replace("[", "");
     commentcnt = commentcnt.replace("]", "");
 
-    if(username != "담당자") {
+    if(title != "" && username != "담당자") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
     }
 
   });
 
-  var next_url = community[key].server_url.replace("1", parseInt(page)+30);
+  var next_url = parseInt(page)+30;
 
   result.push({next_url:next_url, list:list});
 
@@ -337,7 +338,7 @@ function todayhumor($, key, page, recent_url) {
     }
   });
 
-  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+  var next_url = parseInt(page)+1;
 
   result.push({next_url:next_url, list:list});
 
@@ -361,11 +362,12 @@ function bobaedream($, key, page, recent_url) {
     viewcnt = viewcnt.replace("조회", "").trim();
     var commentcnt = $(this).find(".txt5 .num").text().trim();
 
-    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
-
+    if(title != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
   });
 
-  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+  var next_url = parseInt(page)+1;
 
   result.push({next_url:next_url, list:list});
 
@@ -394,7 +396,7 @@ function rgr($, key, page, recent_url) {
     }
   });
 
-  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+  var next_url = parseInt(page)+1;
 
   result.push({next_url:next_url, list:list});
 
@@ -425,7 +427,7 @@ function bestiz($, key, page, recent_url) {
     }
   });
 
-  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+  var next_url = parseInt(page)+1;
 
   result.push({next_url:next_url, list:list});
 
@@ -458,7 +460,7 @@ function humoruniv($, key, page, recent_url) {
     }
   });
 
-  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+  var next_url = parseInt(page)+1;
 
   result.push({next_url:next_url, list:list});
 
@@ -488,7 +490,7 @@ function ygosu($, key, page, recent_url) {
     }
   });
 
-  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+  var next_url = parseInt(page)+1;
 
   result.push({next_url:next_url, list:list});
 
@@ -517,7 +519,7 @@ function ppomppu($, key, page, recent_url) {
     }
   });
 
-  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+  var next_url = parseInt(page)+1;
 
   result.push({next_url:next_url, list:list});
 
@@ -537,7 +539,9 @@ function bboom($, key, page, recent_url) {
     link = "http://m.bboom.naver.com/best/get.nhn?boardNo=9&entrance=&postNo=" + id;
 
     var username = $(this).find(".nick").text().trim();
-    var regdate = $(this).attr("data-sort-date");
+    var regdate = $(this).attr("data-sort-date").toString();
+    regdate = regdate.replace("T", " ");
+    regdate = regdate.replace("+0900", "");
     var viewcnt = ""; // 추천수가 존재
     var commentcnt = $(this).find(".btn_cmnt").text().replace("댓글 수", "").trim();
 
@@ -546,7 +550,7 @@ function bboom($, key, page, recent_url) {
     }
   });
 
-  var next_url = "" //community[key].server_url.replace("1", parseInt(page)+1);
+  var next_url = 1;
   // 뿜은 100개까지만 가져오자
 
   result.push({next_url:next_url, list:list});
@@ -565,8 +569,8 @@ function pann($, key, page, recent_url) {
     var link = $(this).find("a").attr("href");
     link = "http://m.pann.nate.com" + link;
 
-    var username = "" //$(this).find(".nick").text().trim();
-    var regdate = "" //$(this).attr("data-sort-date");
+    var username = ""; //$(this).find(".nick").text().trim();
+    var regdate = ""; //$(this).attr("data-sort-date");
     var viewcnt = $(this).find(".sub").find("span").eq(0).text().trim();
     var commentcnt = $(this).find(".count").text().trim();
     commentcnt = commentcnt.replace("(", "");
@@ -577,7 +581,7 @@ function pann($, key, page, recent_url) {
     }
   });
 
-  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+  var next_url = parseInt(page)+1;
 
   result.push({next_url:next_url, list:list});
 
@@ -594,10 +598,10 @@ function dcinside($, key, page, recent_url) {
     var title = $(this).find(".t_subject a").eq(0).text().trim();
     var link = $(this).find(".t_subject a").attr("href");
     var id = getParameterByName("no", link);
-    link = "http://m.dcinside.com/view.php?id=superidea&no=101298" + id;
+    link = "http://m.dcinside.com/view.php?id=superidea&no=" + id;
 
     var username = $(this).find(".user_nick_nm").text().trim();
-    var regdate = $(this).attr(".t_date");
+    var regdate = $(this).find(".t_date").attr("title");
     var viewcnt = $(this).find(".t_hits").eq(0).text().trim();
     var commentcnt = $(this).find(".t_subject a em").text().trim();
     commentcnt = commentcnt.replace("[", "");
@@ -608,7 +612,7 @@ function dcinside($, key, page, recent_url) {
     }
   });
 
-  var next_url = community[key].server_url.replace("1", parseInt(page)+1);
+  var next_url = parseInt(page)+1;
 
   result.push({next_url:next_url, list:list});
 
