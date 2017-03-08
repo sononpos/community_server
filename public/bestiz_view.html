@@ -24,15 +24,6 @@
 <body>
 	<div id="contents">
 		<script>
-			function imgProportion($targetWidth, $targetHeight)
-			{
-				var DeviceWidth = parseInt($(window).width()-15); 	//화면의 가로 사이즈
-				var a1 = DeviceWidth * $targetHeight; 				//이미지 세로사이즈 계산식
-				var newHeight = (a1 / $targetWidth); 				//이미지 세로사이즈 계산식
-				var rtnSize = new Array((DeviceWidth), newHeight); 	 //리사이징 된 이미지 사이즈 리턴
-
-				return rtnSize;
-			}
 
 			$.extend({
 				getUrlVars: function(){
