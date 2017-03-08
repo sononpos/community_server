@@ -121,9 +121,23 @@ var community = {
   },
   inven : {
     name : "인벤",
-    server_url : "http://www.4seasonpension.com:3000/instiz/1",
+    server_url : "http://www.4seasonpension.com:3000/inven/1",
     site_url : "http://m.inven.co.kr/board/powerbbs.php?come_idx=2097&my=chu",
     page_param : "&p=",
+    encoding : "UTF-8",
+  },
+  soccerline : {
+    name : "사커라인",
+    server_url : "http://www.4seasonpension.com:3000/soccerline/1",
+    site_url : "http://m.soccerline.co.kr/bbs/locker/list.html?&code=locker",
+    page_param : "&page=",
+    encoding : "UTF-8",
+  },
+  ddanzi : {
+    name : "딴지",
+    server_url : "http://www.4seasonpension.com:3000/ddanzi/1",
+    site_url : "http://www.ddanzi.com/index.php?mid=free&bm=hot",
+    page_param : "&page=",
     encoding : "UTF-8",
   },
 };
@@ -196,13 +210,13 @@ var getListData = function(key, page, callback) {
   }
 
   var requestOptions  = {
-    method: "GET"
-		,uri: url
-		,headers: {
+    method: "GET",
+    uri: url,
+		headers: {
       "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
-      //"User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36",
-    }
-		,encoding: null
+    },
+    timeout : 5000,
+		encoding: null
 	};
 
   // URL 호출부
@@ -716,6 +730,76 @@ function inven($, key, page, recent_url) {
 
     if(title != "" && id != null) {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 사커라인 락커룸
+function soccerline($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  var li_length = $("ul li").length;
+  $("ul li").each(function(i) {
+    if(i < 15) {
+      var title = $(this).find("h3").text().trim();
+      var link = $(this).find("a").attr("href");
+      var id = getParameterByName("uid", link);
+      link = "http://m.soccerline.co.kr/bbs/locker/view.html?uid=" + id;
+
+      //Mario Gotze - PM 09:30, 읽음: 0
+
+      var totaldata = $(this).find("p").eq(0).text().trim();
+      var username = totaldata.split("-")[0].trim();
+      var totaldata2 = totaldata.split("-")[1].trim();
+      var regdate = totaldata2.split(",")[0].trim();
+      var viewcnt = totaldata2.split(",")[1].trim();
+      viewcnt = viewcnt.replace("읽음:", "").trim();
+
+      var commentcnt = $(this).find("p").eq(1).text().trim();
+
+      if(title != "") {
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      }
+    }
+
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 딴지일보 자유게시판 HOT
+function ddanzi($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".board_list tr").each(function(i) {
+    if($(this).attr("class") != "notice") {
+      var title = $(this).find(".title a").text().trim();
+      var link = $(this).find(".title a").eq(0).attr("href");
+
+      var id = getParameterByName("document_srl", link);
+      link = "http://www.ddanzi.com/index.php?mid=free&bm=hot&document_srl=" + id;
+      var username = $(this).find(".author").text().trim();
+      var regdate = $(this).find(".time").text().trim();
+      var viewcnt = $(this).find(".readNum").text().trim();
+      var commentcnt = $(this).find(".replyNum").text().trim();
+      commentcnt = commentcnt.replace("[", "");
+      commentcnt = commentcnt.replace("]", "");
+
+      if(title != "") {
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      }
     }
   });
 
