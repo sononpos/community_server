@@ -785,12 +785,15 @@ function ddanzi($, key, page, recent_url) {
 
   $(".board_list tr").each(function(i) {
     if($(this).attr("class") != "notice") {
-      var title = $(this).find(".title a").text().trim();
+      var title = $(this).find(".title a").eq(0).text().trim();
       var link = $(this).find(".title a").eq(0).attr("href");
 
       var id = getParameterByName("document_srl", link);
       link = "http://www.ddanzi.com/index.php?mid=free&bm=hot&document_srl=" + id;
       var username = $(this).find(".author").text().trim();
+      if(username.length > 8) {
+        username = username.substring(0, 7) + "..";
+      }
       var regdate = $(this).find(".time").text().trim();
       var viewcnt = $(this).find(".readNum").text().trim();
       var commentcnt = $(this).find(".replyNum").text().trim();
