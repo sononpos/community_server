@@ -2,8 +2,12 @@ var express = require('express');
 var request = require("request");
 var cheerio = require("cheerio");
 var iconv  = require('iconv-lite');
+var morgan = require('morgan')
 
 var app = express();
+
+app.use(morgan('combined'))
+app.use('/static', express.static('public'));
 
 app.listen(process.env.PORT || 3000, function () {
   console.log('start!');
@@ -115,6 +119,13 @@ var community = {
     page_param : "&page=",
     encoding : "UTF-8",
   },
+  inven : {
+    name : "인벤",
+    server_url : "http://www.4seasonpension.com:3000/instiz/1",
+    site_url : "http://m.inven.co.kr/board/powerbbs.php?come_idx=2097&my=chu",
+    page_param : "&p=",
+    encoding : "UTF-8",
+  },
 };
 
 app.get('/', function (req, res) {
@@ -125,6 +136,38 @@ app.get('/', function (req, res) {
 app.get('/list', function(req, res) {
   res.contentType('application/json');
   res.send(JSON.stringify(community));
+});
+
+// 베스티즈 뷰
+app.get('/bestizView/:id', function(req, res) {
+  var id = req.params.id;
+  var url = "http://besthgc.cafe24.com/zboard/view.php?id=ghm2b&no=" + id;
+  var requestOptions  = {
+    method: "GET"
+    ,uri: url
+    ,headers: {
+      "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+    }
+    ,encoding: null
+  };
+
+  request(requestOptions, function(error, response, body) {
+    try {
+      var strContents = new Buffer(body);
+      var $ = cheerio.load(iconv.decode(strContents, community["bestiz"].encoding).toString());
+      var html = null;
+      $("td").each(function(i) {
+        if($(this).attr("align") == "right" && $(this).attr("width") == "100%") {
+          if(i == 20) {
+            html = $(this).html()
+          }
+        }
+      });
+      res.send(html);
+    } catch(err) {
+      console.log(err);
+    }
+  });
 });
 
 // 모든 요청
@@ -151,8 +194,6 @@ var getListData = function(key, page, callback) {
   } else {
     url = community[key].site_url + community[key].page_param + page;
   }
-
-  console.log(url);
 
   var requestOptions  = {
     method: "GET"
@@ -262,7 +303,8 @@ function slr($, key, page, recent_url) {
 
     var title = $(this).find(".sbj a").text().trim();
     var link = $(this).find(".sbj a").attr("href").trim();
-    link = link.replace("/bbs/vx2.php?id=hot_article&no=", "http://m.slrclub.com/bbs/vx2.php?id=hot_article&no=");
+    var id = getParameterByName("no", link);
+    link =  "http://m.slrclub.com/bbs/vx2.php?id=hot_article&no=" + id;
     var username = $(this).find(".list_name").text().trim();
     var regdate = $(this).find(".list_date").text().trim();
     var viewcnt = $(this).find(".list_click").text().trim();
@@ -420,7 +462,7 @@ function bestiz($, key, page, recent_url) {
     var title = $(this).find("td").eq(1).find("a").text().trim();
     var link = $(this).find("td").eq(1).find("a").attr("href");
     var id = getParameterByName("no", link);
-    link =  "http://besthgc.cafe24.com/zboard/view.php?id=ghm2b&no=" + id;
+    link =  "http://www.4seasonpension.com:3000/static/bestiz_view.html?id=" + id;
 
     var username = $(this).find("td").eq(2).find("span").text().trim();
     var regdate = $(this).find("td").eq(3).find("span").text().trim();
@@ -642,6 +684,35 @@ function instiz($, key, page, recent_url) {
     var regdate = $(this).find(".listno").eq(1).text().trim();
     var viewcnt = $(this).find(".listno").eq(2).text().trim();
     var commentcnt = $(this).find(".cmt").text().trim();
+
+    if(title != "" && id != null) {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 인벤 오늘의 이슈 갤러리 3추
+function inven($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $("#boardList li").each(function(i) {
+    var title = $(this).find(".title").text().trim();
+    var link = $(this).find(".subject").attr("href");
+
+    var id = getParameterByName("l", link);
+    link = "http://m.inven.co.kr/board/powerbbs.php?come_idx=2097&my=chu&l=" + id;
+    var username = $(this).find(".writer").text().trim();
+    var regdate = $(this).find(".postdate").text().trim();
+    var viewcnt = $(this).find(".hit").text().trim();
+    viewcnt = viewcnt.replace("조회:", "");
+    var commentcnt = $(this).find(".cmtWrapForList").text().trim();
 
     if(title != "" && id != null) {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});

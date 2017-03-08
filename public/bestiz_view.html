@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="EUC-KR">
+	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
+	<title>bestiz view</title>
+
+	<script src="http://code.jquery.com/jquery.min.js"></script>
+	<link rel="stylesheet" href="http://besthgc.cafe24.com/zboard/skin/gcmbl/style.css" type="text/css" />
+	<style>
+      body {
+          padding:0px;
+          margin:0px;
+      }
+
+			img, embed, iframe {
+			  width:100%;
+			  max-height : auto;
+			  max-width : 300px;
+			}
+  </style>
+</head>
+
+<body>
+	<div id="contents">
+		<script>
+			function imgProportion($targetWidth, $targetHeight)
+			{
+				var DeviceWidth = parseInt($(window).width()-15); 	//화면의 가로 사이즈
+				var a1 = DeviceWidth * $targetHeight; 				//이미지 세로사이즈 계산식
+				var newHeight = (a1 / $targetWidth); 				//이미지 세로사이즈 계산식
+				var rtnSize = new Array((DeviceWidth), newHeight); 	 //리사이징 된 이미지 사이즈 리턴
+
+				return rtnSize;
+			}
+
+			$.extend({
+				getUrlVars: function(){
+						var vars = [], hash;
+						var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+						for(var i = 0; i < hashes.length; i++) {
+								hash = hashes[i].split('=');
+								vars.push(hash[0]);
+								vars[hash[0]] = hash[1];
+						}
+						return vars;
+				},
+				getUrlVar: function(name) {
+						return $.getUrlVars()[name];
+				}
+			});
+
+			var id = $.getUrlVar('id');
+
+			$.get("/bestizView/"+id, function(data) {
+
+				data = data.replace(/print_ZBlayer/g, '//print_ZBlayer');
+
+				$("#contents").html(data);
+
+				$("img, embed, iframe").each(function() {
+
+					if($(this).attr("src").indexOf("http") < 0) {
+						$(this).remove();
+					}
+
+					if($(this).attr("alt") == "광고" || $(this).attr("alt") == "ad") {
+						$(this).remove();
+					}
+				});
+
+				$("td").each(function() {
+					$(this).html($(this).html().replace("<br>", ""));
+				});
+
+				$("#google_ads_frame1").each(function() {
+					$(this).remove();
+				});
+
+				$(".adsbygoogle").remove();
+
+				$("center").remove();
+			});
+		</script>
+	</div>
+
+
+</body>
+</html>
