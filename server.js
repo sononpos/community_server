@@ -745,21 +745,18 @@ function soccerline($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  var li_length = $("ul li").length;
   $("ul li").each(function(i) {
-    if(i < 15) {
+
+    if($(this).find("h3").text() != "") {
       var title = $(this).find("h3").text().trim();
       var link = $(this).find("a").attr("href");
       var id = getParameterByName("uid", link);
       link = "http://m.soccerline.co.kr/bbs/locker/view.html?uid=" + id;
 
-      //Mario Gotze - PM 09:30, 읽음: 0
-
       var totaldata = $(this).find("p").eq(0).text().trim();
-      var username = totaldata.split("-")[0].trim();
-      var totaldata2 = totaldata.split("-")[1].trim();
-      var regdate = totaldata2.split(",")[0].trim();
-      var viewcnt = totaldata2.split(",")[1].trim();
+      var username = totaldata.split(",")[0].trim();
+      var regdate = "";
+      var viewcnt = totaldata.split(",")[1].trim();
       viewcnt = viewcnt.replace("읽음:", "").trim();
 
       var commentcnt = $(this).find("p").eq(1).text().trim();
@@ -768,7 +765,6 @@ function soccerline($, key, page, recent_url) {
         list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
       }
     }
-
   });
 
   var next_url = parseInt(page)+1;
