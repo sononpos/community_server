@@ -69,7 +69,13 @@ var community = {
     encoding : "UTF-8",
   },
   rgr : {
-    name : "알지롱",
+    name : "알지롱(호기심해결)",
+    site_url : "http://te31.com/rgr/zboard.php?id=rgrong",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  rgrrare : {
+    name : "알지롱(레어/유머)",
     site_url : "http://te31.com/rgr/zboard.php?id=rare2014",
     page_param : "&page=",
     encoding : "EUC-KR",
@@ -247,13 +253,13 @@ var getListData = function(key, page, callback) {
   }
 
   var requestOptions  = {
-    method: "GET"
-		,uri: url
-		,headers: {
+    method: "GET",
+		uri: url,
+		headers: {
       "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
-      //"User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36",
-    }
-		,encoding: null
+    },
+		encoding: null,
+    timeout:5000,
 	};
 
   // URL 호출부
@@ -570,8 +576,37 @@ function bobaedream($, key, page, recent_url) {
   return result;
 }
 
-// 알지롱 레어 유머
+// 알지롱 (호기심해결)
 function rgr($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $("#revolution_main_table tr").each(function(i) {
+
+    var title = $(this).find(".title a").text().trim();
+    var link = $(this).find(".title a").attr("href");
+    var id = getParameterByName("no", link);
+    link =  "http://te31.com/m/view.php?id=rgrong&no=" + id;
+
+    var username = $(this).find(".list_name").text().trim();
+    var regdate = $(this).find("td").eq(1).text().trim();
+    var viewcnt = $(this).find("td").eq(2).text().trim();
+    var commentcnt = $(this).find("td").eq(3).text().trim();
+
+    if(title != "" && username != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 알지롱 (레어/유머)
+function rgrrare($, key, page, recent_url) {
   var result = [];
   var list = [];
 
@@ -1047,9 +1082,11 @@ function ddanzi($, key, page, recent_url) {
     if($(this).attr("class") != "notice") {
       var title = $(this).find(".title a").eq(0).text().trim();
       var link = $(this).find(".title a").eq(0).attr("href");
-
-      var id = getParameterByName("document_srl", link);
+      link = link + "";
+      //var id = getParameterByName("document_srl", link);
+      var id = link.replace("http://www.ddanzi.com/free/", "");
       link = "http://www.ddanzi.com/index.php?mid=free&document_srl=" + id;
+
       var username = $(this).find(".author").text().trim();
       if(username.length > 8) {
         username = username.substring(0, 7) + "..";
