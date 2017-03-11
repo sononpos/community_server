@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<meta charset="EUC-KR">
+	<meta charset="UTF-8">
 	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
 	<title>bestiz view</title>
 
@@ -52,6 +52,7 @@
 			$.get("/bestizView/"+ser+"/"+id+"/"+no, function(data) {
 
 				data = data.replace(/print_ZBlayer/g, '//print_ZBlayer');
+				//data = data.replace(/https/g, '//http');
 
 				$("#contents").html(data);
 
@@ -61,8 +62,8 @@
 						$(this).remove();
 					}
 
-					if($(this).attr("alt") == "광고" || $(this).attr("alt") == "ad") {
-						//$(this).remove();
+					if($(this).attr("alt") == "愿묎퀬" || $(this).attr("alt") == "ad") {
+						$(this).remove();
 					}
 				});
 
@@ -71,12 +72,12 @@
 				});
 
 				$("#google_ads_frame1").each(function() {
-					//$(this).remove();
+					$(this).remove();
 				});
 
-				//$(".adsbygoogle").remove();
+				$(".adsbygoogle").remove();
 
-				//$("center").remove();
+				$("center").remove();
 			});
 		</script>
 	</div>

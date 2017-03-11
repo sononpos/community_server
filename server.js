@@ -283,6 +283,7 @@ app.get('/list', function(req, res) {
   res.send(JSON.stringify(comm));
 });
 
+// 베스티즈 앱
 app.get('/bestiz/:key/:page', function(req, res) {
   var key = req.params.key;
   var page = req.params.page;
