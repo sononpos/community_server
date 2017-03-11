@@ -13,10 +13,14 @@
           margin:0px;
       }
 
-			img, embed, iframe {
+			img, embed, iframe, center {
 			  width:100%;
 			  max-height : auto;
 			  max-width : 300px;
+			}
+
+			center {
+				overflow: hidden;
 			}
   </style>
 </head>
@@ -41,9 +45,11 @@
 				}
 			});
 
+			var ser = $.getUrlVar('ser');
 			var id = $.getUrlVar('id');
+			var no = $.getUrlVar('no');
 
-			$.get("/bestizView/"+id, function(data) {
+			$.get("/bestizView/"+ser+"/"+id+"/"+no, function(data) {
 
 				data = data.replace(/print_ZBlayer/g, '//print_ZBlayer');
 
@@ -56,7 +62,7 @@
 					}
 
 					if($(this).attr("alt") == "±¤°í" || $(this).attr("alt") == "ad") {
-						$(this).remove();
+						//$(this).remove();
 					}
 				});
 
@@ -65,12 +71,12 @@
 				});
 
 				$("#google_ads_frame1").each(function() {
-					$(this).remove();
+					//$(this).remove();
 				});
 
-				$(".adsbygoogle").remove();
+				//$(".adsbygoogle").remove();
 
-				$("center").remove();
+				//$("center").remove();
 			});
 		</script>
 	</div>

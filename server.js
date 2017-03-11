@@ -178,8 +178,96 @@ var community = {
   },
 };
 
+var bestiz_list = {
+  ghm2b : {
+    name : "게스트천국",
+    site_url : "http://besthgc.cafe24.com/zboard/zboard.php?id=ghm2b",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  bestgj : {
+    name : "게천잡담",
+    site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=bestgj",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  gmsb : {
+    name : "게천뮤직",
+    site_url : "http://bestgm.cafe24.com/zboard/zboard.php?id=gmsb",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  sing : {
+    name : "회원노래",
+    site_url : "http://bestgm.cafe24.com/zboard/zboard.php?id=sing",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  jding : {
+    name : "게잡직딩반",
+    site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=jding",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  gjbom : {
+    name : "게잡의봄",
+    site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=gjbom",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  jdalk : {
+    name : "게잡알콩",
+    site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=jdalk",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  gjhy : {
+    name : "게잡해연",
+    site_url : "http://bestjd.cafe24.com/zboard/zboard.php?&id=gjhy",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  drb13 : {
+    name : "드라마방",
+    site_url : "http://bestizsky.cafe24.com/zboard/zboard.php?id=drb13",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  movieb : {
+    name : "영화감상",
+    site_url : "http://bestizsky.cafe24.com/zboard/zboard.php?id=movieb",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  gjkm : {
+    name : "게잡의기묘",
+    site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=gjkm",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  gjjp : {
+    name : "게잡JPStar",
+    site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=gjjp",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+}
+
 app.get('/', function (req, res) {
   res.send('community!');
+});
+
+// 베스티즈 리스트 호출
+app.get('/bestiz_list', function(req, res) {
+  var comm = {};
+
+  var index = 1;
+  for(var data in bestiz_list) {
+    comm[data] = {name:bestiz_list[data].name, index:index};
+    index++;
+  }
+  res.contentType('application/json');
+  res.send(JSON.stringify(comm));
 });
 
 // 커뮤니티 리스트 호출
@@ -195,10 +283,65 @@ app.get('/list', function(req, res) {
   res.send(JSON.stringify(comm));
 });
 
+app.get('/bestiz/:key/:page', function(req, res) {
+  var key = req.params.key;
+  var page = req.params.page;
+
+  try {
+    // 호출할 커뮤니티 URL
+    if(page == 1) {
+      url = bestiz_list[key].site_url;
+    } else {
+      url = bestiz_list[key].site_url + bestiz_list[key].page_param + page;
+    }
+
+    var requestOptions  = {
+      method: "GET",
+  		uri: url,
+  		headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      },
+  		encoding: null,
+      timeout:5000,
+  	};
+
+    // URL 호출부
+    request(requestOptions, function(error, response, body) {
+      try {
+
+        if (error) {
+          console.log(err);
+          callback(err);
+        }
+
+        var strContents = new Buffer(body);
+     	  //console.log(iconv.decode(strContents, bestiz_list[key].encoding).toString());
+
+        var $ = cheerio.load(iconv.decode(strContents, bestiz_list[key].encoding).toString());
+
+        var result = bestiz($, key, page, url);
+
+        res.send(result);
+      } catch(err) {
+        console.log(err);
+        res.send(err);
+      }
+    });
+
+  } catch(err) {
+    console.log(err);
+    res.end(err);
+  }
+});
+
 // 베스티즈 뷰
-app.get('/bestizView/:id', function(req, res) {
+app.get('/bestizView/:ser/:id/:no', function(req, res) {
+  var ser = req.params.ser;
   var id = req.params.id;
-  var url = "http://besthgc.cafe24.com/zboard/view.php?id=ghm2b&no=" + id;
+  var no = req.params.no;
+
+  var url = "http://"+ser+".cafe24.com/zboard/view.php?id="+id+"&no="+no;
+
   var requestOptions  = {
     method: "GET"
     ,uri: url
@@ -212,14 +355,16 @@ app.get('/bestizView/:id', function(req, res) {
     try {
       var strContents = new Buffer(body);
       var $ = cheerio.load(iconv.decode(strContents, community["bestiz"].encoding).toString());
+
       var html = null;
-      $("td").each(function(i) {
+
+      $("table").eq(3).find("tr").find("td").each(function() {
+
         if($(this).attr("align") == "right" && $(this).attr("width") == "100%") {
-          if(i == 20) {
-            html = $(this).html()
-          }
+          html = $(this).html();
         }
       });
+
       res.send(html);
     } catch(err) {
       console.log(err);
@@ -643,8 +788,10 @@ function bestiz($, key, page, recent_url) {
 
     var title = $(this).find("td").eq(1).find("a").text().trim();
     var link = $(this).find("td").eq(1).find("a").attr("href");
-    var id = getParameterByName("no", link);
-    link =  "http://www.4seasonpension.com:3000/static/bestiz_view.html?id=" + id;
+    var id = getParameterByName("id", link);
+    var no = getParameterByName("no", link);
+    var ser = recent_url.split(".")[0].replace("http://", "");
+    link =  "http://www.4seasonpension.com:3000/static/bestiz_view.html?ser="+ser+"&id="+id+"&no="+no;
 
     var username = $(this).find("td").eq(2).find("span").text().trim();
     var regdate = $(this).find("td").eq(3).find("span").text().trim();
