@@ -785,13 +785,19 @@ function bestiz($, key, page, recent_url) {
   var result = [];
   var list = [];
 
+  var ser;
+  if(key == "bestiz") {
+    ser = "besthgc";
+  } else {
+    ser = (bestiz_list["key"].site_url).split(".")[0].replace("http://", "");
+  }
+
   $("tr").each(function(i) {
 
     var title = $(this).find("td").eq(1).find("a").text().trim();
     var link = $(this).find("td").eq(1).find("a").attr("href");
     var id = getParameterByName("id", link);
     var no = getParameterByName("no", link);
-    var ser = recent_url.split(".")[0].replace("http://", "");
     link =  "http://www.4seasonpension.com:3000/static/bestiz_view.html?ser="+ser+"&id="+id+"&no="+no;
 
     var username = $(this).find("td").eq(2).find("span").text().trim();
