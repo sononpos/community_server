@@ -424,9 +424,11 @@ var getListData = function(key, page, callback) {
 
   // 모바일로 호출인지 지정?
   var user_agent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
+  var cookie = "";
   if(key == "dailybest") {
     user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36";
     url = community[key].site_url + (page-1);
+    cookie = "hour=3; _ga=GA1.2.2127292808.1489202866; _gat=1; comm=CLN%2CTHR%2CSLR%2CPMP%2CC82%2CMLB%2CBDM%2CRLW%2CHUV%2CDNZ%2CPKZ%2CITZ%2CYGS%2CIVN%2CDCS%2CDGD%2CTQO%2CEXM%2CDPR%2CDBD%2CSCC%2CFMK";
   }
 
   var requestOptions  = {
@@ -434,6 +436,7 @@ var getListData = function(key, page, callback) {
 		uri: url,
 		headers: {
       "User-Agent": user_agent,
+      "Cookie": cookie,
     },
 		encoding: null,
     timeout:5000,
@@ -487,7 +490,15 @@ function dailybest($, key, page, recent_url) {
 
     title = "[" + comm_name + "] " + title.replace(rank, "").trim();
 
-    var link = $(this).find("a").attr("href");
+    var link = $(this).find("a").attr("href") + "";
+    link = link.replace("≀", "&wr_");
+
+    if(link.indexOf("soccerline.co.kr") > 0) {
+      var id = getParameterByName("uid", link);
+      var code = getParameterByName("code", link);
+      link = "http://m.soccerline.co.kr/bbs/"+code+"/view.html?uid=" + id;
+    }
+
     var username = $(this).find(".source").text().trim();
     username = username.replace("|", "").trim();
 
