@@ -14,6 +14,12 @@ app.listen(process.env.PORT || 3000, function () {
 });
 
 var community = {
+  dailybest : {
+    name : "데일리베스트",
+    site_url : "http://best.mingoon.com/best/?offset=",
+    page_param : "",
+    encoding : "UTF-8",
+  },
   clien : {
     name : "클리앙",
     site_url : "http://www.clien.net/cs2/bbs/board.php?bo_table=park",
@@ -164,6 +170,12 @@ var community = {
     page_param : "&page=",
     encoding : "UTF-8",
   },
+  fmkorea : {
+    name : "펨코(포텐)",
+    site_url : "http://m.fmkorea.com/index.php?mid=best",
+    page_param : "&page=",
+    encoding : "UTF-8",
+  },
   ddanzi : {
     name : "딴지(최신)",
     site_url : "http://www.ddanzi.com/index.php?mid=free",
@@ -173,6 +185,18 @@ var community = {
   ddanzihot : {
     name : "딴지(HOT)",
     site_url : "http://www.ddanzi.com/index.php?mid=free&bm=hot",
+    page_param : "&page=",
+    encoding : "UTF-8",
+  },
+  theqoosquare : {
+    name : "더쿠(스퀘어)",
+    site_url : "http://theqoo.net/index.php?mid=square&filter_mode=normal",
+    page_param : "&page=",
+    encoding : "UTF-8",
+  },
+  theqoobest : {
+    name : "더쿠(베스트)",
+    site_url : "http://theqoo.net/index.php?mid=tbest&filter_mode=normal",
     page_param : "&page=",
     encoding : "UTF-8",
   },
@@ -398,11 +422,18 @@ var getListData = function(key, page, callback) {
     url = community[key].site_url + community[key].page_param + page;
   }
 
+  // 모바일로 호출인지 지정?
+  var user_agent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
+  if(key == "dailybest") {
+    user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36";
+    url = community[key].site_url + (page-1);
+  }
+
   var requestOptions  = {
     method: "GET",
 		uri: url,
 		headers: {
-      "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "User-Agent": user_agent,
     },
 		encoding: null,
     timeout:5000,
@@ -440,6 +471,45 @@ function getParameterByName(name, url) {
   if (!results) return null;
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+// 커뮤니티 인기글 모음
+function dailybest($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".articles li").each(function(i) {
+
+    var comm_name = $(this).find(".label_comm").text().trim();
+
+    var title = $(this).find(".title").text().trim();
+    var rank = title.split(" ")[0];
+
+    title = "[" + comm_name + "] " + title.replace(rank, "").trim();
+
+    var link = $(this).find("a").attr("href");
+    var username = $(this).find(".source").text().trim();
+    username = username.replace("|", "").trim();
+
+    var regdate = $(this).find(".source .date").text().trim();
+
+    var viewcomment = $(this).find(".cmt").text().trim();
+
+
+    var viewcnt = viewcomment.split(" ")[1];
+    var commentcnt = viewcomment.split(" ")[0];
+
+    if(title != "" && username != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
 }
 
 // 클리앙 모두의 공원
@@ -1227,6 +1297,39 @@ function soccerline($, key, page, recent_url) {
   return result;
 }
 
+// 에펨코리아 (포텐)
+function fmkorea($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $("div.fm_best_widget li").each(function(i) {
+
+    var title = $(this).find(".read_more").text().trim();
+    var title_comment = $(this).find(".title").text().trim();
+
+    var link = $(this).find(".title a").attr("href");
+    link = "http://m.fmkorea.com" + link;
+
+    var username = $(this).find(".author").text().trim();
+    username = username.replace("/", "").trim();
+    var regdate = $(this).find(".regdate").text().trim();
+    var viewcnt = "";
+    var commentcnt = title_comment.replace(title, "").trim();
+    commentcnt = commentcnt.replace("[", "");
+    commentcnt = commentcnt.replace("]", "");
+
+    if(title != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
 // 딴지일보 자유게시판 (최신)
 function ddanzi($, key, page, recent_url) {
   var result = [];
@@ -1290,6 +1393,73 @@ function ddanzihot($, key, page, recent_url) {
         list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
       }
     }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 더쿠 (스퀘어)
+function theqoosquare($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".bd_lst_wrp tbody tr").each(function(i) {
+
+    var notice_class = $(this).attr("class");
+
+    if(notice_class == undefined) {
+      var title = $(this).find(".title a").text().trim();
+
+      var link = $(this).find(".title a").attr("href");
+      link = "http://theqoo.net" + link;
+
+      var username = "";
+      var regdate = $(this).find(".time").text().trim();
+      var viewcnt = $(this).find(".m_no").eq(0).text().trim();
+      var commentcnt = $(this).find(".replyNum").text().trim();
+
+      if(title != "") {
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      }
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 더쿠 (베스트)
+function theqoobest($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".bd_lst_wrp tbody tr").each(function(i) {
+
+    var notice_class = $(this).attr("class");
+
+    if(notice_class == undefined) {
+      var title = $(this).find(".title a").text().trim();
+
+      var link = $(this).find(".title a").attr("href");
+      link = "http://theqoo.net" + link;
+
+      var username = "";
+      var regdate = $(this).find(".time").text().trim();
+      var viewcnt = $(this).find(".m_no").eq(0).text().trim();
+      var commentcnt = $(this).find(".replyNum").text().trim();
+
+      if(title != "") {
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      }
+    }
+
   });
 
   var next_url = parseInt(page)+1;
