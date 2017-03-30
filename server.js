@@ -200,6 +200,30 @@ var community = {
     page_param : "&page=",
     encoding : "UTF-8",
   },
+  dvdprime : {
+    name : "DVD프라임(프라임차한잔)",
+    site_url : "https://dvdprime.com/g2/bbs/board.php?bo_table=comm",
+    page_param : "&page=",
+    encoding : "UTF-8",
+  },
+  dvdprimehumor : {
+    name : "DVD프라임(유머)",
+    site_url : "https://dvdprime.com/g2/bbs/board.php?bo_table=humor",
+    page_param : "&page=",
+    encoding : "UTF-8",
+  },
+  dogdripuser : {
+    name : "개드립(최신)",
+    site_url : "http://www.dogdrip.net/index.php?mid=userdog&m=1",
+    page_param : "&page=",
+    encoding : "UTF-8",
+  },
+  dogdrip : {
+    name : "개드립(베스트)",
+    site_url : "http://www.dogdrip.net/index.php?mid=dogdrip&m=1",
+    page_param : "&page=",
+    encoding : "UTF-8",
+  },
 };
 
 var bestiz_list = {
@@ -300,6 +324,7 @@ app.get('/list', function(req, res) {
 
   var index = 1;
   for(var data in community) {
+    //console.log(index + " : " + community[data].name);
     comm[data] = {name:community[data].name, index:index};
     index++;
   }
@@ -1471,6 +1496,134 @@ function theqoobest($, key, page, recent_url) {
       }
     }
 
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// DVD프라임 (프라임차한잔)
+function dvdprime($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".list_table_row").each(function(i) {
+
+    var title = $(this).find(".list_subject_a .mobile_hide span").eq(0).text().trim();
+    var link = $(this).find(".list_subject_a").attr("href");
+    link = link.replace("≀", "&wr_");
+    var id = getParameterByName("wr_id", link);
+    link = "https://dvdprime.com/g2/bbs/board.php?bo_table=comm&wr_id=" + id
+
+    var username = $(this).find(".member").text().trim();
+    var regdate = $(this).find(".list_table_dates").text().trim();
+    var viewcnt = $(this).find(".list_table_col_hit").text().trim();
+    var commentcnt = $(this).find(".list_comment_num_a").eq(0).text().trim();
+
+    if(title != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// DVD프라임 (못웃기면맞는다)
+function dvdprimehumor($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".list_table_row").each(function(i) {
+
+    var title = $(this).find(".list_subject_a .mobile_hide span").eq(0).text().trim();
+    var link = $(this).find(".list_subject_a").attr("href");
+    link = link.replace("≀", "&wr_");
+    var id = getParameterByName("wr_id", link);
+    link = "https://dvdprime.com/g2/bbs/board.php?bo_table=humor&wr_id=" + id
+
+    var username = $(this).find(".member").text().trim();
+    var regdate = $(this).find(".list_table_dates").text().trim();
+    var viewcnt = $(this).find(".list_table_col_hit").text().trim();
+    var commentcnt = $(this).find(".list_comment_num_a").eq(0).text().trim();
+
+    if(title != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 개드립(최신)
+function dogdripuser($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".lt li").each(function(i) {
+    var notice = $(this).find(".notice").text().trim();
+
+    if(notice != "공지") {
+      var title = $(this).find(".title").text().trim();
+      var link = $(this).find("a").attr("href");
+      var username = $(this).find("span[class^=member_]").text().trim();
+
+      var regdate = $(this).find(".time").eq(0).text().trim();
+      var viewcnt = "";
+      var commentcnt = $(this).find(".title em").text().trim();
+      title = title.replace(commentcnt, "");
+      commentcnt = commentcnt.replace("[", "");
+      commentcnt = commentcnt.replace("]", "");
+
+      if(title != "") {
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      }
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 개드립(베스트)
+function dogdrip($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".lt li").each(function(i) {
+    var notice = $(this).find(".notice").text().trim();
+
+    if(notice != "공지") {
+      var title = $(this).find(".title").text().trim();
+      var link = $(this).find("a").attr("href");
+      var username = $(this).find("span[class^=member_]").text().trim();
+
+      var regdate = $(this).find(".time").eq(0).text().trim();
+      var viewcnt = "";
+      var commentcnt = $(this).find(".title em").text().trim();
+      title = title.replace(commentcnt, "");
+      commentcnt = commentcnt.replace("[", "");
+      commentcnt = commentcnt.replace("]", "");
+
+      if(title != "") {
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      }
+    }
   });
 
   var next_url = parseInt(page)+1;
