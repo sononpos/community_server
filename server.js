@@ -164,12 +164,12 @@ var community = {
     page_param : "&p=",
     encoding : "UTF-8",
   },
-  soccerline : {
-    name : "사커라인(라커룸)",
-    site_url : "http://m.soccerline.co.kr/bbs/locker/list.html?&code=locker&keyfield=&key=&period=",
-    page_param : "&page=",
-    encoding : "UTF-8",
-  },
+  // soccerline : {
+  //   name : "사커라인(라커룸)",
+  //   site_url : "http://m.soccerline.co.kr/bbs/locker/list.html?&code=locker&keyfield=&key=&period=",
+  //   page_param : "&page=",
+  //   encoding : "UTF-8",
+  // },
   fmkorea : {
     name : "펨코(포텐)",
     site_url : "http://m.fmkorea.com/index.php?mid=best",
