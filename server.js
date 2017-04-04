@@ -302,7 +302,7 @@ var bestiz_list = {
 }
 
 app.get('/', function (req, res) {
-  res.send('community!');
+  res.redirect('/static/mobile/redirect.html');
 });
 
 // 베스티즈 리스트 호출
