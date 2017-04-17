@@ -723,7 +723,7 @@ function bullpen($, key, page, recent_url) {
     commentcnt = commentcnt.replace("[", "");
     commentcnt = commentcnt.replace("]", "");
 
-    if(title != "" && username != "담당자") {
+    if(title != "" && username != "담당자" && username != "엠팍제휴팀") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
     }
 
