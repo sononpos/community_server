@@ -14,8 +14,20 @@ app.listen(process.env.PORT || 3000, function () {
 });
 
 var community = {
+  nodame : {
+    name : "커뮤니티 이슈(종합)",
+    site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=bobaedreamBest2|clienPark|dogdripFree|eightTwoCook15|humorunivPds|mlbparkBullpen|pgr21Humor|ppomppuFreeboard|ruliwebG005|todayhumorBOB&sortKey=read",
+    page_param : "&page=",
+    encoding : "UTF-8",
+  },
+  beobe : {
+    name : "베오베(종합)",
+    site_url : "http://beobe.us/",
+    page_param : "",
+    encoding : "UTF-8",
+  },
   dailybest : {
-    name : "데일리베스트",
+    name : "데일리베스트(종합)",
     site_url : "http://best.mingoon.com/best/?offset=",
     page_param : "",
     encoding : "UTF-8",
@@ -86,8 +98,14 @@ var community = {
     page_param : "&page=",
     encoding : "EUC-KR",
   },
+  bestizjd : {
+    name : "베스티즈(게천잡담)",
+    site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=bestgj",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
   bestiz : {
-    name : "베스티즈",
+    name : "베스티즈(게스트천국)",
     site_url : "http://besthgc.cafe24.com/zboard/zboard.php?id=ghm2b",
     page_param : "&page=",
     encoding : "EUC-KR",
@@ -324,7 +342,7 @@ app.get('/list', function(req, res) {
 
   var index = 1;
   for(var data in community) {
-    //console.log(index + " : " + community[data].name);
+    console.log(index + " : " + community[data].name);
     comm[data] = {name:community[data].name, index:index};
     index++;
   }
@@ -430,7 +448,33 @@ app.get('/:key/:page', function(req, res) {
   try {
     // 보내줄 리스트 데이터
     getListData(key, page, function(result) {
-      res.send(result);
+
+      //리스트가 없으면 점검중으로 나오게 하자
+      try {
+        if(result[0].list.length == 0) {
+          result = [];
+          list = [];
+
+          for(var i=0; i<20; i++) {
+            list.push({title:"점검중 입니다.", link:"#", username:"관리자", regdate:"", viewcnt:"0", commentcnt:""});
+          }
+          result.push({next_url:"1", list:list});
+          res.send(result);
+        } else {
+          // 이거이 정상
+          res.send(result);
+        }
+      } catch(err) {
+
+        result = [];
+        list = [];
+
+        for(var i=0; i<20; i++) {
+          list.push({title:"점검중 입니다.", link:"#", username:"관리자", regdate:"", viewcnt:"0", commentcnt:""});
+        }
+        result.push({next_url:"1", list:list});
+        res.send(result);
+      }
     });
   } catch(err) {
     console.log(err);
@@ -499,6 +543,79 @@ function getParameterByName(name, url) {
   if (!results) return null;
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+// 커뮤니티 이슈
+function nodame($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  var json_data = eval($.text());
+
+  var nameList = {};
+  nameList['bobaedreamBest2'] = {"name":"보배","color":"#0066CC"};
+  nameList['clienPark'] = {"name":"클량","color":"#08298A"};
+  nameList['dogdripFree'] = {"name":"갣립","color":"#364277"};
+  nameList['eightTwoCook15'] = {"name":"82쿡","color":"#009900"};
+  nameList['humorunivPds'] = {"name":"웃대","color":"#FE2E64"};
+  nameList['mlbparkBullpen'] = {"name":"엠팍","color":"#FF6600"};
+  nameList['pgr21Humor'] = {"name":"PGR","color":"#C14647"};
+  nameList['ppomppuFreeboard'] = {"name":"뽐뿌","color":"#666677"};
+  nameList['ruliwebG005'] = {"name":"루리","color":"#0101DF"};
+  nameList['todayhumorBOB'] = {"name":"오유","color":"#0489B1"};
+
+
+  for(key in json_data) {
+    var title = "[" + nameList[json_data[key].siteDomain].name + "] " + json_data[key].title;
+    var link = json_data[key].address;
+    var username = json_data[key].writer;
+    var regdate = json_data[key].time;
+    var viewcnt = json_data[key].read;
+    var commentcnt = json_data[key].replyCount;
+
+    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+  }
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 베오베
+function beobe($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".list-group a").each(function(i) {
+    if(i < 200) {
+      var all_text = $(this).find(".col-xs-10").text().trim();
+      var sub_text = $(this).find(".col-xs-12").eq(0).text().trim();
+      var comm_name = $(this).find(".col-xs-12").eq(1).text().trim();
+
+      var title = "[" + comm_name + "] " + all_text.replace(sub_text, "");
+      var link = $(this).attr("href");
+      link = getParameterByName("href", link);
+
+      var username = "베오베";
+      var regdate = sub_text.split(",")[0] + " " + sub_text.split(",")[1];
+      var viewcnt = $(this).find(".text-right small").text().trim();
+      var commentcnt = sub_text.split(",")[2] + "";
+      commentcnt = commentcnt.replace(" 댓글:", "");
+
+
+      if(title != "" && username != "" && comm_name != "") {
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      }
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
 }
 
 // 커뮤니티 인기글 모음
@@ -875,6 +992,45 @@ function rgrrare($, key, page, recent_url) {
     var commentcnt = $(this).find("td").eq(3).text().trim();
 
     if(title != "" && username != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 베스티즈 게천잡담
+function bestizjd($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  var ser;
+  if(key == "bestizjd") {
+    ser = "bestjd";
+  } else {
+    ser = (bestiz_list["key"].site_url).split(".")[0].replace("http://", "");
+  }
+
+  $("tr").each(function(i) {
+
+    var title = $(this).find("td").eq(1).find("a").text().trim();
+    var link = $(this).find("td").eq(1).find("a").attr("href");
+    var id = getParameterByName("id", link);
+    var no = getParameterByName("no", link);
+    link =  "http://www.4seasonpension.com:3000/static/bestiz_view.html?ser="+ser+"&id="+id+"&no="+no;
+
+    var username = $(this).find("td").eq(2).find("span").text().trim();
+    var regdate = $(this).find("td").eq(3).find("span").text().trim();
+    var viewcnt = $(this).find("td").eq(4).text().trim();
+    var commentcnt = $(this).find(".commentnum").text().trim();
+    commentcnt = commentcnt.replace("[", "");
+    commentcnt = commentcnt.replace("]", "");
+
+    if(title != "" && username != "Best" && username != "") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
     }
   });
