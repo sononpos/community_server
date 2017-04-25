@@ -342,7 +342,7 @@ app.get('/list', function(req, res) {
 
   var index = 1;
   for(var data in community) {
-    console.log(index + " : " + community[data].name);
+    //console.log(index + " : " + community[data].name);
     comm[data] = {name:community[data].name, index:index};
     index++;
   }
