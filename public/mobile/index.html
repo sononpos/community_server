@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<meta name="author" content="www.frebsite.nl" />
+		<meta name="author" content="" />
 		<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
 
 		<title>핫 커뮤니티</title>
@@ -15,31 +15,31 @@
 
 		<style>
 			.swiper-container {
-	        width: 100%;
-	        height: 60px;
-	        margin: 0 auto;
+			width: 100%;
+			height: 60px;
+			margin: 0 auto;
 					background-color: #f3f3f3;
 					border-bottom: 1px solid #bbb;
-	    }
-	    .swiper-slide {
-	        text-align: center;
-	        font-size: 15px;
-	        width: auto;
+		}
+		.swiper-slide {
+			text-align: center;
+			font-size: 15px;
+			width: auto;
 					min-width: 50px;
-	        /* Center slide text vertically */
-	        display: -webkit-box;
-	        display: -ms-flexbox;
-	        display: -webkit-flex;
-	        display: flex;
-	        -webkit-box-pack: center;
-	        -ms-flex-pack: center;
-	        -webkit-justify-content: center;
-	        justify-content: center;
-	        -webkit-box-align: center;
-	        -ms-flex-align: center;
-	        -webkit-align-items: center;
-	        align-items: center;
-	    }
+			/* Center slide text vertically */
+			display: -webkit-box;
+			display: -ms-flexbox;
+			display: -webkit-flex;
+			display: flex;
+			-webkit-box-pack: center;
+			-ms-flex-pack: center;
+			-webkit-justify-content: center;
+			justify-content: center;
+			-webkit-box-align: center;
+			-ms-flex-align: center;
+			-webkit-align-items: center;
+			align-items: center;
+		}
 			.swiper-slide a {color:#000; text-decoration: none; font-weight: bold;}
 			.swiper-slide a:active {color:#38c;}
 			.swiper-slide a.swiper_active {color:#38c;}
@@ -57,106 +57,37 @@
 
 			.more {height:50px; margin:0 auto; vertical-align: middle;padding-top:25px; color:#000;}
 
+			#mm-0 {overflow-x: visible;}
 		</style>
 
-
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-		<script type="text/javascript" src="js/jquery.mmenu.all.min.js"></script>
-		<script src="js/swiper.min.js"></script>
-
-		<script type="text/javascript">
-			var refresh_val = 0;
-			$(function() {
-				$('nav#menu').mmenu();
-			});
-		</script>
 	</head>
 	<body>
 
 		<div id="page">
+
+			<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+			<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+			<script src="js/jquery.mmenu.all.min.js"></script>
+			<script src="js/swiper.min.js"></script>
+
 			<div class="header">
 				<a href="#menu"><span></span></a>
 				핫 커뮤니티
 			</div>
 
 			<div class="wrap">
-
 				<!-- Swiper -->
-		    <div class="swiper-container">
-	        <div class="swiper-wrapper">
-
-	        </div>
-	        <!-- Add Scrollbar -->
-	        <div class="swiper-scrollbar"></div>
-		    </div>
-
-		    <!-- Initialize Swiper -->
-		    <script>
-					var swiper;
-					init_menu();
-
-					function init_menu() {
-						$.getJSON("/list", function(data) {
-							$.each(data, function(key, value) {
-
-								// 상단 탭 메뉴 추가, 왼쪽 네비게이션 메뉴 추가
-								if(localStorage.getItem(key) == "off") {
-									$("#menu ul").append('<li id="li_'+key+'" class="off"><a href="javascript:select_left_nav(\''+key+'\');">'+value.name+'</a></li>');
-									$(".swiper-wrapper").append('<div id="swiper_'+key+'" class="swiper-slide swiper_off"><a href="javascript:get_menu_list(\''+key+'\', \'1\');">'+ value.name +'</a></div>');
-								} else {
-									$("#menu ul").append('<li id="li_'+key+'" class="on"><a href="javascript:select_left_nav(\''+key+'\');">'+value.name+'</a></li>');
-									$(".swiper-wrapper").append('<div id="swiper_'+key+'" class="swiper-slide"><a href="javascript:get_menu_list(\''+key+'\', \'1\');">'+ value.name +'</a></div>');
-								}
-							})
-						}).done(function() {
-							swiper = new Swiper('.swiper-container', {
-					        scrollbar: '.swiper-scrollbar',
-					        scrollbarHide: true,
-					        slidesPerView: 'auto',
-					        centeredSlides: true,
-					        spaceBetween: 30,
-					        grabCursor: true
-					    });
-
-							var first_key = $("li.on:first").attr("id").replace("li_", "");
-							$(".swiper_active").removeClass("swiper_active");
-							$("#swiper_"+first_key).find("a").addClass("swiper_active");
-							get_menu_list(first_key, '1')
-						});
-					}
-
-					function select_left_nav(key) {
-
-						if(localStorage.getItem(key) == "off") {
-							localStorage.setItem(key, "on");
-							$("#li_"+key).attr("class", "on");
-							$("#swiper_"+key).removeClass("swiper_off");
-						} else {
-							localStorage.setItem(key, "off");
-							$("#li_"+key).attr("class", "off");
-							$("#swiper_"+key).addClass("swiper_off");
-						}
-
-						swiper = new Swiper('.swiper-container', {
-								scrollbar: '.swiper-scrollbar',
-								scrollbarHide: true,
-								slidesPerView: 'auto',
-								centeredSlides: true,
-								spaceBetween: 30,
-								grabCursor: true
-						});
-
-						var first_key = $("li.on:first").attr("id").replace("li_", "");
-
-						$(".swiper_active").removeClass("swiper_active");
-						$("#swiper_"+first_key).find("a").addClass("swiper_active");
-						get_menu_list(first_key, '1');
-					}
-
-		    </script>
+			    <div class="swiper-container">
+			        <div class="swiper-wrapper"></div>
+			        <!-- Add Scrollbar -->
+			        <div class="swiper-scrollbar"></div>
+			    </div>
 
 				<div class="content">
+					<input id="current_key" type="hidden" name="current_key" />
+					<input id="current_index" type="hidden" name="current_index" />
+					<input id="current_next" type="hidden" name="current_next" />
+
 					<ul id="comm_list" data-role="listview" data-inset="true">
 
 					</ul>
@@ -164,78 +95,194 @@
 				</div>
 			</div>
 
-			<nav id="menu">
-				<ul>
+			<nav id="menu"><ul></ul></nav>
 
-				</ul>
-			</nav>
-			<input id="current_key" type="hidden" name="current_key" />
-			<input id="current_next" type="hidden" name="current_next" />
 		</div>
 
-		<script type="text/javascript">
+	</body>
 
-			// 스크롤 끝
-			$(document).ready(function() {
-				window.addEventListener('scroll',function() {
-					var scroll_val = $('html').scrollTop() || $('body').scrollTop();
+	<script>
+		function go_community_page(url) {
 
-					//$("#scroll_info").text(scroll_val);
+			document.location.hash = "#hotcommunity";
+			localStorage.setItem("hotcommunity", $("#page").html());
 
-					if(scroll_val == $(document).height() - $(window).height()) {
-						get_menu_list($("#current_key").val(), $("#current_next").val());
-					}
+			var scroll_val = $('html').scrollTop() || $('body').scrollTop();
+			localStorage.setItem("hotscroll", scroll_val);
 
-					if(scroll_val > 60) {
-						$(".swiper-container").css("position", "fixed");
-						$(".header").hide();
-					} else {
-						$(".swiper-container").css("position", "relative");
-						$(".header").show();
-					}
-				});
+			location.href = url;
+		}
 
-			});
+		$(document).ready(function() {
 
-			function goMore() {
-				get_menu_list($("#current_key").val(), $("#current_next").val());
-			}
+			var swiper;
 
-			function get_menu_list(key, index) {
+			if(document.location.hash){
+				var HashLocationName = document.location.hash;
+				HashLocationName = HashLocationName.replace("#","");
 
-				if(index == '1') {
-					$('html, body').animate({scrollTop:0}, 100);
-					$(".swiper-container").css("position", "relative");
-					$(".header").show();
-				}
+				$("#page").html(localStorage.getItem(HashLocationName));
+				$("#page").append('<nav id="menu"><ul></ul></nav>');
 
-				$.getJSON("/"+ key + "/" + index, function(data) {
+				$.getJSON("/list", function(data) {
 
-					$("#current_key").val(key);
 
 					$.each(data, function(key, value) {
-						if(index == '1') {
-							$(".content ul").html("");
+
+						// 상단 탭 메뉴 추가, 왼쪽 네비게이션 메뉴 추가
+						if(localStorage.getItem(key) == "off") {
+							$("#menu ul").append('<li id="li_'+key+'" class="off"><a href="javascript:select_left_nav(\''+key+'\');">'+value.name+'</a></li>');
+						} else {
+							$("#menu ul").append('<li id="li_'+key+'" class="on"><a href="javascript:select_left_nav(\''+key+'\');">'+value.name+'</a></li>');
 						}
-
-						$("#current_next").val(value.next_url);
-
-						// 리스트
-						$.each(value.list, function(key, value2) {
-							$(".content ul").append('<li><a href="'+value2.link+'"><h2>'+value2.title+'</h2><p>'+ value2.username + " " + value2.regdate + " 조회수:" + value2.viewcnt +'</p></a></li>');
-						})
-
 					})
 				}).done(function() {
 
-					$(".swiper_active").removeClass("swiper_active");
-					$("#swiper_"+key).find("a").addClass("swiper_active");
+					$('nav#menu').mmenu();
+					makeSwiper();
 
-					$("#comm_list").listview("refresh");
+					var hotscroll = parseInt(localStorage.getItem("hotscroll"));
+					$('html, body').animate({scrollTop : hotscroll}, 500);
+
 				});
+
+			} else {
+				init_menu();
 			}
 
-		</script>
+			//init_menu();
 
-	</body>
+			// 스크롤 끝
+			window.addEventListener('scroll',function() {
+				var scroll_val = $('html').scrollTop() || $('body').scrollTop();
+
+				//$("#scroll_info").text(scroll_val);
+
+				if(scroll_val == $(document).height() - $(window).height()) {
+					get_menu_list($("#current_key").val(), $("#current_next").val());
+				}
+
+				if(scroll_val > 60) {
+					$(".swiper-container").css("position", "fixed");
+					$(".header").hide();
+				} else {
+					$(".swiper-container").css("position", "relative");
+					$(".header").show();
+				}
+			});
+		});
+
+	</script>
+
+	<script type="text/javascript">
+
+		function init_menu() {
+			$.getJSON("/list", function(data) {
+				$.each(data, function(key, value) {
+
+					// 상단 탭 메뉴 추가, 왼쪽 네비게이션 메뉴 추가
+					if(localStorage.getItem(key) == "off") {
+						$("#menu ul").append('<li id="li_'+key+'" class="off"><a href="javascript:select_left_nav(\''+key+'\');">'+value.name+'</a></li>');
+						$(".swiper-wrapper").append('<div id="swiper_'+key+'" class="swiper-slide swiper_off"><a href="javascript:get_menu_list(\''+key+'\', \'1\');">'+ value.name +'</a></div>');
+					} else {
+						$("#menu ul").append('<li id="li_'+key+'" class="on"><a href="javascript:select_left_nav(\''+key+'\');">'+value.name+'</a></li>');
+						$(".swiper-wrapper").append('<div id="swiper_'+key+'" class="swiper-slide"><a href="javascript:get_menu_list(\''+key+'\', \'1\');">'+ value.name +'</a></div>');
+					}
+				})
+			}).done(function() {
+
+				var first_key = $("li.on:first").attr("id").replace("li_", "");
+
+				$('nav#menu').mmenu();
+				swiper_button_active(first_key);
+				get_menu_list(first_key, '1');
+				makeSwiper();
+			});
+		}
+
+		function select_left_nav(key) {
+
+			if(localStorage.getItem(key) == "off") {
+				localStorage.setItem(key, "on");
+				$("#li_"+key).attr("class", "on");
+				$("#swiper_"+key).removeClass("swiper_off");
+			} else {
+				localStorage.setItem(key, "off");
+				$("#li_"+key).attr("class", "off");
+				$("#swiper_"+key).addClass("swiper_off");
+			}
+
+			var first_key = $("li.on:first").attr("id").replace("li_", "");
+			var first_key_index = $("li[id^=li_]").index($("li.on:first"));
+
+			makeSwiper();
+			swiper_button_active(first_key);
+			get_menu_list(first_key, '1');
+		}
+
+		function makeSwiper() {
+
+			swiper = new Swiper('.swiper-container', {
+				scrollbar: '.swiper-scrollbar',
+				scrollbarHide: true,
+				slidesPerView: 'auto',
+				centeredSlides: true,
+				spaceBetween: 30,
+				grabCursor: true
+			});
+
+			//swiper.slideTo(first_key_index, 100);
+		}
+
+		function swiper_button_active(key) {
+			$(".swiper_active").removeClass("swiper_active");
+			$("#swiper_"+key).find("a").addClass("swiper_active");
+		}
+
+
+		function goMore() {
+			get_menu_list($("#current_key").val(), $("#current_next").val());
+		}
+
+		function get_menu_list(key, index) {
+
+			if(index == '1') {
+				$('html, body').animate({scrollTop:0}, 100);
+				$(".swiper-container").css("position", "relative");
+				$(".header").show();
+			}
+
+			$.getJSON("/"+ key + "/" + index, function(data) {
+
+				$("#current_key").val(key);
+				$("#current_index").val(index);
+
+				$.each(data, function(key, value) {
+					if(index == '1') {
+						$(".content ul").html("");
+					}
+
+					$("#current_next").val(value.next_url);
+
+					// 리스트
+					$.each(value.list, function(key, value2) {
+						//$(".content ul").append('<li><a href="'+value2.link+'"><h2>'+value2.title+'</h2><p>'+ value2.username + " " + value2.regdate + " 조회수:" + value2.viewcnt +'</p></a></li>');
+						$(".content ul").append('<li><a href="javascript:go_community_page(\''+value2.link+'\');"><h2>'+value2.title+'</h2><p>'+ value2.username + " " + value2.regdate + " 조회수:" + value2.viewcnt +'</p></a></li>');
+					})
+
+				})
+			}).done(function() {
+
+				// if(document.location.hash){
+				// 	var HashLocationName = document.location.hash;
+				// 	HashLocationName = HashLocationName.replace("#","");
+				// 	$(".content").html(localStorage.getItem(HashLocationName));
+				// }
+				swiper_button_active(key);
+
+				$("#comm_list").listview("refresh");
+			});
+		}
+
+	</script>
 </html>
