@@ -320,7 +320,7 @@ var bestiz_list = {
 }
 
 app.get('/', function (req, res) {
-  res.redirect('/static/mobile/redirect.html');
+  res.redirect('/static/mobile/index.html');
 });
 
 // 베스티즈 리스트 호출

@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<script>
+		  (adsbygoogle = window.adsbygoogle || []).push({
+		    google_ad_client: "ca-pub-5751265838880551",
+		    enable_page_level_ads: true
+		  });
+		</script>
+
 		<meta charset="utf-8" />
 		<meta name="author" content="" />
 		<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
@@ -14,13 +22,37 @@
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
 
 		<style>
-			.swiper-container {
+		.swiper-container {
 			width: 100%;
 			height: 60px;
 			margin: 0 auto;
-					background-color: #f3f3f3;
-					border-bottom: 1px solid #bbb;
+			background-color: #f3f3f3;
+			border-bottom: 1px solid #bbb;
+			position: relative;
 		}
+
+		.swiper-more {
+			position: absolute;
+			top:0;
+			right:0;
+			z-index: 1000;
+			background-color: #fff;
+			background-color: #f3f3f3;
+			border-bottom: 1px solid #bbb;
+			text-align: center;
+		}
+
+		.swiper-more a {
+			display:block;
+			width:60px;
+			height:60px;
+			line-height: 60px;
+			font-weight: bold;
+			z-index: 1000;
+			text-decoration: none;
+		}
+
+
 		.swiper-slide {
 			text-align: center;
 			font-size: 15px;
@@ -45,19 +77,47 @@
 			.swiper-slide a.swiper_active {color:#38c;}
 
 			.content {padding : 0;}
-			.wrap {height:auto; min-height:400px;}
+			.wrap {position: relative; height:auto; min-height:400px;}
 			iframe {
 			  border: none;
+			}
+
+			.more_comm_open {
+				display: none;
+				position: absolute;
+				top:60px;
+				left:0;
+				width:100%;
+			}
+
+			.more_comm_open a {
+				display:block;
+				height:20px;
+				padding:20px 5px 20px 5px;
+				text-align: center;
+				background-color: #f3f3f3;
+				border:1px solid #fff;
+				color:#000;
+				text-decoration: none;
+				font-size:12px;
+			}
+
+			.more_comm_open ul {width: 100%;}
+			.more_comm_open ul:after {content: ''; display: block; clear: both;}
+			.more_comm_open li {
+				float:left;
+				width: 25%;
 			}
 
 			.on {color:rgba(0,0,0,.75)}
 			.off {color:rgba(0,0,0,.3)}
 
 			.swiper_off {display:none;}
+			.layer_off {display:none;}
 
 			.more {height:50px; margin:0 auto; vertical-align: middle;padding-top:25px; color:#000;}
 
-			#mm-0 {overflow-x: visible;}
+			/*#mm-0 {overflow-x: visible;}*/
 		</style>
 
 	</head>
@@ -81,6 +141,11 @@
 			        <div class="swiper-wrapper"></div>
 			        <!-- Add Scrollbar -->
 			        <div class="swiper-scrollbar"></div>
+
+							<div class="swiper-more">
+								<a href="javascript:openMoreLayer();">▼</a>
+							</div>
+
 			    </div>
 
 				<div class="content">
@@ -92,6 +157,12 @@
 
 					</ul>
 					<a href="javascript:goMore();"><div class="more">더보기</div></a>
+				</div>
+
+				<div class="more_comm_open">
+					<ul>
+
+					</ul>
 				</div>
 			</div>
 
@@ -141,8 +212,7 @@
 					$('nav#menu').mmenu();
 					makeSwiper();
 
-					var hotscroll = parseInt(localStorage.getItem("hotscroll"));
-					$('html, body').animate({scrollTop : hotscroll}, 500);
+					go_hash_scroll();
 
 				});
 
@@ -164,6 +234,7 @@
 
 				if(scroll_val > 60) {
 					$(".swiper-container").css("position", "fixed");
+					$(".swiper-container").css("top", "0");
 					$(".header").hide();
 				} else {
 					$(".swiper-container").css("position", "relative");
@@ -184,9 +255,11 @@
 					if(localStorage.getItem(key) == "off") {
 						$("#menu ul").append('<li id="li_'+key+'" class="off"><a href="javascript:select_left_nav(\''+key+'\');">'+value.name+'</a></li>');
 						$(".swiper-wrapper").append('<div id="swiper_'+key+'" class="swiper-slide swiper_off"><a href="javascript:get_menu_list(\''+key+'\', \'1\');">'+ value.name +'</a></div>');
+						$(".more_comm_open ul").append('<li id="layer_'+key+'" class="layer_off"><a href="javascript:clickLayer(\''+key+'\');">'+value.name+'</a></li>');
 					} else {
 						$("#menu ul").append('<li id="li_'+key+'" class="on"><a href="javascript:select_left_nav(\''+key+'\');">'+value.name+'</a></li>');
 						$(".swiper-wrapper").append('<div id="swiper_'+key+'" class="swiper-slide"><a href="javascript:get_menu_list(\''+key+'\', \'1\');">'+ value.name +'</a></div>');
+						$(".more_comm_open ul").append('<li id="layer_'+key+'"><a href="javascript:clickLayer(\''+key+'\');">'+value.name+'</a></li>');
 					}
 				})
 			}).done(function() {
@@ -206,10 +279,12 @@
 				localStorage.setItem(key, "on");
 				$("#li_"+key).attr("class", "on");
 				$("#swiper_"+key).removeClass("swiper_off");
+				$("#layer_"+key).removeClass("layer_off");
 			} else {
 				localStorage.setItem(key, "off");
 				$("#li_"+key).attr("class", "off");
 				$("#swiper_"+key).addClass("swiper_off");
+				$("#layer_"+key).addClass("layer_off");
 			}
 
 			var first_key = $("li.on:first").attr("id").replace("li_", "");
@@ -231,7 +306,28 @@
 				grabCursor: true
 			});
 
-			//swiper.slideTo(first_key_index, 100);
+			var swiper_off_num = 0;
+
+			$(".swiper-slide").each(function(i) {
+				if($(this).hasClass("swiper_off") === true) {
+					swiper_off_num = swiper_off_num + 1;
+				} else {
+					if($(this).find("a").hasClass("swiper_active") === true) {
+						swiper.slideTo(i-swiper_off_num, 100);
+					}
+				}
+			});
+
+			go_hash_scroll();
+		}
+
+		function go_hash_scroll() {
+			if(document.location.hash){
+				var hotscroll = parseInt(localStorage.getItem("hotscroll"));
+				$('html, body').animate({scrollTop : hotscroll}, 500);
+
+				$("#mm-0").css("overflow-x", "visible");
+			}
 		}
 
 		function swiper_button_active(key) {
@@ -281,7 +377,40 @@
 				swiper_button_active(key);
 
 				$("#comm_list").listview("refresh");
+
+				var swiper_off_num = 0;
+				$(".swiper-slide").each(function(i) {
+					if($(this).hasClass("swiper_off") === true) {
+						swiper_off_num = swiper_off_num + 1;
+					} else {
+						if($(this).find("a").hasClass("swiper_active") === true) {
+							swiper.slideTo(i-swiper_off_num, 100);
+						}
+					}
+				});
 			});
+		}
+
+		function openMoreLayer() {
+
+			var left = ( $(window).scrollLeft());
+      var top = ( $(window).scrollTop() + 60);
+
+      // css 스타일을 변경합니다.
+      $('.more_comm_open').css({'left':left,'top':top, 'position':'absolute'});
+
+			$(".more_comm_open").show();
+			$(".swiper-more").html('<a href="javascript:closeMoreLayer();">▲</a>');
+		}
+
+		function closeMoreLayer() {
+			$(".more_comm_open").hide();
+			$(".swiper-more").html('<a href="javascript:openMoreLayer();">▼</a>');
+		}
+
+		function clickLayer(key) {
+			get_menu_list(key, '1');
+			closeMoreLayer();
 		}
 
 	</script>
