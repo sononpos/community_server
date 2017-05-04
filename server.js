@@ -550,7 +550,21 @@ function nodame($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  var json_data = eval($.text());
+  var all_text = $.text();
+
+  var noda_split1 = all_text.split("\"title\": \"");
+
+  // 0번째 말고 1번째부터로 하자
+  for(var i=1; i<noda_split1.length; i++) {
+      var noda_title = noda_split1[i].split("\",")[0];
+
+      noda_title_replace = noda_title.replace( /\"/gi, "");
+      noda_title_replace = noda_title_replace.replace( /\'/gi, "");
+
+      all_text = all_text.replace(noda_title, noda_title_replace);
+  }
+
+  var json_data = eval(all_text);
 
   var nameList = {};
   nameList['bobaedreamBest2'] = {"name":"보배","color":"#0066CC"};
@@ -1604,9 +1618,9 @@ function theqoosquare($, key, page, recent_url) {
     var notice_class = $(this).attr("class");
 
     if(notice_class == undefined) {
-      var title = $(this).find(".title a").text().trim();
+      var title = $(this).find(".title a").eq(0).text().trim();
 
-      var link = $(this).find(".title a").attr("href");
+      var link = $(this).find(".title a").eq(0).attr("href");
       link = "http://theqoo.net" + link;
 
       var username = "";
@@ -1637,9 +1651,9 @@ function theqoobest($, key, page, recent_url) {
     var notice_class = $(this).attr("class");
 
     if(notice_class == undefined) {
-      var title = $(this).find(".title a").text().trim();
+      var title = $(this).find(".title a").eq(0).text().trim();
 
-      var link = $(this).find(".title a").attr("href");
+      var link = $(this).find(".title a").eq(0).attr("href");
       link = "http://theqoo.net" + link;
 
       var username = "";
