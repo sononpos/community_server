@@ -33,9 +33,15 @@ var community = {
     encoding : "UTF-8",
   },
   clien : {
-    name : "클리앙",
-    site_url : "http://www.clien.net/cs2/bbs/board.php?bo_table=park",
-    page_param : "&page=",
+    name : "클리앙(모두의공원)",
+    site_url : "https://www.clien.net/service/board/park?&od=T31",
+    page_param : "&po=",
+    encoding : "UTF-8",
+  },
+  clienall : {
+    name : "클리앙(공감)",
+    site_url : "https://new.clien.net/service/group/board_all?&od=T33",
+    page_param : "&po=",
     encoding : "UTF-8",
   },
   ruliweb : {
@@ -489,6 +495,10 @@ var getListData = function(key, page, callback) {
     url = community[key].site_url;
   } else {
     url = community[key].site_url + community[key].page_param + page;
+
+    if(key == "clien" || key == "clienall") {
+      url = community[key].site_url + community[key].page_param + (page-1);
+    }
   }
 
   // 모바일로 호출인지 지정?
@@ -684,18 +694,59 @@ function clien($, key, page, url) {
   var result = [];
   var list = [];
 
-  $("tbody .mytr").each(function() {
-    var id = $(this).find("td").eq(0).text().trim();
-    var title = $(this).find("td").eq(1).find("a").text().trim();
-    var link = "http://m.clien.net/cs3/board?bo_table=park&bo_style=view&wr_id=" + id;
-    var username = $(this).find("td").eq(2).find(".member").text().trim();
-    var regdate = $(this).find("td").eq(3).find("span").attr("title");
-    var viewcnt = $(this).find("td").eq(4).text().trim();
-    var commentcnt = $(this).find("td").eq(1).find("span").text().trim();
-    commentcnt = commentcnt.replace("[", "");
-    commentcnt = commentcnt.replace("]", "");
+  $(".item").each(function() {
 
-    if(title != "") {
+    //console.log($(this).html());
+
+    var title = $(this).find(".list-subject").text().trim();
+    var link = $(this).find(".list-subject").attr("href");
+
+    var notice = $(this).find(".list-symph").text().trim();
+
+
+    link = "https://new.clien.net" + link;
+    var username = $(this).find(".list-author").text().trim();
+    var regdate = $(this).find(".timestamp").text().trim();
+    var viewcnt = "";
+    var commentcnt = $(this).find(".badge-reply").text().trim();
+
+    if(title != "" && notice != "공지") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 클리앙 공감게시물
+function clienall($, key, page, url) {
+  var result = [];
+  var list = [];
+
+  $(".item").each(function() {
+
+    //console.log($(this).html());
+
+    var title = $(this).find(".list-subject").text().trim();
+
+    title = "[" + title.replace("\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", "] ");
+
+    var link = $(this).find(".list-subject").attr("href");
+
+    var notice = $(this).find(".list-symph").text().trim();
+
+
+    link = "https://new.clien.net" + link;
+    var username = $(this).find(".list-author").text().trim();
+    var regdate = $(this).find(".timestamp").text().trim();
+    var viewcnt = "";
+    var commentcnt = $(this).find(".badge-reply").text().trim();
+
+    if(title != "" && notice != "공지") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
     }
   });
