@@ -178,7 +178,7 @@
                 localStorage.setItem("hotscroll", scroll_val);
 
                 //alert($("#body_id").html());
-                location.href = url;
+                window.parent.location.href = url;
             }
 
             function init_menu() {
@@ -341,7 +341,10 @@
                 var top = ( $(window).scrollTop() + 60);
 
               	// css 스타일을 변경합니다.
-              	$('.more_comm_open').css({'left':left,'top':top, 'position':'absolute', 'height':$(window).height(), 'overflow-y':'scroll'});
+
+                var height_px = $(window).height()+200;
+
+              	$('.more_comm_open').css({'left':left,'top':top, 'position':'absolute', 'height':height_px+"px", 'overflow-y':'scroll'});
 				$('body').css("overflow", "hidden");
 				$(".more_comm_open").show();
                 $(".swiper-more").html('<a href="javascript:closeMoreLayer();">▲</a>');
