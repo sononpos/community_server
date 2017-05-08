@@ -124,46 +124,46 @@
         <script src="js/swiper.min.js"></script>
 
         <script>
-        $(document).ready(function() {
+	        $(document).ready(function() {
 
-            var swiper;
+	            var swiper;
 
-            if(document.location.hash){
-                var HashLocationName = document.location.hash;
-                HashLocationName = HashLocationName.replace("#","");
+	            if(document.location.hash){
+	                var HashLocationName = document.location.hash;
+	                HashLocationName = HashLocationName.replace("#","");
 
-                $("#body_id").html(localStorage.getItem(HashLocationName));
+	                $("#body_id").html(localStorage.getItem(HashLocationName));
 
-                $('nav#menu').mmenu();
-                makeSwiper();
-                go_hash_scroll();
+	                $('nav#menu').mmenu();
+	                makeSwiper();
+	                go_hash_scroll();
 
-            } else {
-                init_menu();
-            }
+	            } else {
+	                init_menu();
+	            }
 
-            //init_menu();
+	            //init_menu();
 
-            // 스크롤 끝
-            window.addEventListener('scroll',function() {
-                var scroll_val = $('html').scrollTop() || $('body').scrollTop();
+	            // 스크롤 끝
+	            window.addEventListener('scroll',function() {
+	                var scroll_val = $('html').scrollTop() || $('body').scrollTop();
 
-                //$("#scroll_info").text(scroll_val);
+	                //$("#scroll_info").text(scroll_val);
 
-                if(scroll_val == $(document).height() - $(window).height()) {
-                    get_menu_list($("#current_key").val(), $("#current_next").val());
-                }
+	                if(scroll_val == $(document).height() - $(window).height()) {
+	                    get_menu_list($("#current_key").val(), $("#current_next").val());
+	                }
 
-                if(scroll_val > 60) {
-                    $(".swiper-container").css("position", "fixed");
-                    $(".swiper-container").css("top", "0");
-                    $(".header").hide();
-                } else {
-                    $(".swiper-container").css("position", "relative");
-                    $(".header").show();
-                }
-            });
-        });
+	                if(scroll_val > 60) {
+	                    $(".swiper-container").css("position", "fixed");
+	                    $(".swiper-container").css("top", "0");
+	                    $(".header").hide();
+	                } else {
+	                    $(".swiper-container").css("position", "relative");
+	                    $(".header").show();
+	                }
+	            });
+	        });
         </script>
 
 
@@ -341,7 +341,10 @@
                 var top = ( $(window).scrollTop() + 60);
 
               	// css 스타일을 변경합니다.
-              	$('.more_comm_open').css({'left':left,'top':top, 'position':'absolute', 'height':$(window).height(), 'overflow-y':'scroll'});
+
+                var height_px = $(window).height()+200;
+
+              	$('.more_comm_open').css({'left':left,'top':top, 'position':'absolute', 'height':height_px+"px", 'overflow-y':'scroll'});
 				$('body').css("overflow", "hidden");
 				$(".more_comm_open").show();
                 $(".swiper-more").html('<a href="javascript:closeMoreLayer();">▲</a>');

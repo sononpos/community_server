@@ -3,35 +3,8 @@
         <title>핫커뮤니티</title>
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
         <style>
-            /*iframe {
-                width:1px;
-                min-width:100%;
-                *width:100%;
-                overflow:hidden;
-                height:100%;
-                width:100%;
-                ;
-            }*/
-
-            * {
-                margin: 0;
-                padding: 0;
-            }
-            #wrap {
-                width: 100%;
-                height: 100%;
-                position: relative;
-                overflow-x: hidden;
-                overflow-y: scroll;
-                -webkit-overflow-scrolling: touch;
-            }
-            #inner {
-                /* Android 이중 스크롤 방지 */
-                position:absolute;
-                top:0;
-                left:0;
-                display:block
-            }
+            html, body {margin:0; padding:0;}
+            .inner {width:1px;min-width: 100%; height:100%;}
         </style>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <script>
@@ -39,15 +12,8 @@
         </script>
     </head>
     <body>
-        <div id="wrap">
-            <iframe id="inner" src="http://4seasonpension.com:3000/static/mobile/iframe.html"></iframe>
+        <div class="wrap">
+            <iframe class="inner" src="http://4seasonpension.com:3000/static/mobile/iframe.html" scrolling="no"></iframe>
         </div>
-        <script type="text/javascript">
-            $(function(){
-                $("#inner").width($(window).width());
-                $("#inner").height($(window).height());
-            });
-        </script>
-
     </body>
 </html>
