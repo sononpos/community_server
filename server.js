@@ -135,8 +135,14 @@ var community = {
     encoding : "UTF-8",
   },
   ppomppu : {
-    name : "뽐뿌",
-    site_url : "http://www.ppomppu.co.kr/hot.php?category=2&id=humor",
+    name : "뽐뿌(유머/감동)",
+    site_url : "http://www.ppomppu.co.kr/zboard/zboard.php?id=humor",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+  },
+  ppomppufree : {
+    name : "뽐뿌(자유게시판)",
+    site_url : "http://www.ppomppu.co.kr/zboard/zboard.php?id=freeboard",
     page_param : "&page=",
     encoding : "EUC-KR",
   },
@@ -1242,7 +1248,7 @@ function ygosu($, key, page, recent_url) {
   return result;
 }
 
-// 뽐뿌 유저 HOT게시글
+// 뽐뿌 유머/감동
 function ppomppu($, key, page, recent_url) {
   var result = [];
   var list = [];
@@ -1254,12 +1260,47 @@ function ppomppu($, key, page, recent_url) {
     var id = getParameterByName("no", link);
     link = "http://m.ppomppu.co.kr/new/bbs_view.php?id=humor&no=" + id;
 
-    var username = $(this).find("td").eq(1).text().trim();
+    var username = $(this).find("td").eq(2).text().trim();
+    if(username == "") {
+        username = $(this).find("td").eq(2).find("img").attr("alt");
+    }
     var regdate = $(this).find("td").eq(4).text().trim();
-    var viewcnt = ""; // 추천수가 존재
+    var viewcnt = $(this).find("td").eq(6).text().trim();
     var commentcnt = $(this).find(".list_comment2").text().trim();
 
-    if(title != "" && username != "") {
+    if(title != "" && username != "관리자" && viewcnt != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 뽐뿌 자유게시판
+function ppomppufree($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $("tr").each(function(i) {
+
+    var title = $(this).find("td").eq(2).find("a").text().trim();
+    var link = $(this).find("td").eq(2).find("a").attr("href");
+    var id = getParameterByName("no", link);
+    link = "http://m.ppomppu.co.kr/new/bbs_view.php?id=freeboard&no=" + id;
+
+    var username = $(this).find("td").eq(1).text().trim();
+    if(username == "") {
+        username = $(this).find("td").eq(1).find("img").attr("alt");
+    }
+    var regdate = $(this).find("td").eq(3).text().trim();
+    var viewcnt = $(this).find("td").eq(5).text().trim();
+    var commentcnt = $(this).find(".list_comment2").text().trim();
+
+    if(title != "" && username != "관리자" && viewcnt != "") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
     }
   });
