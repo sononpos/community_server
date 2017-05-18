@@ -739,7 +739,11 @@ function clienall($, key, page, url) {
 
     var title = $(this).find(".list-subject").text().trim();
 
-    title = "[" + title.replace("\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", "] ");
+    title = "[" + title.replace("\n", "] ");
+
+    title = title.replace(/\n/gi, "");
+    title = title.replace(/\t/gi, "");
+
 
     var link = $(this).find(".list-subject").attr("href");
 
