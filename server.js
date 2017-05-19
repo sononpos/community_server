@@ -1,4 +1,4 @@
-var express = require('express');
+uvar express = require('express');
 var request = require("request");
 var cheerio = require("cheerio");
 var iconv  = require('iconv-lite');
@@ -19,180 +19,240 @@ var community = {
     site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=bobaedreamBest2|clienPark|dogdripFree|eightTwoCook15|humorunivPds|mlbparkBullpen|pgr21Humor|ppomppuFreeboard|ruliwebG005|todayhumorBOB&sortKey=read",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   beobe : {
     name : "베오베(종합)",
     site_url : "http://beobe.us/",
     page_param : "",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   dailybest : {
     name : "데일리베스트(종합)",
     site_url : "http://best.mingoon.com/best/?offset=",
     page_param : "",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   clien : {
     name : "클리앙(모두의공원)",
     site_url : "https://www.clien.net/service/board/park?&od=T31",
     page_param : "&po=",
     encoding : "UTF-8",
+    iphone_view : "app",
+    android_view : "web",
   },
   clienall : {
     name : "클리앙(공감)",
     site_url : "https://new.clien.net/service/group/board_all?&od=T33",
     page_param : "&po=",
     encoding : "UTF-8",
+    iphone_view : "app",
+    android_view : "web",
   },
   ruliweb : {
     name : "루리웹(NOW)",
     site_url : "http://bbs.ruliweb.com/best",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "app",
+    android_view : "web",
   },
   ruliwebhit : {
     name : "루리웹(힛갤)",
     site_url : "http://bbs.ruliweb.com/best?type=hit",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "app",
+    android_view : "web",
   },
   slr : {
     name : "SLR(HOT)",
     site_url : "http://www.slrclub.com/bbs/zboard.php?id=hot_article",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "app",
+    android_view : "web",
   },
   slrbest : {
     name : "SLR(BEST)",
     site_url : "http://www.slrclub.com/bbs/zboard.php?id=best_article",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "app",
+    android_view : "web",
   },
   bullpen : {
     name : "엠팍(불펜)",
     site_url : "http://mlbpark.donga.com/mp/b.php?b=bullpen",
     page_param : "&p=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   todayhumor : {
     name : "오유(최신)",
     site_url : "http://www.todayhumor.co.kr/board/list.php?kind=total",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   todayhumorbob : {
     name : "오유(베오베)",
     site_url : "http://www.todayhumor.co.kr/board/list.php?table=bestofbest",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   bobaedream : {
     name : "보배드림",
     site_url : "http://m.bobaedream.co.kr/board/new_writing/best",
     page_param : "/",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   rgr : {
     name : "알지롱(호기심해결)",
     site_url : "http://te31.com/rgr/zboard.php?id=rgrong",
     page_param : "&page=",
     encoding : "EUC-KR",
+    iphone_view : "web",
+    android_view : "web",
   },
   rgrrare : {
     name : "알지롱(레어/유머)",
     site_url : "http://te31.com/rgr/zboard.php?id=rare2014",
     page_param : "&page=",
     encoding : "EUC-KR",
+    iphone_view : "web",
+    android_view : "web",
   },
   bestizjd : {
     name : "베스티즈(게천잡담)",
     site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=bestgj",
     page_param : "&page=",
     encoding : "EUC-KR",
+    iphone_view : "web",
+    android_view : "web",
   },
   bestiz : {
     name : "베스티즈(게스트천국)",
     site_url : "http://besthgc.cafe24.com/zboard/zboard.php?id=ghm2b",
     page_param : "&page=",
     encoding : "EUC-KR",
+    iphone_view : "web",
+    android_view : "web",
   },
   humoruniv : {
     name : "웃대(최신)",
     site_url : "http://web.humoruniv.com/board/humor/list.html?table=pds",
     page_param : "&pg=",
     encoding : "EUC-KR",
+    iphone_view : "web",
+    android_view : "web",
   },
   humorunivbest : {
     name : "웃대(BEST)",
     site_url : "http://web.humoruniv.com/board/humor/list.html?table=pds&st=day",
     page_param : "&pg=",
     encoding : "EUC-KR",
+    iphone_view : "web",
+    android_view : "web",
   },
   ygosu : {
     name : "와이고수",
     site_url : "http://www.ygosu.com/community/real_article",
     page_param : "/?page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   ppomppu : {
     name : "뽐뿌(유머/감동)",
     site_url : "http://www.ppomppu.co.kr/zboard/zboard.php?id=humor",
     page_param : "&page=",
     encoding : "EUC-KR",
+    iphone_view : "web",
+    android_view : "web",
   },
   ppomppufree : {
     name : "뽐뿌(자유게시판)",
     site_url : "http://www.ppomppu.co.kr/zboard/zboard.php?id=freeboard",
     page_param : "&page=",
     encoding : "EUC-KR",
+    iphone_view : "web",
+    android_view : "web",
   },
   bboom : {
     name : "네이버뿜",
     site_url : "http://m.bboom.naver.com/best/moreList.json?likeBandNo=&&viewTypeNo=2&length=100&limit=0",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   pann : {
     name : "네이트판(실시간)",
     site_url : "http://m.pann.nate.com/talk/talker",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   pannbest : {
     name : "네이트판(BEST)",
     site_url : "http://m.pann.nate.com/talk/talker?order=REC",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   dcinside : {
     name : "디씨(초개념)",
     site_url : "http://gall.dcinside.com/board/lists/?id=superidea",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   dcinsidehit : {
     name : "디씨(HIT)",
     site_url : "http://gall.dcinside.com/board/lists/?id=hit",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   instiz : {
     name : "인스티즈(최신)",
     site_url : "https://www.instiz.net/bbs/list.php?id=pt",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   instizhot : {
     name : "인스티즈(인기)",
     site_url : "https://www.instiz.net/bbs/list.php?id=pt&srt=3&k=&srd=1",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   inven : {
     name : "인벤",
     site_url : "http://m.inven.co.kr/board/powerbbs.php?come_idx=2097&my=chu",
     page_param : "&p=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   // soccerline : {
   //   name : "사커라인(라커룸)",
@@ -205,54 +265,72 @@ var community = {
     site_url : "http://m.fmkorea.com/index.php?mid=best",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   ddanzi : {
     name : "딴지(최신)",
     site_url : "http://www.ddanzi.com/index.php?mid=free",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   ddanzihot : {
     name : "딴지(HOT)",
     site_url : "http://www.ddanzi.com/index.php?mid=free&bm=hot",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   theqoosquare : {
     name : "더쿠(스퀘어)",
     site_url : "http://theqoo.net/index.php?mid=square&filter_mode=normal",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   theqoobest : {
     name : "더쿠(베스트)",
     site_url : "http://theqoo.net/index.php?mid=tbest&filter_mode=normal",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   dvdprime : {
     name : "DVD프라임(프라임차한잔)",
     site_url : "https://dvdprime.com/g2/bbs/board.php?bo_table=comm",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   dvdprimehumor : {
     name : "DVD프라임(유머)",
     site_url : "https://dvdprime.com/g2/bbs/board.php?bo_table=humor",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   dogdripuser : {
     name : "개드립(최신)",
     site_url : "http://www.dogdrip.net/index.php?mid=userdog&m=1",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
   dogdrip : {
     name : "개드립(베스트)",
     site_url : "http://www.dogdrip.net/index.php?mid=dogdrip&m=1",
     page_param : "&page=",
     encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
   },
 };
 
@@ -360,6 +438,63 @@ app.get('/list', function(req, res) {
   }
   res.contentType('application/json');
   res.send(JSON.stringify(comm));
+});
+
+// 커뮤니티 리스트 호출
+app.get('/list_iphone', function(req, res) {
+  var comm = {};
+
+  var index = 1;
+  for(var data in community) {
+
+    if(community[data].iphone_view == "app") {
+        comm[data] = {name:community[data].name, index:index, viewtype:community[data].iphone_view};
+        index++;
+    }
+  }
+  res.contentType('application/json');
+  res.send(JSON.stringify(comm));
+});
+
+
+// 아이폰 뷰
+app.get('/iphone/:key/:linkencoding', function(req, res) {
+  var key = req.params.key;
+  var linkencoding = req.params.linkencoding;
+
+  var url = decodeURIComponent(linkencoding);
+
+  var requestOptions  = {
+    method: "GET"
+    ,uri: url
+    ,headers: {
+      "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+    }
+    ,encoding: null
+  };
+
+  // URL 호출부
+  request(requestOptions, function(error, response, body) {
+    try {
+
+      if (error) {
+        console.log(err);
+        callback(err);
+      }
+
+      var strContents = new Buffer(body);
+   	  //console.log(iconv.decode(strContents, community[key].encoding).toString());
+
+      var $ = cheerio.load(iconv.decode(strContents, community[key].encoding).toString());
+
+      var result = eval(key+"_view")($, key);
+
+      res.send(result);
+    } catch(err) {
+      console.log(err);
+      res.send(err);
+    }
+  });
 });
 
 // 베스티즈 앱
@@ -603,7 +738,7 @@ function nodame($, key, page, recent_url) {
     var viewcnt = json_data[key].read;
     var commentcnt = json_data[key].replyCount;
 
-    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
   }
 
   var next_url = parseInt(page)+1;
@@ -636,7 +771,7 @@ function beobe($, key, page, recent_url) {
 
 
       if(title != "" && username != "" && comm_name != "") {
-        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
       }
     }
   });
@@ -683,7 +818,7 @@ function dailybest($, key, page, recent_url) {
     var commentcnt = viewcomment.split(" ")[0];
 
     if(title != "" && username != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
 
   });
@@ -709,15 +844,15 @@ function clien($, key, page, url) {
 
     var notice = $(this).find(".list-symph").text().trim();
 
-
     link = "https://new.clien.net" + link;
+
     var username = $(this).find(".list-author").text().trim();
     var regdate = $(this).find(".timestamp").text().trim();
     var viewcnt = "";
     var commentcnt = $(this).find(".badge-reply").text().trim();
 
     if(title != "" && notice != "공지") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -757,7 +892,7 @@ function clienall($, key, page, url) {
     var commentcnt = $(this).find(".badge-reply").text().trim();
 
     if(title != "" && notice != "공지") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -784,7 +919,7 @@ function ruliweb($, key, page, recent_url) {
     var commentcnt = $(this).find(".recomd").text().trim();
 
     if(title != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -811,7 +946,7 @@ function ruliwebhit($, key, page, recent_url) {
     var commentcnt = $(this).find(".recomd").text().trim();
 
     if(title != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -841,7 +976,7 @@ function slr($, key, page, recent_url) {
     commentcnt = commentcnt.replace("]", "");
 
     if(title != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -878,7 +1013,7 @@ function slrbest($, key, page, recent_url) {
     commentcnt = commentcnt.replace("]", "");
 
     if(title != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -916,7 +1051,7 @@ function bullpen($, key, page, recent_url) {
     commentcnt = commentcnt.replace("]", "");
 
     if(title != "" && username != "담당자" && username != "엠팍제휴팀") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
 
   });
@@ -949,7 +1084,7 @@ function todayhumor($, key, page, recent_url) {
     commentcnt = commentcnt.replace("]", "");
 
     if(title != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -980,7 +1115,7 @@ function todayhumorbob($, key, page, recent_url) {
     commentcnt = commentcnt.replace("]", "");
 
     if(title != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1009,7 +1144,7 @@ function bobaedream($, key, page, recent_url) {
     var commentcnt = $(this).find(".txt5 .num").text().trim();
 
     if(title != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1038,7 +1173,7 @@ function rgr($, key, page, recent_url) {
     var commentcnt = $(this).find("td").eq(3).text().trim();
 
     if(title != "" && username != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1067,7 +1202,7 @@ function rgrrare($, key, page, recent_url) {
     var commentcnt = $(this).find("td").eq(3).text().trim();
 
     if(title != "" && username != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1106,7 +1241,7 @@ function bestizjd($, key, page, recent_url) {
     commentcnt = commentcnt.replace("]", "");
 
     if(title != "" && username != "Best" && username != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1145,7 +1280,7 @@ function bestiz($, key, page, recent_url) {
     commentcnt = commentcnt.replace("]", "");
 
     if(title != "" && username != "Best" && username != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1178,7 +1313,7 @@ function humoruniv($, key, page, recent_url) {
     commentcnt = commentcnt.replace("]", "");
 
     if(title != "" && username != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1211,7 +1346,7 @@ function humorunivbest($, key, page, recent_url) {
     commentcnt = commentcnt.replace("]", "");
 
     if(title != "" && username != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1241,7 +1376,7 @@ function ygosu($, key, page, recent_url) {
     var commentcnt = $(this).find(".tit span strong").text().trim();
 
     if(title != "" && username != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1273,7 +1408,7 @@ function ppomppu($, key, page, recent_url) {
     var commentcnt = $(this).find(".list_comment2").text().trim();
 
     if(title != "" && username != "관리자" && viewcnt != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1305,7 +1440,7 @@ function ppomppufree($, key, page, recent_url) {
     var commentcnt = $(this).find(".list_comment2").text().trim();
 
     if(title != "" && username != "관리자" && viewcnt != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1336,7 +1471,7 @@ function bboom($, key, page, recent_url) {
     var commentcnt = $(this).find(".btn_cmnt").text().replace("댓글 수", "").trim();
 
     if(title != "" && username != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1367,7 +1502,7 @@ function pann($, key, page, recent_url) {
     commentcnt = commentcnt.replace(")", "");
 
     if(title != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1397,7 +1532,7 @@ function pannbest($, key, page, recent_url) {
     commentcnt = commentcnt.replace(")", "");
 
     if(title != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1430,7 +1565,7 @@ function dcinside($, key, page, recent_url) {
       commentcnt = commentcnt.replace("]", "");
 
       if(title != "" && title != "운영자") {
-        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
       }
     }
 
@@ -1465,7 +1600,7 @@ function dcinsidehit($, key, page, recent_url) {
       commentcnt = commentcnt.replace("]", "");
 
       if(title != "" && title != "운영자") {
-        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
       }
     }
 
@@ -1496,7 +1631,7 @@ function instiz($, key, page, recent_url) {
     var commentcnt = $(this).find(".cmt").text().trim();
 
     if(title != "" && id != null) {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1525,7 +1660,7 @@ function instizhot($, key, page, recent_url) {
     var commentcnt = $(this).find(".cmt").text().trim();
 
     if(title != "" && id != null) {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1554,7 +1689,7 @@ function inven($, key, page, recent_url) {
     var commentcnt = $(this).find(".cmtWrapForList").text().trim();
 
     if(title != "" && id != null) {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1587,7 +1722,7 @@ function soccerline($, key, page, recent_url) {
       var commentcnt = $(this).find("p").eq(1).text().trim();
 
       if(title != "") {
-        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
       }
     }
   });
@@ -1621,7 +1756,7 @@ function fmkorea($, key, page, recent_url) {
     commentcnt = commentcnt.replace("]", "");
 
     if(title != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
 
@@ -1657,7 +1792,7 @@ function ddanzi($, key, page, recent_url) {
       commentcnt = commentcnt.replace("]", "");
 
       if(title != "") {
-        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
       }
     }
   });
@@ -1692,7 +1827,7 @@ function ddanzihot($, key, page, recent_url) {
       commentcnt = commentcnt.replace("]", "");
 
       if(title != "") {
-        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
       }
     }
   });
@@ -1725,7 +1860,7 @@ function theqoosquare($, key, page, recent_url) {
       var commentcnt = $(this).find(".replyNum").text().trim();
 
       if(title != "") {
-        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
       }
     }
   });
@@ -1758,7 +1893,7 @@ function theqoobest($, key, page, recent_url) {
       var commentcnt = $(this).find(".replyNum").text().trim();
 
       if(title != "") {
-        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
       }
     }
 
@@ -1790,7 +1925,7 @@ function dvdprime($, key, page, recent_url) {
     var commentcnt = $(this).find(".list_comment_num_a").eq(0).text().trim();
 
     if(title != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
 
   });
@@ -1821,7 +1956,7 @@ function dvdprimehumor($, key, page, recent_url) {
     var commentcnt = $(this).find(".list_comment_num_a").eq(0).text().trim();
 
     if(title != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
 
   });
@@ -1854,7 +1989,7 @@ function dogdripuser($, key, page, recent_url) {
       commentcnt = commentcnt.replace("]", "");
 
       if(title != "") {
-        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
       }
     }
   });
@@ -1887,7 +2022,7 @@ function dogdrip($, key, page, recent_url) {
       commentcnt = commentcnt.replace("]", "");
 
       if(title != "") {
-        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt});
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
       }
     }
   });
@@ -1895,6 +2030,90 @@ function dogdrip($, key, page, recent_url) {
   var next_url = parseInt(page)+1;
 
   result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+
+
+
+
+
+/**********************************************************************
+    뷰 페이지 구현부
+***********************************************************************/
+
+
+// 클리앙(모두의 공원) 뷰
+function clien_view($, key) {
+  var result = [];
+
+  var title = $(".title-subject").html();
+  var contents = $(".post-content").html();
+
+  result.push({title:title, contents:contents});
+
+  return result;
+}
+
+// 클리앙(공감게시물) 뷰
+function clienall_view($, key) {
+  var result = [];
+
+  var title = $(".title-subject").html();
+  var contents = $(".post-content").html();
+
+  result.push({title:title, contents:contents});
+
+  return result;
+}
+
+// 루리웹(NOW) 뷰
+function ruliweb_view($, key) {
+  var result = [];
+
+  var title = $(".subject_text").html();
+  var contents = $(".view_content").html();
+
+  result.push({title:title, contents:contents});
+
+  return result;
+}
+
+// 루리웹(HIT) 뷰
+function ruliwebhit_view($, key) {
+  var result = [];
+
+  var title = $(".subject_text").html();
+  var contents = $(".view_content").html();
+
+  result.push({title:title, contents:contents});
+
+  return result;
+}
+
+// SLR(HOT) 뷰
+function slr_view($, key) {
+  var result = [];
+
+  console.log($.html());
+
+  var title = $(".sbj").html();
+  var contents = $("#userct").html();
+
+  result.push({title:title, contents:contents});
+
+  return result;
+}
+
+// SLR(BEST) 뷰
+function slrbest_view($, key) {
+  var result = [];
+
+  var title = $(".sbj").html();
+  var contents = $("#userct").html();
+
+  result.push({title:title, contents:contents});
 
   return result;
 }
