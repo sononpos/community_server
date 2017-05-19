@@ -1,4 +1,4 @@
-uvar express = require('express');
+var express = require('express');
 var request = require("request");
 var cheerio = require("cheerio");
 var iconv  = require('iconv-lite');
@@ -2096,9 +2096,7 @@ function ruliwebhit_view($, key) {
 function slr_view($, key) {
   var result = [];
 
-  console.log($.html());
-
-  var title = $(".sbj").html();
+  var title = $(".subject").html();
   var contents = $("#userct").html();
 
   result.push({title:title, contents:contents});
@@ -2110,7 +2108,7 @@ function slr_view($, key) {
 function slrbest_view($, key) {
   var result = [];
 
-  var title = $(".sbj").html();
+  var title = $(".subject").html();
   var contents = $("#userct").html();
 
   result.push({title:title, contents:contents});
