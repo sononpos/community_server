@@ -75,7 +75,7 @@ var community = {
     site_url : "http://www.slrclub.com/bbs/zboard.php?id=hot_article",
     page_param : "&page=",
     encoding : "UTF-8",
-    iphone_view : "app",
+    iphone_view : "web",
     android_view : "web",
   },
   slrbest : {
@@ -83,7 +83,7 @@ var community = {
     site_url : "http://www.slrclub.com/bbs/zboard.php?id=best_article",
     page_param : "&page=",
     encoding : "UTF-8",
-    iphone_view : "app",
+    iphone_view : "web",
     android_view : "web",
   },
   bullpen : {
@@ -155,7 +155,7 @@ var community = {
     site_url : "http://web.humoruniv.com/board/humor/list.html?table=pds",
     page_param : "&pg=",
     encoding : "EUC-KR",
-    iphone_view : "web",
+    iphone_view : "app",
     android_view : "web",
   },
   humorunivbest : {
@@ -163,7 +163,7 @@ var community = {
     site_url : "http://web.humoruniv.com/board/humor/list.html?table=pds&st=day",
     page_param : "&pg=",
     encoding : "EUC-KR",
-    iphone_view : "web",
+    iphone_view : "app",
     android_view : "web",
   },
   ygosu : {
@@ -2050,6 +2050,7 @@ function clien_view($, key) {
 
   var title = $(".title-subject").html();
   var contents = $(".post-content").html();
+  contents = contents + "<style>img {display:none;} <style>";
 
   result.push({title:title, contents:contents});
 
@@ -2062,6 +2063,7 @@ function clienall_view($, key) {
 
   var title = $(".title-subject").html();
   var contents = $(".post-content").html();
+  contents = contents + "<style>img {display:none;} <style>";
 
   result.push({title:title, contents:contents});
 
@@ -2074,6 +2076,7 @@ function ruliweb_view($, key) {
 
   var title = $(".subject_text").html();
   var contents = $(".view_content").html();
+  contents = contents + "<style>img {display:none;} <style>";
 
   result.push({title:title, contents:contents});
 
@@ -2086,30 +2089,59 @@ function ruliwebhit_view($, key) {
 
   var title = $(".subject_text").html();
   var contents = $(".view_content").html();
+  contents = contents + "<style>img {display:none;} <style>";
 
   result.push({title:title, contents:contents});
 
   return result;
 }
 
-// SLR(HOT) 뷰
-function slr_view($, key) {
+// 웃대 뷰
+function humoruniv_view($, key) {
   var result = [];
 
-  var title = $(".subject").html();
-  var contents = $("#userct").html();
+  var title = $(".read_subject h2").html();
+  var contents = $("#wrap_copy").html();
+  contents = contents + "<style>img {display:none;} <style>";
 
   result.push({title:title, contents:contents});
 
   return result;
 }
 
-// SLR(BEST) 뷰
-function slrbest_view($, key) {
+// 웃대 뷰
+function humorunivbest_view($, key) {
   var result = [];
 
-  var title = $(".subject").html();
-  var contents = $("#userct").html();
+  var title = $(".read_subject h2").html();
+  var contents = $("#wrap_copy").html();
+  contents = contents + "<style>img {display:none;} <style>";
+
+  result.push({title:title, contents:contents});
+
+  return result;
+}
+
+// 딴지 뷰
+function ddanzi_view($, key) {
+  var result = [];
+
+  var title = $(".read_header a").eq(0).html();
+  var contents = $(".read_body").html();
+  contents = contents + "<style>img {display:none;} <style>";
+
+  result.push({title:title, contents:contents});
+
+  return result;
+}
+
+// 딴지 뷰
+function ddanzihot_view($, key) {
+  var result = [];
+
+  var title = $(".read_header a").eq(0).html();
+  var contents = $(".read_body").html();
+  contents = contents + "<style>img {display:none;} <style>";
 
   result.push({title:title, contents:contents});
 
