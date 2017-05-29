@@ -43,7 +43,7 @@ var community = {
     site_url : "https://www.clien.net/service/board/park?&od=T31",
     page_param : "&po=",
     encoding : "UTF-8",
-    iphone_view : "app",
+    iphone_view : "web",
     android_view : "web",
   },
   clienall : {
@@ -51,7 +51,7 @@ var community = {
     site_url : "https://new.clien.net/service/group/board_all?&od=T33",
     page_param : "&po=",
     encoding : "UTF-8",
-    iphone_view : "app",
+    iphone_view : "web",
     android_view : "web",
   },
   ruliweb : {
@@ -59,7 +59,7 @@ var community = {
     site_url : "http://bbs.ruliweb.com/best",
     page_param : "&page=",
     encoding : "UTF-8",
-    iphone_view : "app",
+    iphone_view : "web",
     android_view : "web",
   },
   ruliwebhit : {
@@ -67,7 +67,7 @@ var community = {
     site_url : "http://bbs.ruliweb.com/best?type=hit",
     page_param : "&page=",
     encoding : "UTF-8",
-    iphone_view : "app",
+    iphone_view : "web",
     android_view : "web",
   },
   slr : {
@@ -155,7 +155,7 @@ var community = {
     site_url : "http://web.humoruniv.com/board/humor/list.html?table=pds",
     page_param : "&pg=",
     encoding : "EUC-KR",
-    iphone_view : "app",
+    iphone_view : "web",
     android_view : "web",
   },
   humorunivbest : {
@@ -163,7 +163,7 @@ var community = {
     site_url : "http://web.humoruniv.com/board/humor/list.html?table=pds&st=day",
     page_param : "&pg=",
     encoding : "EUC-KR",
-    iphone_view : "app",
+    iphone_view : "web",
     android_view : "web",
   },
   ygosu : {
@@ -447,10 +447,10 @@ app.get('/list_iphone', function(req, res) {
   var index = 1;
   for(var data in community) {
 
-    if(community[data].iphone_view == "app") {
+    // if(community[data].iphone_view == "app") {
         comm[data] = {name:community[data].name, index:index, viewtype:community[data].iphone_view};
         index++;
-    }
+    // }
   }
   res.contentType('application/json');
   res.send(JSON.stringify(comm));
