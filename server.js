@@ -43,7 +43,7 @@ var community = {
     site_url : "https://www.clien.net/service/board/park?&od=T31",
     page_param : "&po=",
     encoding : "UTF-8",
-    iphone_view : "web",
+    iphone_view : "app",
     android_view : "web",
   },
   clienall : {
@@ -51,7 +51,7 @@ var community = {
     site_url : "https://new.clien.net/service/group/board_all?&od=T33",
     page_param : "&po=",
     encoding : "UTF-8",
-    iphone_view : "web",
+    iphone_view : "app",
     android_view : "web",
   },
   ruliweb : {
@@ -59,7 +59,7 @@ var community = {
     site_url : "http://bbs.ruliweb.com/best",
     page_param : "&page=",
     encoding : "UTF-8",
-    iphone_view : "web",
+    iphone_view : "app",
     android_view : "web",
   },
   ruliwebhit : {
@@ -67,7 +67,7 @@ var community = {
     site_url : "http://bbs.ruliweb.com/best?type=hit",
     page_param : "&page=",
     encoding : "UTF-8",
-    iphone_view : "web",
+    iphone_view : "app",
     android_view : "web",
   },
   slr : {
@@ -155,7 +155,7 @@ var community = {
     site_url : "http://web.humoruniv.com/board/humor/list.html?table=pds",
     page_param : "&pg=",
     encoding : "EUC-KR",
-    iphone_view : "web",
+    iphone_view : "app",
     android_view : "web",
   },
   humorunivbest : {
@@ -163,7 +163,7 @@ var community = {
     site_url : "http://web.humoruniv.com/board/humor/list.html?table=pds&st=day",
     page_param : "&pg=",
     encoding : "EUC-KR",
-    iphone_view : "web",
+    iphone_view : "app",
     android_view : "web",
   },
   ygosu : {
@@ -442,16 +442,26 @@ app.get('/list', function(req, res) {
 
 // 커뮤니티 리스트 호출
 app.get('/list_iphone', function(req, res) {
+
+  var ver = req.query.ver;
   var comm = {};
 
   var index = 1;
-  for(var data in community) {
 
-    // if(community[data].iphone_view == "app") {
-        comm[data] = {name:community[data].name, index:index, viewtype:community[data].iphone_view};
+  if(ver == "7") {
+      for(var data in community) {
+        if(community[data].iphone_view == "app") {
+            comm[data] = {name:community[data].name, index:index, viewtype:community[data].iphone_view};
+            index++;
+        }
+      }
+  } else {
+      for(var data in community) {
+        comm[data] = {name:community[data].name, index:index, viewtype:"web"};
         index++;
-    // }
+      }
   }
+
   res.contentType('application/json');
   res.send(JSON.stringify(comm));
 });
@@ -2142,7 +2152,7 @@ function ddanzihot_view($, key) {
   var title = $(".read_header a").eq(0).html();
   var contents = $(".read_body").html();
   contents = contents + "<style>img {display:none;} <style>";
-
+  
   result.push({title:title, contents:contents});
 
   return result;
