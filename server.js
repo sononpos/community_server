@@ -216,7 +216,7 @@ var community = {
   },
   dcinside : {
     name : "디씨(초개념)",
-    site_url : "http://gall.dcinside.com/board/lists/?id=superidea",
+    site_url : "http://m.dcinside.com/list.php?id=superidea",
     page_param : "&page=",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -224,7 +224,7 @@ var community = {
   },
   dcinsidehit : {
     name : "디씨(HIT)",
-    site_url : "http://gall.dcinside.com/board/lists/?id=hit",
+    site_url : "http://m.dcinside.com/list.php?id=hit",
     page_param : "&page=",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -659,7 +659,9 @@ var getListData = function(key, page, callback) {
     user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36";
     url = community[key].site_url + (page-1);
     cookie = "hour=9; _ga=GA1.2.2127292808.1489202866; _gat=1; comm=CLN%2CTHR%2CSLR%2CPMP%2CC82%2CMLB%2CBDM%2CRLW%2CHUV%2CDNZ%2CPKZ%2CITZ%2CYGS%2CIVN%2CDCS%2CDGD%2CTQO%2CEXM%2CDPR%2CDBD%2CSCC%2CFMK";
-  }
+} else if(key == "dcinside" || key == "dcinsidehit") {
+    user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36";
+}
 
   var requestOptions  = {
     method: "GET",
@@ -1558,27 +1560,20 @@ function dcinside($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  $(".list_tbody tr").each(function(i) {
-    var notice = $(this).find(".t_notice").text().trim();
+  $(".article_list li").each(function(i) {
 
-    if(notice != "공지") {
-      var title = $(this).find(".t_subject a").eq(0).text().trim();
-      var link = $(this).find(".t_subject a").attr("href");
-      var id = getParameterByName("no", link);
-      link = "http://m.dcinside.com/view.php?id=superidea&no=" + id;
-
-      var username = $(this).find(".user_nick_nm").text().trim();
-      var regdate = $(this).find(".t_date").attr("title");
-      var viewcnt = $(this).find(".t_hits").eq(0).text().trim();
-      var commentcnt = $(this).find(".t_subject a em").text().trim();
+      var title = $(this).find(".title .txt").eq(0).text().trim();
+      var link = $(this).find("span a").eq(0).attr("href");
+      var username = $(this).find(".info span").eq(0).text().trim();
+      var regdate = $(this).find(".info span").eq(1).text().trim();
+      var viewcnt = $(this).find(".info span").eq(2).text().trim();
+      var commentcnt = $(this).find(".title .txt_num").text().trim();
       commentcnt = commentcnt.replace("[", "");
       commentcnt = commentcnt.replace("]", "");
 
-      if(title != "" && title != "운영자") {
+      if(title != "") {
         list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
       }
-    }
-
   });
 
   var next_url = parseInt(page)+1;
@@ -1593,27 +1588,20 @@ function dcinsidehit($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  $(".list_tbody tr").each(function(i) {
-    var notice = $(this).find(".t_notice").text().trim();
+  $(".article_list li").each(function(i) {
 
-    if(notice != "공지") {
-      var title = $(this).find(".t_subject a").eq(0).text().trim();
-      var link = $(this).find(".t_subject a").attr("href");
-      var id = getParameterByName("no", link);
-      link = "http://m.dcinside.com/view.php?id=hit&no=" + id;
-
-      var username = $(this).find(".user_nick_nm").text().trim();
-      var regdate = $(this).find(".t_date").attr("title");
-      var viewcnt = $(this).find(".t_hits").eq(0).text().trim();
-      var commentcnt = $(this).find(".t_subject a em").text().trim();
+      var title = $(this).find(".title .txt").eq(0).text().trim();
+      var link = $(this).find("span a").eq(0).attr("href");
+      var username = $(this).find(".info span").eq(0).text().trim();
+      var regdate = $(this).find(".info span").eq(1).text().trim();
+      var viewcnt = $(this).find(".info span").eq(2).text().trim();
+      var commentcnt = $(this).find(".title .txt_num").text().trim();
       commentcnt = commentcnt.replace("[", "");
       commentcnt = commentcnt.replace("]", "");
 
-      if(title != "" && title != "운영자") {
+      if(title != "") {
         list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
       }
-    }
-
   });
 
   var next_url = parseInt(page)+1;
@@ -2152,7 +2140,7 @@ function ddanzihot_view($, key) {
   var title = $(".read_header a").eq(0).html();
   var contents = $(".read_body").html();
   contents = contents + "<style>img {display:none;} <style>";
-  
+
   result.push({title:title, contents:contents});
 
   return result;
