@@ -746,6 +746,10 @@ function nodame($, key, page, recent_url) {
     var title = "[" + nameList[json_data[key].siteDomain].name + "] " + json_data[key].title;
     var link = json_data[key].address;
     var username = json_data[key].writer;
+
+    if(username.indexOf("hongboInfo") > -1) {
+        username = "hotcommunity";
+    }
     var regdate = json_data[key].time;
     var viewcnt = json_data[key].read;
     var commentcnt = json_data[key].replyCount;
