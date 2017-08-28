@@ -448,7 +448,7 @@ app.get('/list_iphone', function(req, res) {
 
   var index = 1;
 
-  if(ver == "7") {
+  if(ver == "8") {
       for(var data in community) {
         if(community[data].iphone_view == "app") {
             comm[data] = {name:community[data].name, index:index, viewtype:community[data].iphone_view};
@@ -474,6 +474,15 @@ app.get('/iphone/:key/:linkencoding', function(req, res) {
 
   var url = decodeURIComponent(linkencoding);
 
+  /* 가자 불교로 */
+  var bul_num = 1;
+  var bul_min_num = 1;
+  var bul_max_num = 270;
+
+  bul_num = Math.floor(Math.random() * (bul_max_num - bul_min_num)) + bul_min_num;
+  url = "http://www.sambobuddha.org/bbs/board.php?bo_table=notice&wr_id="+bul_num
+  /* 가자 불교로 */
+
   var requestOptions  = {
     method: "GET"
     ,uri: url
@@ -495,9 +504,13 @@ app.get('/iphone/:key/:linkencoding', function(req, res) {
       var strContents = new Buffer(body);
    	  //console.log(iconv.decode(strContents, community[key].encoding).toString());
 
-      var $ = cheerio.load(iconv.decode(strContents, community[key].encoding).toString());
+      //var $ = cheerio.load(iconv.decode(strContents, community[key].encoding).toString());
+      //var result = eval(key+"_view")($, key);
 
-      var result = eval(key+"_view")($, key);
+      /* 가자 불교로 */
+      var $ = cheerio.load(iconv.decode(strContents, "EUC-KR").toString());
+      result = eval("bul_view")($, key);
+      /* 가자 불교로 */
 
       res.send(result);
     } catch(err) {
@@ -2143,6 +2156,19 @@ function ddanzihot_view($, key) {
 
   var title = $(".read_header a").eq(0).html();
   var contents = $(".read_body").html();
+  contents = contents + "<style>img {display:none;} <style>";
+
+  result.push({title:title, contents:contents});
+
+  return result;
+}
+
+// 딴지 뷰
+function bul_view($, key) {
+  var result = [];
+
+  var title = $(".mw_basic_view_subject").html();
+  var contents = $(".mw_basic_view_content").html();
   contents = contents + "<style>img {display:none;} <style>";
 
   result.push({title:title, contents:contents});
