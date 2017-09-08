@@ -1582,11 +1582,12 @@ function dcinside($, key, page, recent_url) {
       var title = $(this).find(".title .txt").eq(0).text().trim();
       var link = $(this).find("span a").eq(0).attr("href");
       var username = $(this).find(".info span").eq(0).text().trim();
-      var regdate = $(this).find(".info span").eq(1).text().trim();
-      var viewcnt = $(this).find(".info span").eq(2).text().trim();
+      var regdate = $(this).find(".info span").eq(2).text().trim();
+      var viewcnt = $(this).find(".info span").eq(4).text().trim();
       var commentcnt = $(this).find(".title .txt_num").text().trim();
       commentcnt = commentcnt.replace("[", "");
       commentcnt = commentcnt.replace("]", "");
+      viewcnt = viewcnt.replace("조회", "");
 
       if(title != "") {
         list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
@@ -1610,11 +1611,12 @@ function dcinsidehit($, key, page, recent_url) {
       var title = $(this).find(".title .txt").eq(0).text().trim();
       var link = $(this).find("span a").eq(0).attr("href");
       var username = $(this).find(".info span").eq(0).text().trim();
-      var regdate = $(this).find(".info span").eq(1).text().trim();
-      var viewcnt = $(this).find(".info span").eq(2).text().trim();
+      var regdate = $(this).find(".info span").eq(2).text().trim();
+      var viewcnt = $(this).find(".info span").eq(4).text().trim();
       var commentcnt = $(this).find(".title .txt_num").text().trim();
       commentcnt = commentcnt.replace("[", "");
       commentcnt = commentcnt.replace("]", "");
+      viewcnt = viewcnt.replace("조회", "");
 
       if(title != "") {
         list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
