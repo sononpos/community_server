@@ -1635,7 +1635,7 @@ function instiz($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  $(".mainboard tr").each(function(i) {
+  $("tr").each(function(i) {
 
     var title = $(this).find(".listsubject a").eq(0).text().trim();
     var link = $(this).find(".listsubject a").eq(0).attr("href");
@@ -1664,7 +1664,7 @@ function instizhot($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  $(".mainboard tr").each(function(i) {
+  $("tr").each(function(i) {
 
     var title = $(this).find(".listsubject a").eq(0).text().trim();
     var link = $(this).find(".listsubject a").eq(0).attr("href");
