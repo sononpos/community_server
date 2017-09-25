@@ -332,6 +332,14 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  games : {
+    name : "게임",
+    site_url : "http://4seasonpension.com:3000/list",
+    page_param : "&page=",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
 };
 
 var bestiz_list = {
@@ -2051,10 +2059,24 @@ function dogdrip($, key, page, recent_url) {
   return result;
 }
 
+// 게임
+function games($, key, page, recent_url) {
+  var result = [];
+  var list = [];
 
+  list.push({title:"fishy-rush", link:"http://m.myrealgames.com/fishy-rush/game/index.html", username:"관리자", regdate:"", viewcnt:"0", commentcnt:""});
+  list.push({title:"mini-race-rush", link:"http://m.myrealgames.com/mini-race-rush/game/index.html", username:"관리자", regdate:"", viewcnt:"0", commentcnt:""});
+  
+  for(var i=0; i<20; i++) {
+    list.push({title:" ", link:"#", username:"관리자", regdate:"", viewcnt:"0", commentcnt:""});
+  }
 
+  var next_url = parseInt(page)+1;
 
+  result.push({next_url:next_url, list:list});
 
+  return result;
+}
 
 /**********************************************************************
     뷰 페이지 구현부
