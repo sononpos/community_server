@@ -30,6 +30,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  /*
   dailybest : {
     name : "데일리베스트(종합)",
     site_url : "http://best.mingoon.com/best/?offset=",
@@ -38,6 +39,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  */
   clien : {
     name : "클리앙(모두의공원)",
     site_url : "https://www.clien.net/service/board/park?&od=T31",
@@ -118,9 +120,10 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  /*
   rgr : {
     name : "알지롱(호기심해결)",
-    site_url : "http://te31.com/rgr/zboard.php?id=rgrong",
+    site_url : "http://server6.kproxy.com/servlet/redirect.srv/sruj/s13pf/p1/rgr/zboard.php?id=rgrong",
     page_param : "&page=",
     encoding : "EUC-KR",
     iphone_view : "web",
@@ -128,12 +131,13 @@ var community = {
   },
   rgrrare : {
     name : "알지롱(레어/유머)",
-    site_url : "http://te31.com/rgr/zboard.php?id=rare2014",
+    site_url : "http://server6.kproxy.com/servlet/redirect.srv/sruj/s13pf/p1/rgr/zboard.php?id=rare2014",
     page_param : "&page=",
     encoding : "EUC-KR",
     iphone_view : "web",
     android_view : "web",
   },
+  */
   bestizjd : {
     name : "베스티즈(게천잡담)",
     site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=bestgj",
@@ -166,6 +170,7 @@ var community = {
     iphone_view : "app",
     android_view : "web",
   },
+  /*
   ygosu : {
     name : "와이고수",
     site_url : "http://www.ygosu.com/community/real_article",
@@ -174,6 +179,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  */
   ppomppu : {
     name : "뽐뿌(유머/감동)",
     site_url : "http://www.ppomppu.co.kr/zboard/zboard.php?id=humor",
@@ -332,6 +338,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  /*
   games : {
     name : "게임",
     site_url : "http://4seasonpension.com:3000/list",
@@ -340,6 +347,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  */
 };
 
 var bestiz_list = {
@@ -1225,7 +1233,7 @@ function rgr($, key, page, recent_url) {
 function rgrrare($, key, page, recent_url) {
   var result = [];
   var list = [];
-
+console.log($.html());
   $("#revolution_main_table tr").each(function(i) {
 
     var title = $(this).find(".title a").text().trim();
@@ -1254,7 +1262,6 @@ function rgrrare($, key, page, recent_url) {
 function bestizjd($, key, page, recent_url) {
   var result = [];
   var list = [];
-
   var ser;
   if(key == "bestizjd") {
     ser = "bestjd";
@@ -2066,7 +2073,7 @@ function games($, key, page, recent_url) {
 
   list.push({title:"fishy-rush", link:"http://m.myrealgames.com/fishy-rush/game/index.html", username:"관리자", regdate:"", viewcnt:"0", commentcnt:""});
   list.push({title:"mini-race-rush", link:"http://m.myrealgames.com/mini-race-rush/game/index.html", username:"관리자", regdate:"", viewcnt:"0", commentcnt:""});
-  
+
   for(var i=0; i<20; i++) {
     list.push({title:" ", link:"#", username:"관리자", regdate:"", viewcnt:"0", commentcnt:""});
   }
@@ -2199,3 +2206,26 @@ function bul_view($, key) {
 
   return result;
 }
+
+/*
+var schedule = require('node-schedule');
+var rule = new schedule.RecurrenceRule();
+rule.second = new schedule.Range(0, 59, 2)
+
+var j = schedule.scheduleJob(rule, function() {
+
+    var comm_index = [];
+    var index = 0;
+    for(var data in community) {
+        comm_index[index] = data;
+        index++;
+    }
+
+    getListData(comm_index[0], 1, function(result) {
+        //console.log(result.list);
+    });
+
+    console.log(comm_index[5]);
+    console.log(comm_index.length);
+});
+*/
