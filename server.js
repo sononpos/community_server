@@ -6,7 +6,7 @@ var morgan = require('morgan')
 
 var app = express();
 
-app.use(morgan('combined'))
+//app.use(morgan('combined'))
 app.use('/static', express.static('public'));
 
 app.listen(process.env.PORT || 3000, function () {
@@ -22,6 +22,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  /*
   beobe : {
     name : "베오베(종합)",
     site_url : "http://beobe.us/",
@@ -30,6 +31,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  */
   /*
   dailybest : {
     name : "데일리베스트(종합)",
@@ -556,7 +558,7 @@ app.get('/bestiz/:key/:page', function(req, res) {
         "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
       },
   		encoding: null,
-      timeout:5000,
+      timeout:2000,
   	};
 
     // URL 호출부
@@ -700,7 +702,7 @@ var getListData = function(key, page, callback) {
       "Cookie": cookie,
     },
 		encoding: null,
-    timeout:5000,
+    timeout:2000,
 	};
 
   // URL 호출부
@@ -2206,26 +2208,3 @@ function bul_view($, key) {
 
   return result;
 }
-
-/*
-var schedule = require('node-schedule');
-var rule = new schedule.RecurrenceRule();
-rule.second = new schedule.Range(0, 59, 2)
-
-var j = schedule.scheduleJob(rule, function() {
-
-    var comm_index = [];
-    var index = 0;
-    for(var data in community) {
-        comm_index[index] = data;
-        index++;
-    }
-
-    getListData(comm_index[0], 1, function(result) {
-        //console.log(result.list);
-    });
-
-    console.log(comm_index[5]);
-    console.log(comm_index.length);
-});
-*/
