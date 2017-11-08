@@ -22,7 +22,6 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  /*
   beobe : {
     name : "베오베(종합)",
     site_url : "http://beobe.us/",
@@ -31,7 +30,6 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  */
   /*
   dailybest : {
     name : "데일리베스트(종합)",
@@ -93,6 +91,14 @@ var community = {
   bullpen : {
     name : "엠팍(불펜)",
     site_url : "http://mlbpark.donga.com/mp/b.php?b=bullpen",
+    page_param : "&p=",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  kbotown : {
+    name : "엠팍(한야타)",
+    site_url : "http://mlbpark.donga.com/mp/b.php?b=kbotown",
     page_param : "&p=",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -1080,6 +1086,38 @@ function slrbest($, key, page, recent_url) {
 
 // 엠팍 불펜
 function bullpen($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".tbl_type01 tbody tr").each(function(i) {
+
+    var title = $(this).find("td").eq(1).find("a").attr("title");
+    var link = $(this).find("td").eq(1).find("a").attr("href");
+    var id = getParameterByName("id", link);
+    link =  "http://mlbpark.donga.com/mp/b.php?p=1&b=bullpen&id=" + id;
+
+    var username = $(this).find(".nick").text().trim();
+    var regdate = $(this).find(".date").text().trim();
+    var viewcnt = $(this).find(".viewV").text().trim();
+    var commentcnt = $(this).find(".replycnt").text().trim();
+    commentcnt = commentcnt.replace("[", "");
+    commentcnt = commentcnt.replace("]", "");
+
+    if(title != "" && username != "담당자" && username != "엠팍제휴팀") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    }
+
+  });
+
+  var next_url = parseInt(page)+30;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 엠팍 한국야구타운
+function kbotown($, key, page, recent_url) {
   var result = [];
   var list = [];
 
