@@ -564,7 +564,7 @@ app.get('/bestiz/:key/:page', function(req, res) {
         "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
       },
   		encoding: null,
-      timeout:2000,
+      timeout:5000,
   	};
 
     // URL 호출부
@@ -708,7 +708,7 @@ var getListData = function(key, page, callback) {
       "Cookie": cookie,
     },
 		encoding: null,
-    timeout:2000,
+    timeout:5000,
 	};
 
   // URL 호출부
