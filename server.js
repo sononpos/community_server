@@ -676,6 +676,60 @@ app.get('/:key/:page', function(req, res) {
   }
 });
 
+// 광고여부 체크
+app.get('/check_ad', function(req, res) {
+  var ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+  if (ipaddr && ipaddr.startsWith("::ffff:")) {
+    ipaddr = ipaddr.replace("::ffff:", "");
+  }
+
+  var url = "http://whois.kisa.or.kr/openapi/ipascc.jsp?query="+ipaddr+"&key=2017120116222166628759&answer=json"
+
+  var requestOptions  = {
+    method: "GET"
+    ,uri: url
+    ,headers: {
+      "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+    }
+    ,encoding: null
+  };
+
+  // URL 호출부
+  request(requestOptions, function(error, response, body) {
+
+    var ad_result = [];
+    var ret = -1;
+    var access = "N";
+
+    try {
+      if (error) {
+        console.log(err);
+        ad_result.push({ret:ret, access:access});
+        res.send(ad_result);
+      }
+
+      var strContents = new Buffer(body);
+      var result_json = JSON.parse(strContents.toString());
+      var countryCode = result_json.whois.countryCode.toUpperCase();
+
+      if(countryCode == "KR") {
+        ret = 1;
+        access = "Y";
+      }
+
+      ad_result.push({ret:ret, access:access});
+      res.send(ad_result);
+
+    } catch(err) {
+      console.log(err);
+      ad_result.push({ret:ret, access:access});
+      res.send(ad_result);
+    }
+
+  });
+});
+
 var getListData = function(key, page, callback) {
 
   // 호출할 커뮤니티 URL
@@ -696,7 +750,7 @@ var getListData = function(key, page, callback) {
     user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36";
     url = community[key].site_url + (page-1);
     cookie = "hour=9; _ga=GA1.2.2127292808.1489202866; _gat=1; comm=CLN%2CTHR%2CSLR%2CPMP%2CC82%2CMLB%2CBDM%2CRLW%2CHUV%2CDNZ%2CPKZ%2CITZ%2CYGS%2CIVN%2CDCS%2CDGD%2CTQO%2CEXM%2CDPR%2CDBD%2CSCC%2CFMK";
-} else if(key == "dcinside" || key == "dcinsidehit" || bobaedream) {
+} else if(key == "dcinside" || key == "dcinsidehit" || key == "bobaedream") {
     user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36";
 }
 
@@ -754,6 +808,7 @@ function nodame($, key, page, recent_url) {
 
   var noda_split1 = all_text.split("\"title\": \"");
 
+
   // 0번째 말고 1번째부터로 하자
   for(var i=1; i<noda_split1.length; i++) {
       var noda_title = noda_split1[i].split("\",")[0];
@@ -779,9 +834,10 @@ function nodame($, key, page, recent_url) {
   nameList['todayhumorBOB'] = {"name":"오유","color":"#0489B1"};
 
 
+
   for(key in json_data) {
     var title = "[" + nameList[json_data[key].siteDomain].name + "] " + json_data[key].title;
-    var link = json_data[key].address;
+	var link = json_data[key].address;
     var username = json_data[key].writer;
 
     if(username.indexOf("hongboInfo") > -1) {
