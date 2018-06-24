@@ -6,7 +6,7 @@ var morgan = require('morgan')
 
 var app = express();
 
-//app.use(morgan('combined'))
+//app.use(morgan('combined'));
 app.use('/static', express.static('public'));
 
 app.listen(process.env.PORT || 3000, function () {
@@ -22,6 +22,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  /*
   beobe : {
     name : "베오베(종합)",
     site_url : "http://beobe.us/",
@@ -30,7 +31,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  /*
+
   dailybest : {
     name : "데일리베스트(종합)",
     site_url : "http://best.mingoon.com/best/?offset=",
@@ -39,7 +40,6 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  */
   clien : {
     name : "클리앙(모두의공원)",
     site_url : "https://www.clien.net/service/board/park?&od=T31",
@@ -56,6 +56,7 @@ var community = {
     iphone_view : "app",
     android_view : "web",
   },
+  */
   ruliweb : {
     name : "루리웹(NOW)",
     site_url : "http://bbs.ruliweb.com/best",
@@ -147,8 +148,8 @@ var community = {
   },
   */
   bestizjd : {
-    name : "베스티즈(게천잡담)",
-    site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=bestgj",
+    name : "베스티즈(직딩)",
+    site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=jding",
     page_param : "&page=",
     encoding : "EUC-KR",
     iphone_view : "web",
@@ -306,6 +307,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  /*
   theqoobest : {
     name : "더쿠(베스트)",
     site_url : "http://theqoo.net/index.php?mid=tbest&filter_mode=normal",
@@ -314,6 +316,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  */
   dvdprime : {
     name : "DVD프라임(프라임차한잔)",
     site_url : "https://dvdprime.com/g2/bbs/board.php?bo_table=comm",
@@ -676,8 +679,9 @@ app.get('/:key/:page', function(req, res) {
   }
 });
 
-// 광고여부 체크
+// 아이폰 뷰
 app.get('/check_ad', function(req, res) {
+
   var ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
   if (ipaddr && ipaddr.startsWith("::ffff:")) {
@@ -728,6 +732,15 @@ app.get('/check_ad', function(req, res) {
     }
 
   });
+});
+
+// 공지사항
+app.get('/notice', function(req, res) {
+    var notice_result = [];
+    notice_result.push({seq:1, st_dt:"2018032311000000", ed_dt:"20180323235959", title:"공지사항1", contents:"이것은 내용이다아아아"})
+    notice_result.push({seq:2, st_dt:"2018032311000000", ed_dt:"20180323235959", title:"공지사항2222", contents:"<img src='http://s.nx.com/s2/game/mabinogi/mabiweb/homepage/images/main/advanced_item05_01.png'>"})
+
+    res.send(notice_result);
 });
 
 var getListData = function(key, page, callback) {
@@ -1371,7 +1384,7 @@ function bestizjd($, key, page, recent_url) {
     var link = $(this).find("td").eq(1).find("a").attr("href");
     var id = getParameterByName("id", link);
     var no = getParameterByName("no", link);
-    link =  "http://www.4seasonpension.com:3000/static/bestiz_view.html?ser="+ser+"&id="+id+"&no="+no;
+    link =  "http://4seasonpension.com:3000/static/bestiz_view.html?ser="+ser+"&id="+id+"&no="+no;
 
     var username = $(this).find("td").eq(2).find("span").text().trim();
     var regdate = $(this).find("td").eq(3).find("span").text().trim();
@@ -1410,7 +1423,7 @@ function bestiz($, key, page, recent_url) {
     var link = $(this).find("td").eq(1).find("a").attr("href");
     var id = getParameterByName("id", link);
     var no = getParameterByName("no", link);
-    link =  "http://www.4seasonpension.com:3000/static/bestiz_view.html?ser="+ser+"&id="+id+"&no="+no;
+    link =  "http://4seasonpension.com:3000/static/bestiz_view.html?ser="+ser+"&id="+id+"&no="+no;
 
     var username = $(this).find("td").eq(2).find("span").text().trim();
     var regdate = $(this).find("td").eq(3).find("span").text().trim();
