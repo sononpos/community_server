@@ -31,7 +31,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-
+  
   dailybest : {
     name : "데일리베스트(종합)",
     site_url : "http://best.mingoon.com/best/?offset=",
