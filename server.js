@@ -7,6 +7,9 @@ var morgan = require('morgan')
 var app = express();
 
 //app.use(morgan('combined'));
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 app.use('/static', express.static('public'));
 
 app.listen(process.env.PORT || 3000, function () {
@@ -215,7 +218,7 @@ var community = {
   },
   pann : {
     name : "네이트판(실시간)",
-    site_url : "http://m.pann.nate.com/talk/talker",
+    site_url : "https://m.pann.nate.com/talk/talker",
     page_param : "&page=",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -223,7 +226,7 @@ var community = {
   },
   pannbest : {
     name : "네이트판(BEST)",
-    site_url : "http://m.pann.nate.com/talk/talker?order=REC",
+    site_url : "https://m.pann.nate.com/talk/talker?order=REC",
     page_param : "&page=",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -239,7 +242,7 @@ var community = {
   },
   dcinsidehit : {
     name : "디씨(HIT)",
-    site_url : "http://m.dcinside.com/list.php?id=hit",
+    site_url : "http://m.dcinside.com/board/hit",
     page_param : "&page=",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -679,59 +682,72 @@ app.get('/:key/:page', function(req, res) {
   }
 });
 
-// 아이폰 뷰
+// 광고 체크
 app.get('/check_ad', function(req, res) {
+	
+  try {  
+	  
+	  
+	  var ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-  var ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+	  if (ipaddr && ipaddr.startsWith("::ffff:")) {
+		ipaddr = ipaddr.replace("::ffff:", "");
+	  }
 
-  if (ipaddr && ipaddr.startsWith("::ffff:")) {
-    ipaddr = ipaddr.replace("::ffff:", "");
+	  var url = "http://whois.kisa.or.kr/openapi/ipascc.jsp?query="+ipaddr+"&key=2017120116222166628759&answer=json"
+
+	  var requestOptions  = {
+		method: "GET"
+		,uri: url
+		,headers: {
+		  "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+		}
+		,encoding: null
+	  };
+
+	  // URL 호출부
+	  request(requestOptions, function(error, response, body) {
+
+		var ad_result = [];
+		var ret = -1;
+		var access = "N";
+
+		try {
+		  if (error) {
+			console.log(err);
+			ad_result.push({ret:ret, access:access});
+			res.send(ad_result);
+		  }
+
+		  var strContents = new Buffer(body);
+		  var result_json = JSON.parse(strContents.toString());
+		  var countryCode = result_json.whois.countryCode.toUpperCase();
+
+		  if(countryCode == "KR") {
+			ret = 1;
+			access = "Y";
+		  }
+
+		  ad_result.push({ret:ret, access:access});
+		  res.send(ad_result);
+
+		} catch(err) {
+		  console.log(err);
+		  ad_result.push({ret:ret, access:access});
+		  res.send(ad_result);
+		}
+
+	  });
+  } catch(ex) {
+	  var ad_result = [];
+	  var ret = -1;
+	  var access = "N";
+	  
+	  ad_result.push({ret:ret, access:access});
+	  res.send(ad_result);
   }
 
-  var url = "http://whois.kisa.or.kr/openapi/ipascc.jsp?query="+ipaddr+"&key=2017120116222166628759&answer=json"
-
-  var requestOptions  = {
-    method: "GET"
-    ,uri: url
-    ,headers: {
-      "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
-    }
-    ,encoding: null
-  };
-
-  // URL 호출부
-  request(requestOptions, function(error, response, body) {
-
-    var ad_result = [];
-    var ret = -1;
-    var access = "N";
-
-    try {
-      if (error) {
-        console.log(err);
-        ad_result.push({ret:ret, access:access});
-        res.send(ad_result);
-      }
-
-      var strContents = new Buffer(body);
-      var result_json = JSON.parse(strContents.toString());
-      var countryCode = result_json.whois.countryCode.toUpperCase();
-
-      if(countryCode == "KR") {
-        ret = 1;
-        access = "Y";
-      }
-
-      ad_result.push({ret:ret, access:access});
-      res.send(ad_result);
-
-    } catch(err) {
-      console.log(err);
-      ad_result.push({ret:ret, access:access});
-      res.send(ad_result);
-    }
-
-  });
+  
 });
 
 // 공지사항
@@ -1342,7 +1358,7 @@ function rgr($, key, page, recent_url) {
 function rgrrare($, key, page, recent_url) {
   var result = [];
   var list = [];
-console.log($.html());
+  //console.log($.html());
   $("#revolution_main_table tr").each(function(i) {
 
     var title = $(this).find(".title a").text().trim();
@@ -1701,22 +1717,23 @@ function dcinside($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  $(".article_list li").each(function(i) {
+  $(".gall-detail-lst li .gall-detail-lnktb").each(function(i) {
 
-      var title = $(this).find(".title .txt").eq(0).text().trim();
-      var link = $(this).find("span a").eq(0).attr("href");
-      var username = $(this).find(".info span").eq(0).text().trim();
-      var regdate = $(this).find(".info span").eq(2).text().trim();
-      var viewcnt = $(this).find(".info span").eq(4).text().trim();
-      var commentcnt = $(this).find(".title .txt_num").text().trim();
-      commentcnt = commentcnt.replace("[", "");
-      commentcnt = commentcnt.replace("]", "");
-      viewcnt = viewcnt.replace("조회", "");
+    var title = $(this).find(".subject .detail-txt").text().trim();
+    var link = $(this).find("a").eq(0).attr("href");
+    var username = $(this).find(".ginfo li").eq(0).text().trim();
+    var regdate = $(this).find(".ginfo li").eq(1).text().trim();
+    var viewcnt = $(this).find(".ginfo li").eq(2).text().trim();
+    var commentcnt = $(this).find(".ct").text().trim();
+    commentcnt = commentcnt.replace("[", "");
+    commentcnt = commentcnt.replace("]", "");
+    viewcnt = viewcnt.replace("조회", "");
 
-      if(title != "") {
-        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
-      }
-  });
+    if(title != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    }
+});
+
 
   var next_url = parseInt(page)+1;
 
@@ -1730,14 +1747,14 @@ function dcinsidehit($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  $(".article_list li").each(function(i) {
+  $(".gall-detail-lst li .gall-detail-lnktb").each(function(i) {
 
-      var title = $(this).find(".title .txt").eq(0).text().trim();
-      var link = $(this).find("span a").eq(0).attr("href");
-      var username = $(this).find(".info span").eq(0).text().trim();
-      var regdate = $(this).find(".info span").eq(2).text().trim();
-      var viewcnt = $(this).find(".info span").eq(4).text().trim();
-      var commentcnt = $(this).find(".title .txt_num").text().trim();
+      var title = $(this).find(".subject .detail-txt").text().trim();
+      var link = $(this).find("a").eq(0).attr("href");
+      var username = $(this).find(".ginfo li").eq(0).text().trim();
+      var regdate = $(this).find(".ginfo li").eq(1).text().trim();
+      var viewcnt = $(this).find(".ginfo li").eq(2).text().trim();
+      var commentcnt = $(this).find(".ct").text().trim();
       commentcnt = commentcnt.replace("[", "");
       commentcnt = commentcnt.replace("]", "");
       viewcnt = viewcnt.replace("조회", "");
@@ -2114,17 +2131,20 @@ function dogdripuser($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  $(".lt li").each(function(i) {
+  $(".ed table tr").each(function(i) {
+
+	  //console.log($(this).text());
+
     var notice = $(this).find(".notice").text().trim();
 
     if(notice != "공지") {
-      var title = $(this).find(".title").text().trim();
+      var title = $(this).find(".title span").eq(0).text().trim();
       var link = $(this).find("a").attr("href");
       var username = $(this).find("span[class^=member_]").text().trim();
 
       var regdate = $(this).find(".time").eq(0).text().trim();
       var viewcnt = "";
-      var commentcnt = $(this).find(".title em").text().trim();
+      var commentcnt = $(this).find(".title span").eq(1).text().trim();
       title = title.replace(commentcnt, "");
       commentcnt = commentcnt.replace("[", "");
       commentcnt = commentcnt.replace("]", "");
@@ -2147,17 +2167,18 @@ function dogdrip($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  $(".lt li").each(function(i) {
+  $(".ed table tr").each(function(i) {
+
     var notice = $(this).find(".notice").text().trim();
 
     if(notice != "공지") {
-      var title = $(this).find(".title").text().trim();
+      var title = $(this).find(".title span").eq(0).text().trim();
       var link = $(this).find("a").attr("href");
       var username = $(this).find("span[class^=member_]").text().trim();
 
       var regdate = $(this).find(".time").eq(0).text().trim();
       var viewcnt = "";
-      var commentcnt = $(this).find(".title em").text().trim();
+      var commentcnt = $(this).find(".title span").eq(1).text().trim();
       title = title.replace(commentcnt, "");
       commentcnt = commentcnt.replace("[", "");
       commentcnt = commentcnt.replace("]", "");
