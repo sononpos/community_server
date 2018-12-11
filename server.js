@@ -19,8 +19,16 @@ app.listen(process.env.PORT || 3000, function () {
 var community = {
   nodame : {
     name : "커뮤니티 이슈(종합)",
-    site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=bobaedreamBest2|clienPark|dogdripFree|eightTwoCook15|humorunivPds|mlbparkBullpen|pgr21Humor|ppomppuFreeboard|ruliwebG005|todayhumorBOB&sortKey=read",
+    site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=bobaedreamBest2|eightTwoCook15|humorunivPds|mlbparkBullpen|pgr21Humor|ppomppuFreeboard|ruliwebG005|todayhumorBOB&sortKey=read",
     page_param : "&page=",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  aagag : {
+    name : "AAGAG(종합)",
+    site_url : "https://aagag.com/mirror/",
+    page_param : "?page=",
     encoding : "UTF-8",
     iphone_view : "web",
     android_view : "web",
@@ -28,13 +36,12 @@ var community = {
   /*
   beobe : {
     name : "베오베(종합)",
-    site_url : "http://beobe.us/",
+    site_url : "https://beobe.ai/",
     page_param : "",
     encoding : "UTF-8",
     iphone_view : "web",
     android_view : "web",
   },
-  
   dailybest : {
     name : "데일리베스트(종합)",
     site_url : "http://best.mingoon.com/best/?offset=",
@@ -150,17 +157,25 @@ var community = {
     android_view : "web",
   },
   */
-  bestizjd : {
-    name : "베스티즈(직딩)",
-    site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=jding",
+  bestiz : {
+    name : "베스티즈(게스트천국)",
+    site_url : "http://besthgc.cafe24.com/zboard/zboard.php?id=ghm2b",
     page_param : "&page=",
     encoding : "EUC-KR",
     iphone_view : "web",
     android_view : "web",
   },
-  bestiz : {
-    name : "베스티즈(게스트천국)",
-    site_url : "http://besthgc.cafe24.com/zboard/zboard.php?id=ghm2b",
+  bestizgj : {
+    name : "베스티즈(게천잡담)",
+    site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=bestgj",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  bestizjd : {
+    name : "베스티즈(직딩)",
+    site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=jding",
     page_param : "&page=",
     encoding : "EUC-KR",
     iphone_view : "web",
@@ -336,6 +351,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  /*
   dogdripuser : {
     name : "개드립(최신)",
     site_url : "http://www.dogdrip.net/index.php?mid=userdog&m=1",
@@ -352,6 +368,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  */
   /*
   games : {
     name : "게임",
@@ -607,6 +624,10 @@ app.get('/bestizView/:ser/:id/:no', function(req, res) {
   var ser = req.params.ser;
   var id = req.params.id;
   var no = req.params.no;
+
+  if(id == "bestgj") {
+    ser = "bestjd";
+  }
 
   var url = "http://"+ser+".cafe24.com/zboard/view.php?id="+id+"&no="+no;
 
@@ -886,13 +907,90 @@ function nodame($, key, page, recent_url) {
   return result;
 }
 
+
+// AAGAG
+function aagag($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $("#mList .multi_area tr").each(function() {
+
+	var head = $(this).find(".rank").attr("class").replace("rank bc_", "");
+
+	switch(head) {
+		case "clien":
+			head = "클리앙"
+			break;
+		case "ou":
+			head = "오유"
+			break;
+		case "slrclub":
+			head = "SLR"
+			break;
+		case "ppomppu":
+			head = "뽐뿌"
+			break;
+		case "82cook":
+			head = "82쿡"
+			break;
+		case "mlbpark":
+			head = "엠팍"
+			break;
+		case "bobae":
+			head = "보배"
+			break;
+		case "inven":
+			head = "인벤"
+			break;
+		case "ruli":
+			head = "루리"
+			break;
+		case "humor":
+			head = "웃대"
+			break;
+		case "ddanzi":
+			head = "딴지"
+			break;
+		case "fmkorea":
+			head = "펨코"
+			break;
+		default:
+			head = "유머"
+	}
+
+    var title = "[" + head + "] " + $(this).find(".tarea .title").text().trim();
+    var link = $(this).find(".tarea .title").attr("href");
+
+	link = "https://aagag.com" + link;
+
+    var notice = $(this).find(".list-symph").text().trim();
+
+
+    var username = $(this).find(".nick").text().trim();
+    var regdate = $(this).find(".date").text().trim();
+    var viewcnt = $(this).find(".hit").text().trim();
+    var commentcnt = $(this).find(".cmt").text().trim();
+	commentcnt = commentcnt.replace("(", "").replace(")", "");
+
+    if(title != "" && notice != "공지") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
 // 베오베
 function beobe($, key, page, recent_url) {
   var result = [];
   var list = [];
 
   $(".list-group a").each(function(i) {
-    if(i < 200) {
+    if(i < 50) {
       var all_text = $(this).find(".col-xs-10").text().trim();
       var sub_text = $(this).find(".col-xs-12").eq(0).text().trim();
       var comm_name = $(this).find(".col-xs-12").eq(1).text().trim();
@@ -1459,6 +1557,45 @@ function bestiz($, key, page, recent_url) {
 
   return result;
 }
+
+// 베스티즈 게천잡담
+function bestizgj($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+  var ser;
+  if(key == "bestizgj") {
+    ser = "bestgj";
+  } else {
+    ser = (bestiz_list["key"].site_url).split(".")[0].replace("http://", "");
+  }
+
+  $("tr").each(function(i) {
+
+    var title = $(this).find("td").eq(1).find("a").text().trim();
+    var link = $(this).find("td").eq(1).find("a").attr("href");
+    var id = getParameterByName("id", link);
+    var no = getParameterByName("no", link);
+    link =  "http://4seasonpension.com:3000/static/bestiz_view.html?ser="+ser+"&id="+id+"&no="+no;
+
+    var username = $(this).find("td").eq(2).find("span").text().trim();
+    var regdate = $(this).find("td").eq(3).find("span").text().trim();
+    var viewcnt = $(this).find("td").eq(4).text().trim();
+    var commentcnt = $(this).find(".commentnum").text().trim();
+    commentcnt = commentcnt.replace("[", "");
+    commentcnt = commentcnt.replace("]", "");
+
+    if(title != "" && username != "Best" && username != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
 
 // 웃대 웃긴자료
 function humoruniv($, key, page, recent_url) {
