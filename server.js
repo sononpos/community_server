@@ -173,6 +173,14 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  bestizgm : {
+    name : "베스티즈(게천뮤직)",
+    site_url : "http://bestgm.cafe24.com/zboard/zboard.php?id=gmsb",
+    page_param : "&page=",
+    encoding : "EUC-KR",
+    iphone_view : "web",
+    android_view : "web",
+  },
   bestizjd : {
     name : "베스티즈(직딩)",
     site_url : "http://bestjd.cafe24.com/zboard/zboard.php?id=jding",
@@ -1565,6 +1573,44 @@ function bestizgj($, key, page, recent_url) {
   var ser;
   if(key == "bestizgj") {
     ser = "bestgj";
+  } else {
+    ser = (bestiz_list["key"].site_url).split(".")[0].replace("http://", "");
+  }
+
+  $("tr").each(function(i) {
+
+    var title = $(this).find("td").eq(1).find("a").text().trim();
+    var link = $(this).find("td").eq(1).find("a").attr("href");
+    var id = getParameterByName("id", link);
+    var no = getParameterByName("no", link);
+    link =  "http://4seasonpension.com:3000/static/bestiz_view.html?ser="+ser+"&id="+id+"&no="+no;
+
+    var username = $(this).find("td").eq(2).find("span").text().trim();
+    var regdate = $(this).find("td").eq(3).find("span").text().trim();
+    var viewcnt = $(this).find("td").eq(4).text().trim();
+    var commentcnt = $(this).find(".commentnum").text().trim();
+    commentcnt = commentcnt.replace("[", "");
+    commentcnt = commentcnt.replace("]", "");
+
+    if(title != "" && username != "Best" && username != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// 베스티즈 게천잡담
+function bestizgm($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+  var ser;
+  if(key == "bestizgm") {
+    ser = "bestgm";
   } else {
     ser = (bestiz_list["key"].site_url).split(".")[0].replace("http://", "");
   }
