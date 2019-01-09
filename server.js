@@ -19,7 +19,7 @@ app.listen(process.env.PORT || 3000, function () {
 var community = {
   nodame : {
     name : "커뮤니티 이슈(종합)",
-    site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=bobaedreamBest2|eightTwoCook15|humorunivPds|mlbparkBullpen|pgr21Humor|ppomppuFreeboard|ruliwebG005|todayhumorBOB&sortKey=read",
+    site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=bobaedreamBest2|clienPark|eightTwoCook15|humorunivPds|mlbparkBullpen|pgr21Humor|ppomppuFreeboard|ruliwebG005|todayhumorBOB&sortKey=read",
     page_param : "&page=",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -29,6 +29,22 @@ var community = {
     name : "AAGAG(종합)",
     site_url : "https://aagag.com/mirror/",
     page_param : "?page=",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  nodame_clien : {
+    name : "클리앙",
+    site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=clienPark&sortKey=read",
+    page_param : "&page=",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  aagag_fmkorea : {
+    name : "펨코",
+    site_url : "https://aagag.com/mirror/?site=fmkorea",
+    page_param : "&page=",
     encoding : "UTF-8",
     iphone_view : "web",
     android_view : "web",
@@ -301,14 +317,15 @@ var community = {
   //   page_param : "&page=",
   //   encoding : "UTF-8",
   // },
-  fmkorea : {
-    name : "펨코(포텐)",
-    site_url : "http://m.fmkorea.com/index.php?mid=best",
-    page_param : "&page=",
-    encoding : "UTF-8",
-    iphone_view : "web",
-    android_view : "web",
-  },
+  
+  // fmkorea : {
+  //   name : "펨코(포텐)",
+  //   site_url : "http://m.fmkorea.com/index.php?mid=best",
+  //   page_param : "&page=",
+  //   encoding : "UTF-8",
+  //   iphone_view : "web",
+  //   android_view : "web",
+  // },
   ddanzi : {
     name : "딴지(최신)",
     site_url : "http://www.ddanzi.com/index.php?mid=free",
@@ -915,6 +932,64 @@ function nodame($, key, page, recent_url) {
   return result;
 }
 
+// 커뮤니티 이슈
+function nodame_clien($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  var all_text = $.text();
+
+  var noda_split1 = all_text.split("\"title\": \"");
+
+
+  // 0번째 말고 1번째부터로 하자
+  for(var i=1; i<noda_split1.length; i++) {
+      var noda_title = noda_split1[i].split("\",")[0];
+
+      noda_title_replace = noda_title.replace( /\"/gi, "");
+      noda_title_replace = noda_title_replace.replace( /\'/gi, "");
+
+      all_text = all_text.replace(noda_title, noda_title_replace);
+  }
+
+  var json_data = eval(all_text);
+
+  var nameList = {};
+  nameList['bobaedreamBest2'] = {"name":"보배","color":"#0066CC"};
+  nameList['clienPark'] = {"name":"클량","color":"#08298A"};
+  nameList['dogdripFree'] = {"name":"갣립","color":"#364277"};
+  nameList['eightTwoCook15'] = {"name":"82쿡","color":"#009900"};
+  nameList['humorunivPds'] = {"name":"웃대","color":"#FE2E64"};
+  nameList['mlbparkBullpen'] = {"name":"엠팍","color":"#FF6600"};
+  nameList['pgr21Humor'] = {"name":"PGR","color":"#C14647"};
+  nameList['ppomppuFreeboard'] = {"name":"뽐뿌","color":"#666677"};
+  nameList['ruliwebG005'] = {"name":"루리","color":"#0101DF"};
+  nameList['todayhumorBOB'] = {"name":"오유","color":"#0489B1"};
+
+
+
+  for(key in json_data) {
+    var title = json_data[key].title;
+	var link = json_data[key].address;
+    var username = json_data[key].writer;
+
+    if(username.indexOf("hongboInfo") > -1) {
+        username = "hotcommunity";
+    }
+    var regdate = json_data[key].time;
+    var viewcnt = json_data[key].read;
+    var commentcnt = json_data[key].replyCount;
+
+    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+  }
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
 
 // AAGAG
 function aagag($, key, page, recent_url) {
@@ -967,6 +1042,82 @@ function aagag($, key, page, recent_url) {
 	}
 
     var title = "[" + head + "] " + $(this).find(".tarea .title").text().trim();
+    var link = $(this).find(".tarea .title").attr("href");
+
+	link = "https://aagag.com" + link;
+
+    var notice = $(this).find(".list-symph").text().trim();
+
+
+    var username = $(this).find(".nick").text().trim();
+    var regdate = $(this).find(".date").text().trim();
+    var viewcnt = $(this).find(".hit").text().trim();
+    var commentcnt = $(this).find(".cmt").text().trim();
+	commentcnt = commentcnt.replace("(", "").replace(")", "");
+
+    if(title != "" && notice != "공지") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+// AAGAG
+function aagag_fmkorea($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $("#mList .multi_area tr").each(function() {
+
+	var head = $(this).find(".rank").attr("class").replace("rank bc_", "");
+
+	switch(head) {
+		case "clien":
+			head = "클리앙"
+			break;
+		case "ou":
+			head = "오유"
+			break;
+		case "slrclub":
+			head = "SLR"
+			break;
+		case "ppomppu":
+			head = "뽐뿌"
+			break;
+		case "82cook":
+			head = "82쿡"
+			break;
+		case "mlbpark":
+			head = "엠팍"
+			break;
+		case "bobae":
+			head = "보배"
+			break;
+		case "inven":
+			head = "인벤"
+			break;
+		case "ruli":
+			head = "루리"
+			break;
+		case "humor":
+			head = "웃대"
+			break;
+		case "ddanzi":
+			head = "딴지"
+			break;
+		case "fmkorea":
+			head = "펨코"
+			break;
+		default:
+			head = "유머"
+	}
+
+    var title = $(this).find(".tarea .title").text().trim();
     var link = $(this).find(".tarea .title").attr("href");
 
 	link = "https://aagag.com" + link;
