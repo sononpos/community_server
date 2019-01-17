@@ -49,6 +49,14 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  namulive : {
+    name : "나무라이브",
+    site_url : "https://namu.live/b/hobby/?mode=board",
+    page_param : "&p=",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
   /*
   beobe : {
     name : "베오베(종합)",
@@ -1132,6 +1140,45 @@ function aagag_fmkorea($, key, page, recent_url) {
 	commentcnt = commentcnt.replace("(", "").replace(")", "");
 
     if(title != "" && notice != "공지") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+function namulive($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".list-table a").each(function(i) {
+
+    var colid = $(this).find(".col-id").text().trim();
+
+    var title = $(this).find(".col-title").text().trim();
+    var commentindex = title.lastIndexOf("[");
+    var commentstr = title.substring(commentindex, title.length);
+
+    title = title.replace(commentstr, "");
+
+
+    var link = $(this).attr("href");
+
+    var notice = $(this).find(".list-symph").text().trim();
+
+    link = "https://namu.live" + link;
+
+    var username = $(this).find(".user-info").text().trim();
+    var regdate = $(this).find(".date").text().trim();
+    var viewcnt = $(this).find(".col-view").text().trim();
+    
+    var commentcnt = commentstr.replace("[", "").replace("]", "");
+
+    if(title != "" && colid != "공지") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
