@@ -25,9 +25,17 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  aagag : {
-    name : "AAGAG(종합)",
-    site_url : "https://aagag.com/mirror/",
+  // aagag : {
+  //   name : "AAGAG(종합)",
+  //   site_url : "https://aagag.com/mirror/",
+  //   page_param : "?page=",
+  //   encoding : "UTF-8",
+  //   iphone_view : "web",
+  //   android_view : "web",
+  // },
+  jamnan_all : {
+    name : "잼난다",
+    site_url : "https://www.jamnanda.com/commbest",
     page_param : "?page=",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -41,14 +49,14 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  aagag_fmkorea : {
-    name : "펨코",
-    site_url : "https://aagag.com/mirror/?site=fmkorea",
-    page_param : "&page=",
-    encoding : "UTF-8",
-    iphone_view : "web",
-    android_view : "web",
-  },
+  // aagag_fmkorea : {
+  //   name : "펨코",
+  //   site_url : "https://aagag.com/mirror/?site=fmkorea",
+  //   page_param : "&page=",
+  //   encoding : "UTF-8",
+  //   iphone_view : "web",
+  //   android_view : "web",
+  // },
   namulive : {
     name : "나무라이브",
     site_url : "https://namu.live/b/hobby/?mode=board",
@@ -1140,6 +1148,32 @@ function aagag_fmkorea($, key, page, recent_url) {
 	commentcnt = commentcnt.replace("(", "").replace(")", "");
 
     if(title != "" && notice != "공지") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+function jamnan_all($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".content table").eq(0).find("tr").each(function() {
+    var head = $(this).find("small").text().trim();
+    var title = "[" + head + "] " + $(this).find("td").eq(2).find("a > div > div").eq(0).text().trim();
+    var link = $(this).find("td").eq(2).find("a").attr("href");
+
+    var username = "잼난다";
+    var regdate = $(this).find(".font-11").text().trim();
+    var viewcnt = $(this).find(".hit").text().trim();
+    var commentcnt = "";
+	
+    if(title != "" && regdate != "") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
