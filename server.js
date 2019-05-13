@@ -33,6 +33,15 @@ var community = {
   //   iphone_view : "web",
   //   android_view : "web",
   // },
+  nodabnet : {
+    name : "노답넷",
+    site_url : "http://nodab.net/data/getContentLists/1/1/20/",
+    page_param : "",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+
   jamnan_all : {
     name : "잼난다",
     site_url : "https://www.jamnanda.com/commbest",
@@ -826,6 +835,9 @@ var getListData = function(key, page, callback) {
   // 호출할 커뮤니티 URL
   if(page == 1) {
     url = community[key].site_url;
+    if(key == "nodabnet") {
+      url = community[key].site_url + "1";
+    }
   } else {
     url = community[key].site_url + community[key].page_param + page;
 
@@ -1151,6 +1163,49 @@ function aagag_fmkorea($, key, page, recent_url) {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+function nodabnet($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  var all_text = $.text();
+
+  var noda_split1 = all_text.split("\"content_subject\": \"");
+
+
+  // 0번째 말고 1번째부터로 하자
+  for(var i=1; i<noda_split1.length; i++) {
+      var noda_title = noda_split1[i].split("\",")[0];
+
+      noda_title_replace = noda_title.replace( /\"/gi, "");
+      noda_title_replace = noda_title_replace.replace( /\'/gi, "");
+
+      all_text = all_text.replace(noda_title, noda_title_replace);
+  }
+
+  var json_data = eval("["+all_text+"]");
+
+  var json_data = json_data[0].contents_list;
+
+  for(key in json_data) {
+
+    var title = json_data[key].content_subject;
+	  var link = "http://nodab.net/freecontent/" + json_data[key].content_id;
+    var username = "노답넷";
+
+    var regdate = json_data[key].content_time;
+    var viewcnt = json_data[key].content_hits;
+    var commentcnt = json_data[key].content_comments;
+
+    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+  }
 
   var next_url = parseInt(page)+1;
 
