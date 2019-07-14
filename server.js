@@ -537,6 +537,18 @@ app.get('/list', function(req, res) {
   res.send(JSON.stringify(comm));
 });
 
+app.get('/list2', function(req, res) {
+  var comm = [];
+
+  var index = 1;
+  for(var data in community) {    
+    comm.push({id:data, name:community[data].name, index:index});
+    index++;
+  }
+    
+  res.json(comm);
+});
+
 // 커뮤니티 리스트 호출
 app.get('/list_iphone', function(req, res) {
 
