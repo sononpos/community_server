@@ -17,6 +17,38 @@ app.listen(process.env.PORT || 3000, function () {
 });
 
 var community = {
+  issuelink : {
+    name : "이슈링크(종합)",
+    site_url : "https://www.issuelink.co.kr/community/listview/all/3/adj/_self/blank/blank/blank/",
+    page_param : "",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  jamnan_all : {
+    name : "잼난다(종합)",
+    site_url : "https://www.jamnanda.com/commbest",
+    page_param : "?page=",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  beobe : {
+    name : "베오베(종합)",
+    site_url : "https://beobe.ai/",
+    page_param : "",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  ssumup : {
+    name : "썸업(종합)",
+    site_url : "https://ssumup.com/api/posts?filter=cl&filter=pp&filter=oh&filter=hu&filter=dz&filter=sl&filter=ml&filter=fm&filter=rw&filter=iv&filter=bd&filter=iz&filter=dq&filter=dc&filter=ck&filter=bz&filter=pk&&sort=count&datetime=12",
+    page_param : "&page=",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
   nodame : {
     name : "커뮤니티 이슈(종합)",
     site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=bobaedreamBest2|clienPark|eightTwoCook15|humorunivPds|mlbparkBullpen|pgr21Humor|ppomppuFreeboard|ruliwebG005|todayhumorBOB&sortKey=read",
@@ -33,6 +65,7 @@ var community = {
   //   iphone_view : "web",
   //   android_view : "web",
   // },
+  
   nodabnet_bhu : {
     name : "노답넷(BHU)",
     site_url : "http://nodab.net/data/getContentLists/1/1/20/",
@@ -49,18 +82,18 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  jamnan_all : {
-    name : "잼난다",
-    site_url : "https://www.jamnanda.com/commbest",
-    page_param : "?page=",
-    encoding : "UTF-8",
-    iphone_view : "web",
-    android_view : "web",
-  },
-  nodame_clien : {
+  // nodame_clien : {
+  //   name : "클리앙",
+  //   site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=clienPark&sortKey=read",
+  //   page_param : "&page=",
+  //   encoding : "UTF-8",
+  //   iphone_view : "web",
+  //   android_view : "web",
+  // },
+  issuelink_clien : {
     name : "클리앙",
-    site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=clienPark&sortKey=read",
-    page_param : "&page=",
+    site_url : "https://www.issuelink.co.kr/community/listview/clien/3/adj/_self/blank/blank/blank/",
+    page_param : "",
     encoding : "UTF-8",
     iphone_view : "web",
     android_view : "web",
@@ -81,15 +114,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  /*
-  beobe : {
-    name : "베오베(종합)",
-    site_url : "https://beobe.ai/",
-    page_param : "",
-    encoding : "UTF-8",
-    iphone_view : "web",
-    android_view : "web",
-  },
+   /*
   dailybest : {
     name : "데일리베스트(종합)",
     site_url : "http://best.mingoon.com/best/?offset=",
@@ -1191,6 +1216,151 @@ function aagag_fmkorea($, key, page, recent_url) {
   return result;
 }
 
+function issuelink($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".ibox-content").find("tr").each(function() {
+    var head = $(this).find(".rank_bg").find("small").text().trim();
+
+    var title = "[" + head + "] " + $(this).find(".first_title").find(".title").find("a").text().trim();
+    var link = $(this).find(".first_title").find(".title").find("a").attr("href");
+
+    var username = $(this).find(".second_etc").find(".nick").text().trim();
+    var regdate = $(this).find(".second_date").find("span").eq(0).text().trim();
+    var viewcnt = $(this).find(".second_etc").find(".hit").text().trim();
+    var commentcnt = $(this).find(".first_title").find(".title").find("a").find("small").text().trim();
+    title = title.replace(commentcnt, "").trim();
+    commentcnt = commentcnt.replace("[", "").replace("]", "");
+	
+    if(title != "" && regdate != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+function issuelink_clien($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".ibox-content").find("tr").each(function() {
+    var head = $(this).find(".rank_bg").find("small").text().trim();
+
+    var title = $(this).find(".first_title").find(".title").find("a").text().trim();
+    var link = $(this).find(".first_title").find(".title").find("a").attr("href");
+
+    var username = $(this).find(".second_etc").find(".nick").text().trim();
+    var regdate = $(this).find(".second_date").find("span").eq(0).text().trim();
+    var viewcnt = $(this).find(".second_etc").find(".hit").text().trim();
+    var commentcnt = $(this).find(".first_title").find(".title").find("a").find("small").text().trim();
+    title = title.replace(commentcnt, "").trim();
+    commentcnt = commentcnt.replace("[", "").replace("]", "");
+	
+    if(title != "" && regdate != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+function ssumup($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  var all_text = $.text();
+  var json_data = JSON.parse(all_text);
+
+  json_data = json_data.data.posts;
+
+  for(key in json_data) {
+    var site = json_data[key].site;
+    var sitename = "";
+    
+    switch(site) {
+      case "pk" : 
+        sitename = "파코즈"
+        break;
+      case "bz" : 
+        sitename = "베스티즈"
+        break;
+      case "ck" : 
+        sitename = "82쿡"
+        break;
+      case "dc" : 
+        sitename = "디씨"
+        break;
+      case "dq" : 
+        sitename = "더쿠"
+        break;
+      case "iz" : 
+        sitename = "인스티즈"
+        break;
+      case "bd" : 
+        sitename = "보배드림"
+        break;
+      case "iv" : 
+        sitename = "인벤"
+        break;
+      case "rw" : 
+        sitename = "루리웹"
+        break;
+      case "fm" : 
+        sitename = "에펨코리아"
+        break;
+      case "ml" : 
+        sitename = "MLB파크"
+        break;
+      case "sl" : 
+        sitename = "SLR클럽"
+        break;
+      case "dz" : 
+        sitename = "딴지일보"
+        break;
+      case "hu" : 
+        sitename = "웃긴대학"
+        break;
+      case "oh" : 
+        sitename = "오유"
+        break;
+      case "pp" : 
+        sitename = "뽐뿌"
+        break;
+      case "cl" : 
+        sitename = "클리앙"
+        break;
+    }
+
+
+    var title = "[" + sitename + "] " + json_data[key].title;
+	  var link = json_data[key].url;
+    var username = json_data[key].name;
+
+    var regdate = json_data[key].createdAt;
+    regdate = regdate.replace("T", " ").replace(".000Z", "");
+    var viewcnt = json_data[key].hit;
+    var commentcnt = json_data[key].reply;
+
+    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+  }
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
 function nodabnet_bhu($, key, page, recent_url) {
   var result = [];
   var list = [];
@@ -1347,27 +1517,29 @@ function beobe($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  $(".list-group a").each(function(i) {
-    if(i < 50) {
-      var all_text = $(this).find(".col-xs-10").text().trim();
-      var sub_text = $(this).find(".col-xs-12").eq(0).text().trim();
-      var comm_name = $(this).find(".col-xs-12").eq(1).text().trim();
+  $("li.item").each(function(i) {
+    
+    var all_text = $(this).find("a").text().trim();
+    var sub_text = $(this).find("a").find("p").text().trim();
 
-      var title = "[" + comm_name + "] " + all_text.replace(sub_text, "");
-      var link = $(this).attr("href");
-      link = getParameterByName("href", link);
+    var title = all_text.replace(sub_text, "").replace("\n").replace("undefined", "").trim();
+    var comm_name = sub_text.split("·")[0].trim();
 
-      var username = "베오베";
-      var regdate = sub_text.split(",")[0] + " " + sub_text.split(",")[1];
-      var viewcnt = $(this).find(".text-right small").text().trim();
-      var commentcnt = sub_text.split(",")[2] + "";
-      commentcnt = commentcnt.replace(" 댓글:", "");
+    title = "[" + comm_name + "] " + title;
+    
+    var link = $(this).find("a").attr("href");
+    
+    var username = "베오베";
+    var regdate = sub_text.split("·")[2].trim();
 
-
-      if(title != "" && username != "" && comm_name != "") {
-        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
-      }
+    var viewcmt = sub_text.split("·")[1].trim();
+    var viewcnt = viewcmt.split("  ")[0].trim();
+    var commentcnt = viewcmt.split("  ")[1].replace("(", "").replace(")", "").trim();
+    
+    if(title != "" && username != "" && comm_name != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
+  
   });
 
   var next_url = parseInt(page)+1;
