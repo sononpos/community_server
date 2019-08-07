@@ -82,22 +82,22 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  // nodame_clien : {
-  //   name : "클리앙",
-  //   site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=clienPark&sortKey=read",
-  //   page_param : "&page=",
-  //   encoding : "UTF-8",
-  //   iphone_view : "web",
-  //   android_view : "web",
-  // },
-  issuelink_clien : {
+  nodame_clien : {
     name : "클리앙",
-    site_url : "https://www.issuelink.co.kr/community/listview/clien/3/adj/_self/blank/blank/blank/",
-    page_param : "",
+    site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=clienPark&sortKey=read",
+    page_param : "&page=",
     encoding : "UTF-8",
     iphone_view : "web",
     android_view : "web",
   },
+  // issuelink_clien : {
+  //   name : "클리앙",
+  //   site_url : "https://www.issuelink.co.kr/community/listview/clien/3/adj/_self/blank/blank/blank/",
+  //   page_param : "",
+  //   encoding : "UTF-8",
+  //   iphone_view : "web",
+  //   android_view : "web",
+  // },
   // aagag_fmkorea : {
   //   name : "펨코",
   //   site_url : "https://aagag.com/mirror/?site=fmkorea",
@@ -206,7 +206,7 @@ var community = {
   },
   bobaedream : {
     name : "보배드림",
-    site_url : "http://m.bobaedream.co.kr/board/new_writing/best",
+    site_url : "https://m.bobaedream.co.kr/board/new_writing/best",
     page_param : "/",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -985,7 +985,7 @@ function nodame($, key, page, recent_url) {
 
   for(key in json_data) {
     var title = "[" + nameList[json_data[key].siteDomain].name + "] " + json_data[key].title;
-	var link = json_data[key].address;
+    var link = json_data[key].address;
     var username = json_data[key].writer;
 
     if(username.indexOf("hongboInfo") > -1) {
@@ -994,6 +994,9 @@ function nodame($, key, page, recent_url) {
     var regdate = json_data[key].time;
     var viewcnt = json_data[key].read;
     var commentcnt = json_data[key].replyCount;
+
+    link = link.replace("http://www.bobaedream.co.kr//view?code=best&No=", "https://m.bobaedream.co.kr/board/bbs_view/best/");
+    link = link.replace("&vdate=", "");
 
     list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
   }
@@ -1351,6 +1354,15 @@ function ssumup($, key, page, recent_url) {
     var viewcnt = json_data[key].hit;
     var commentcnt = json_data[key].reply;
 
+    
+    if(link != null) {
+      link = link.replace("http://www.bobaedream.co.kr/view?code=strange&No=", "https://m.bobaedream.co.kr/board/bbs_view/strange/");
+      link = link.replace("&bm=1", "");
+      link = link.replace("http://m.ruliweb.com", "https://m.ruliweb.com");
+      link = link.replace("http://theqoo.net", "https://theqoo.net");
+    }
+    
+
     list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
   }
 
@@ -1460,8 +1472,15 @@ function jamnan_all($, key, page, recent_url) {
     var regdate = $(this).find(".font-11").text().trim();
     var viewcnt = $(this).find(".hit").text().trim();
     var commentcnt = "";
+
 	
     if(title != "" && regdate != "") {
+      link = link.replace("http://pann.nate.com", "https://m.pann.nate.com");
+      link = link.replace("http://www.bobaedream.co.kr/view?code=strange&No=", "https://m.bobaedream.co.kr/board/bbs_view/strange/");
+      link = link.replace("&bm=1", "");
+
+      
+
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
@@ -1678,7 +1697,7 @@ function ruliweb($, key, page, recent_url) {
 
     var title = $(this).find(".subject a").text().trim();
     var link = $(this).find(".subject a").attr("href").trim();
-    link = link.replace("http://bbs.ruliweb.com/", "http://m.ruliweb.com/");
+    link = link.replace("http://bbs.ruliweb.com/", "https://m.ruliweb.com/");
     var username = $(this).find(".writer").text().trim();
     var regdate = $(this).find(".time").text().trim();
     var viewcnt = $(this).find(".hit").text().trim();
@@ -1705,7 +1724,7 @@ function ruliwebhit($, key, page, recent_url) {
 
     var title = $(this).find(".subject a").text().trim();
     var link = $(this).find(".subject a").attr("href").trim();
-    link = link.replace("http://bbs.ruliweb.com/", "http://m.ruliweb.com/");
+    link = link.replace("http://bbs.ruliweb.com/", "https://m.ruliweb.com/");
     var username = $(this).find(".writer").text().trim();
     var regdate = $(this).find(".time").text().trim();
     var viewcnt = $(this).find(".hit").text().trim();
@@ -1933,7 +1952,7 @@ function bobaedream($, key, page, recent_url) {
 
     var title = $(this).find(".txt .cont").text().trim();
     var link = $(this).find(".info a").attr("href");
-    link =  "http://m.bobaedream.co.kr" + link;
+    link =  "https://m.bobaedream.co.kr" + link;
 
     var username = $(this).find(".txt2 span").eq(0).text().trim();
     var regdate = $(this).find(".txt2 span").eq(1).text().trim();
@@ -2366,7 +2385,7 @@ function pann($, key, page, recent_url) {
 
     var title = $(this).find("span.tit").text().trim();
     var link = $(this).find("a").attr("href");
-    link = "http://m.pann.nate.com" + link;
+    link = "https://m.pann.nate.com" + link;
 
     var username = ""; //$(this).find(".nick").text().trim();
     var regdate = ""; //$(this).attr("data-sort-date");
@@ -2396,7 +2415,7 @@ function pannbest($, key, page, recent_url) {
 
     var title = $(this).find("span.tit").text().trim();
     var link = $(this).find("a").attr("href");
-    link = "http://m.pann.nate.com" + link;
+    link = "https://m.pann.nate.com" + link;
 
     var username = ""; //$(this).find(".nick").text().trim();
     var regdate = ""; //$(this).attr("data-sort-date");
@@ -2715,7 +2734,7 @@ function theqoosquare($, key, page, recent_url) {
       var title = $(this).find(".title a").eq(0).text().trim();
 
       var link = $(this).find(".title a").eq(0).attr("href");
-      link = "http://theqoo.net" + link;
+      link = "https://theqoo.net" + link;
 
       var username = "";
       var regdate = $(this).find(".time").text().trim();
