@@ -41,6 +41,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  /*
   ssumup : {
     name : "썸업(종합)",
     site_url : "https://ssumup.com/api/posts?filter=cl&filter=pp&filter=oh&filter=hu&filter=dz&filter=sl&filter=ml&filter=fm&filter=rw&filter=iv&filter=bd&filter=iz&filter=dq&filter=dc&filter=ck&filter=bz&filter=pk&&sort=count&datetime=12",
@@ -49,6 +50,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  */
   nodame : {
     name : "커뮤니티 이슈(종합)",
     site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=bobaedreamBest2|clienPark|eightTwoCook15|humorunivPds|mlbparkBullpen|pgr21Humor|ppomppuFreeboard|ruliwebG005|todayhumorBOB&sortKey=read",
