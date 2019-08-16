@@ -2508,7 +2508,7 @@ function instiz($, key, page, recent_url) {
     var link = $(this).find(".listsubject a").eq(0).attr("href");
 
     var id = getParameterByName("no", link);
-    link = "http://www.instiz.net/pt?no=" + id;
+    link = "https://instiz.net/pt?no=" + id;
     var username = $(this).find(".minitext2").text().trim();
     var regdate = $(this).find(".listno").eq(1).text().trim();
     var viewcnt = $(this).find(".listno").eq(2).text().trim();
@@ -2537,7 +2537,7 @@ function instizhot($, key, page, recent_url) {
     var link = $(this).find(".listsubject a").eq(0).attr("href");
 
     var id = getParameterByName("no", link);
-    link = "http://www.instiz.net/pt?id=pt&srt=3&k=&srd=1&no=" + id;
+    link = "https://instiz.net/pt?id=pt&srt=3&k=&srd=1&no=" + id;
     var username = $(this).find(".minitext2").text().trim();
     var regdate = $(this).find(".listno").eq(1).text().trim();
     var viewcnt = $(this).find(".listno").eq(2).text().trim();
