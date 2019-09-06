@@ -2504,18 +2504,24 @@ function instiz($, key, page, recent_url) {
 
   $("tr").each(function(i) {
 
-    var title = $(this).find(".listsubject a").eq(0).text().trim();
-    var link = $(this).find(".listsubject a").eq(0).attr("href");
+    var title_head = $(this).find(".listsubject").text();
+    var tr_id = $(this).attr("id");
 
-    var id = getParameterByName("no", link);
-    link = "https://instiz.net/pt?no=" + id;
-    var username = $(this).find(".minitext2").text().trim();
-    var regdate = $(this).find(".listno").eq(1).text().trim();
-    var viewcnt = $(this).find(".listno").eq(2).text().trim();
-    var commentcnt = $(this).find(".cmt").text().trim();
+    var texthead_notice = $(this).find(".texthead_notice");
 
-    if(title != "" && id != null) {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    if(title_head != "" && tr_id != "topboard" && tr_id != "greenv" && texthead_notice == "") {
+      var title = $(this).find(".listsubject a").eq(0).text().trim();
+      var link = $(this).find(".listsubject a").eq(0).attr("href") + "";
+  
+      link = link.replace("../pt/", "https://www.instiz.net/pt/");
+      var username = $(this).find(".minitext2").text().trim();
+      var regdate = $(this).find(".listno").eq(1).text().trim();
+      var viewcnt = $(this).find(".listno").eq(2).text().trim();
+      var commentcnt = $(this).find(".cmt").eq(0).text().trim();
+
+      if(title != "") {
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+      }
     }
   });
 
@@ -2533,18 +2539,24 @@ function instizhot($, key, page, recent_url) {
 
   $("tr").each(function(i) {
 
-    var title = $(this).find(".listsubject a").eq(0).text().trim();
-    var link = $(this).find(".listsubject a").eq(0).attr("href");
+    var title_head = $(this).find(".listsubject").text();
+    var tr_id = $(this).attr("id");
 
-    var id = getParameterByName("no", link);
-    link = "https://instiz.net/pt?id=pt&srt=3&k=&srd=1&no=" + id;
-    var username = $(this).find(".minitext2").text().trim();
-    var regdate = $(this).find(".listno").eq(1).text().trim();
-    var viewcnt = $(this).find(".listno").eq(2).text().trim();
-    var commentcnt = $(this).find(".cmt").text().trim();
+    var texthead_notice = $(this).find(".texthead_notice");
 
-    if(title != "" && id != null) {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    if(title_head != "" && tr_id != "topboard" && tr_id != "greenv" && texthead_notice == "") {
+      var title = $(this).find(".listsubject a").eq(0).text().trim();
+      var link = $(this).find(".listsubject a").eq(0).attr("href") + "";
+  
+      link = link.replace("../pt/", "https://www.instiz.net/pt/");
+      var username = $(this).find(".minitext2").text().trim();
+      var regdate = $(this).find(".listno").eq(1).text().trim();
+      var viewcnt = $(this).find(".listno").eq(2).text().trim();
+      var commentcnt = $(this).find(".cmt").eq(0).text().trim();
+
+      if(title != "") {
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+      }
     }
   });
 
