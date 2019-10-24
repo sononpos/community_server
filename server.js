@@ -1699,7 +1699,7 @@ function ruliweb($, key, page, recent_url) {
 
     var title = $(this).find(".subject a").text().trim();
     var link = $(this).find(".subject a").attr("href").trim();
-    link = link.replace("http://bbs.ruliweb.com/", "https://m.ruliweb.com/");
+    link = link.replace("https://bbs.ruliweb.com/", "https://m.ruliweb.com/");
     var username = $(this).find(".writer").text().trim();
     var regdate = $(this).find(".time").text().trim();
     var viewcnt = $(this).find(".hit").text().trim();
@@ -1726,7 +1726,7 @@ function ruliwebhit($, key, page, recent_url) {
 
     var title = $(this).find(".subject a").text().trim();
     var link = $(this).find(".subject a").attr("href").trim();
-    link = link.replace("http://bbs.ruliweb.com/", "https://m.ruliweb.com/");
+    link = link.replace("https://bbs.ruliweb.com/", "https://m.ruliweb.com/");
     var username = $(this).find(".writer").text().trim();
     var regdate = $(this).find(".time").text().trim();
     var viewcnt = $(this).find(".hit").text().trim();
