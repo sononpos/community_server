@@ -264,6 +264,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  /*
   humoruniv : {
     name : "웃대(최신)",
     site_url : "http://web.humoruniv.com/board/humor/list.html?table=pds",
@@ -280,6 +281,7 @@ var community = {
     iphone_view : "app",
     android_view : "web",
   },
+  */
   /*
   ygosu : {
     name : "와이고수",
@@ -1555,7 +1557,7 @@ function beobe($, key, page, recent_url) {
 
     var viewcmt = sub_text.split("·")[1].trim();
     var viewcnt = viewcmt.split("  ")[0].trim();
-    var commentcnt = viewcmt.split("  ")[1].replace("(", "").replace(")", "").trim();
+    var commentcnt = 0; //viewcmt.split("  ")[1].replace("(", "").replace(")", "").trim();
     
     if(title != "" && username != "" && comm_name != "") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
