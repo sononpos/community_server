@@ -76,6 +76,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  /*
   nodabnet_ggoorr : {
     name : "노답넷(꾸르)",
     site_url : "http://nodab.net/data/getContentLists/4/1/20/",
@@ -84,6 +85,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  */
   nodame_clien : {
     name : "클리앙",
     site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=clienPark&sortKey=read",
@@ -232,6 +234,7 @@ var community = {
     android_view : "web",
   },
   */
+  /*
   bestiz : {
     name : "베스티즈(게스트천국)",
     site_url : "http://besthgc.cafe24.com/zboard/zboard.php?id=ghm2b",
@@ -264,6 +267,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  */
   /*
   humoruniv : {
     name : "웃대(최신)",
