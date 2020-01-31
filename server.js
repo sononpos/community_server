@@ -25,6 +25,22 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  nodabnet_issuegot : {
+    name : "노답넷(이슈갓)",
+    site_url : "http://nodab.net/data/getContentLists/5/1/20/",
+    page_param : "",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  nodabnet_bhu : {
+    name : "노답넷(BHU)",
+    site_url : "http://nodab.net/data/getContentLists/1/1/20/",
+    page_param : "",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
   jamnan_all : {
     name : "잼난다(종합)",
     site_url : "https://www.jamnanda.com/commbest",
@@ -68,14 +84,7 @@ var community = {
   //   android_view : "web",
   // },
   
-  nodabnet_bhu : {
-    name : "노답넷(BHU)",
-    site_url : "http://nodab.net/data/getContentLists/1/1/20/",
-    page_param : "",
-    encoding : "UTF-8",
-    iphone_view : "web",
-    android_view : "web",
-  },
+  
   /*
   nodabnet_ggoorr : {
     name : "노답넷(꾸르)",
@@ -1424,6 +1433,52 @@ function nodabnet_bhu($, key, page, recent_url) {
   return result;
 }
 
+function nodabnet_issuegot($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  var all_text = $.text();
+
+  var noda_split1 = all_text.split("\"content_subject\": \"");
+
+
+  // 0번째 말고 1번째부터로 하자
+  for(var i=1; i<noda_split1.length; i++) {
+      var noda_title = noda_split1[i].split("\",")[0];
+
+      noda_title_replace = noda_title.replace( /\"/gi, "");
+      noda_title_replace = noda_title_replace.replace( /\'/gi, "");
+
+      all_text = all_text.replace(noda_title, noda_title_replace);
+  }
+
+  var json_data = eval("["+all_text+"]");
+
+  var json_data = json_data[0].contents_list;
+
+  for(key in json_data) {
+
+    var title = json_data[key].content_subject;
+	  var link = "http://nodab.net/m/freecontent/" + json_data[key].content_id;
+    var username = "노답넷";
+
+    var regdate = json_data[key].content_time;
+    // var viewcnt = json_data[key].content_hits;
+    // var commentcnt = json_data[key].content_comments;
+
+    var viewcnt = "****";
+    var commentcnt = "****";
+
+    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+  }
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
 function nodabnet_ggoorr($, key, page, recent_url) {
   var result = [];
   var list = [];
@@ -1557,16 +1612,19 @@ function beobe($, key, page, recent_url) {
     var link = $(this).find("a").attr("href");
     
     var username = "베오베";
-    var regdate = sub_text.split("·")[2].trim();
 
-    var viewcmt = sub_text.split("·")[1].trim();
-    var viewcnt = viewcmt.split("  ")[0].trim();
-    var commentcnt = 0; //viewcmt.split("  ")[1].replace("(", "").replace(")", "").trim();
-    
-    if(title != "" && username != "" && comm_name != "") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    var sub_text_split = sub_text.split("·");
+    if(sub_text_split.length == 3) {
+      var regdate = sub_text.split("·")[2].trim();
+
+      var viewcmt = sub_text.split("·")[1].trim();
+      var viewcnt = viewcmt.split("  ")[0].trim();
+      var commentcnt = 0; //viewcmt.split("  ")[1].replace("(", "").replace(")", "").trim();
+      
+      if(title != "" && username != "" && comm_name != "") {
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+      }
     }
-  
   });
 
   var next_url = parseInt(page)+1;
