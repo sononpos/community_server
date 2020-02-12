@@ -915,7 +915,7 @@ var getListData = function(key, page, callback) {
     user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36";
     url = community[key].site_url + (page-1);
     cookie = "hour=9; _ga=GA1.2.2127292808.1489202866; _gat=1; comm=CLN%2CTHR%2CSLR%2CPMP%2CC82%2CMLB%2CBDM%2CRLW%2CHUV%2CDNZ%2CPKZ%2CITZ%2CYGS%2CIVN%2CDCS%2CDGD%2CTQO%2CEXM%2CDPR%2CDBD%2CSCC%2CFMK";
-} else if(key == "dcinside" || key == "dcinsidehit" || key == "bobaedream") {
+} else if(key == "dcinside" || key == "dcinsidehit" || key == "bobaedream" || key == "inven") {
     user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36";
 }
 
@@ -2640,15 +2640,18 @@ function inven($, key, page, recent_url) {
     var title = $(this).find(".title").text().trim();
     var link = $(this).find(".subject").attr("href");
 
-    var id = getParameterByName("l", link);
-    link = "http://m.inven.co.kr/board/powerbbs.php?come_idx=2097&my=chu&l=" + id;
+    //var id = getParameterByName("l", link);
+    //link = "http://m.inven.co.kr/board/powerbbs.php?come_idx=2097&my=chu&l=" + id;
     var username = $(this).find(".writer").text().trim();
     var regdate = $(this).find(".postdate").text().trim();
     var viewcnt = $(this).find(".hit").text().trim();
     viewcnt = viewcnt.replace("조회:", "");
     var commentcnt = $(this).find(".cmtWrapForList").text().trim();
 
-    if(title != "" && id != null) {
+    console.log(title);
+    
+
+    if(title != "") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
@@ -2747,7 +2750,7 @@ function ddanzi($, key, page, recent_url) {
       }
       var regdate = $(this).find(".time").text().trim();
       var viewcnt = $(this).find(".readNum").text().trim();
-      var commentcnt = $(this).find(".replyNum").text().trim();
+      var commentcnt = $(this).find(".talk").text().trim();
       commentcnt = commentcnt.replace("[", "");
       commentcnt = commentcnt.replace("]", "");
 
@@ -2782,7 +2785,7 @@ function ddanzihot($, key, page, recent_url) {
       }
       var regdate = $(this).find(".time").text().trim();
       var viewcnt = $(this).find(".readNum").text().trim();
-      var commentcnt = $(this).find(".replyNum").text().trim();
+      var commentcnt = $(this).find(".talk").text().trim();
       commentcnt = commentcnt.replace("[", "");
       commentcnt = commentcnt.replace("]", "");
 
@@ -2882,7 +2885,7 @@ function dvdprime($, key, page, recent_url) {
     var username = $(this).find(".member").text().trim();
     var regdate = $(this).find(".list_table_dates").text().trim();
     var viewcnt = $(this).find(".list_table_col_hit").text().trim();
-    var commentcnt = $(this).find(".list_comment_num_a").eq(0).text().trim();
+    var commentcnt = $(this).find(".list_comment_em").eq(0).text().trim();
 
     if(title != "") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
@@ -2913,7 +2916,7 @@ function dvdprimehumor($, key, page, recent_url) {
     var username = $(this).find(".member").text().trim();
     var regdate = $(this).find(".list_table_dates").text().trim();
     var viewcnt = $(this).find(".list_table_col_hit").text().trim();
-    var commentcnt = $(this).find(".list_comment_num_a").eq(0).text().trim();
+    var commentcnt = $(this).find(".list_comment_em").eq(0).text().trim();
 
     if(title != "") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
