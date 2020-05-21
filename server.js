@@ -3,6 +3,9 @@ var request = require("request");
 var cheerio = require("cheerio");
 var iconv  = require('iconv-lite');
 var morgan = require('morgan')
+const Entities = require('html-entities').XmlEntities;
+ 
+const entities = new Entities();
 
 var app = express();
 
@@ -27,24 +30,40 @@ var community = {
   },
   nodabnet_issuegot : {
     name : "노답넷(이슈갓)",
-    site_url : "http://nodab.net/data/getContentLists/5/1/20/",
+    site_url : "http://v4boss.info:9999/data/getContentLists/5/1/20/",
     page_param : "",
     encoding : "UTF-8",
     iphone_view : "web",
     android_view : "web",
   },
-  nodabnet_bhu : {
-    name : "노답넷(BHU)",
-    site_url : "http://nodab.net/data/getContentLists/1/1/20/",
-    page_param : "",
-    encoding : "UTF-8",
-    iphone_view : "web",
-    android_view : "web",
-  },
+  // nodabnet_bhu : {
+  //   name : "노답넷(BHU)",
+  //   site_url : "http://v4boss.info:9999/data/getContentLists/1/1/20/",
+  //   page_param : "",
+  //   encoding : "UTF-8",
+  //   iphone_view : "web",
+  //   android_view : "web",
+  // },
   nodabnet_ssumup : {
     name : "노답넷(썸업)",
-    site_url : "http://nodab.net/data/getContentLists/6/1/20/",
+    site_url : "http://v4boss.info:9999/data/getContentLists/6/1/20/",
     page_param : "",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  bhu_best : {
+    name : "엠봉(베스트)",
+    site_url : "http://bhu.co.kr/bbs/best.php?device=mobile",
+    page_param : "&page=",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  bhu_user : {
+    name : "엠봉(유저업)",
+    site_url : "http://bhu.co.kr/bbs/board.php?bo_table=issue&device=mobile",
+    page_param : "&page=",
     encoding : "UTF-8",
     iphone_view : "web",
     android_view : "web",
@@ -96,7 +115,7 @@ var community = {
   /*
   nodabnet_ggoorr : {
     name : "노답넷(꾸르)",
-    site_url : "http://nodab.net/data/getContentLists/4/1/20/",
+    site_url : "http://v4boss.info:9999/data/getContentLists/4/1/20/",
     page_param : "",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -1422,7 +1441,7 @@ function nodabnet_bhu($, key, page, recent_url) {
   for(key in json_data) {
 
     var title = json_data[key].content_subject;
-	  var link = "http://nodab.net/m/freecontent/" + json_data[key].content_id;
+	  var link = "http://v4boss.info:9999/m/freecontent/" + json_data[key].content_id;
     var username = "노답넷";
 
     var regdate = json_data[key].content_time;
@@ -1465,7 +1484,7 @@ function nodabnet_issuegot($, key, page, recent_url) {
   for(key in json_data) {
 
     var title = json_data[key].content_subject;
-	  var link = "http://nodab.net/m/freecontent/" + json_data[key].content_id;
+	  var link = "http://v4boss.info:9999/m/freecontent/" + json_data[key].content_id;
     var username = "노답넷";
 
     var regdate = json_data[key].content_time;
@@ -1511,7 +1530,7 @@ function nodabnet_ssumup($, key, page, recent_url) {
   for(key in json_data) {
 
     var title = json_data[key].content_subject;
-    //var link = "http://nodab.net/m/freecontent/" + json_data[key].content_id;
+    //var link = "http://v4boss.info:9999/m/freecontent/" + json_data[key].content_id;
     var link = json_data[key].content_url;
     var username = "노답넷";
 
@@ -1558,7 +1577,7 @@ function nodabnet_ggoorr($, key, page, recent_url) {
   for(key in json_data) {
 
     var title = json_data[key].content_subject;
-	  var link = "http://nodab.net/m/freecontent/" + json_data[key].content_id;
+	  var link = "http://v4boss.info:9999/m/freecontent/" + json_data[key].content_id;
     var username = "노답넷";
 
     var regdate = json_data[key].content_time;
@@ -1597,6 +1616,68 @@ function jamnan_all($, key, page, recent_url) {
 
       
 
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+function bhu_best($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".tbl_wrap tr").each(function(i) {
+
+    var title = $(this).find("a").text().trim().split("                    ")[0];
+    var link = $(this).find("a").attr("href");
+    link = link.replace("≀", "&wr_");
+
+    var username = $(this).find("div").html().trim().split("&#xA0;&#xA0;&#xA0;&#xA0;")[0];
+    var regdate = $(this).find("div").html().trim().split("&#xA0;&#xA0;&#xA0;&#xA0;")[1];
+
+    username =  entities.decode(username);
+
+    
+    var viewcnt = "";
+    var commentcnt = $(this).find(".cnt_cmt").text().trim();
+
+    if(title != "") {
+      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+    }
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+function bhu_user($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".tbl_wrap tr").each(function(i) {
+
+    var title = $(this).find("a").text().trim().split("                    ")[0];
+    var link = $(this).find("a").attr("href");
+    link = link.replace("≀", "&wr_");
+
+    var username = $(this).find("div").html().trim().split("&#xA0;&#xA0;&#xA0;&#xA0;")[0];
+    var regdate = $(this).find("div").html().trim().split("&#xA0;&#xA0;&#xA0;&#xA0;")[1];
+
+    username =  entities.decode(username);
+
+    
+    var viewcnt = "";
+    var commentcnt = $(this).find(".cnt_cmt").text().trim();
+
+    if(title != "" && username != "운영도우미") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
   });
@@ -2701,7 +2782,7 @@ function inven($, key, page, recent_url) {
     viewcnt = viewcnt.replace("조회:", "");
     var commentcnt = $(this).find(".cmtWrapForList").text().trim();
 
-    console.log(title);
+    //console.log(title);
     
 
     if(title != "") {

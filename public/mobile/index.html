@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html>
 	<head>
+
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-132044008-1"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-132044008-1');
+		</script>
+		
 		<meta charset="utf-8" />
 		<meta name="author" content="" />
 		<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
@@ -87,7 +98,7 @@
 			.more_comm_open a {
 				display:block;
 				height:20px;
-				padding:20px 5px 20px 5px;
+				padding:15px 5px 15px 5px;
 				text-align: center;
 				background-color: #f3f3f3;
 				border:1px solid #fff;
@@ -109,7 +120,7 @@
 			.swiper_off {display:none;}
 			.layer_off {display:none;}
 
-			.more {height:50px; margin:0 auto; vertical-align: middle;padding-top:25px; color:#000;}
+			.more {height:50px; margin:0 auto; vertical-align: middle;padding-top:25px; color:rgb(4, 8, 245);}
 
             #comm_list li {display:block; position: relative; overflow: visible; margin: 0; list-style: none; color:#333; border-bottom: 1px solid #ccc;}
             #comm_list li a {display:block; position:relative; margin:0; text-align: left; padding: 8px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; text-decoration: none;}
@@ -121,7 +132,8 @@
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <script src="js/jquery.mmenu.all.min.js"></script>
-        <script src="js/swiper.min.js"></script>
+		<script src="js/swiper.min.js"></script>
+		<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
 
         <script>
 	        $(document).ready(function() {
@@ -150,9 +162,10 @@
 
 	                //$("#scroll_info").text(scroll_val);
 
-	                if(scroll_val == $(document).height() - $(window).height()) {
-	                    get_menu_list($("#current_key").val(), $("#current_next").val());
-	                }
+					// 자동 더보기
+	                // if(scroll_val == $(document).height() - $(window).height()) {
+	                //     get_menu_list($("#current_key").val(), $("#current_next").val());
+	                // }
 
 	                if(scroll_val > 60) {
 	                    $(".swiper-container").css("position", "fixed");
@@ -162,7 +175,11 @@
 	                    $(".swiper-container").css("position", "relative");
 	                    $(".header").show();
 	                }
-	            });
+				});
+				
+				$("#hotsubject").click(function() {
+					location.href = "/";
+				});
 	        });
         </script>
 
@@ -365,11 +382,12 @@
 	</head>
 	<body id="body_id">
 
-
+		
+		
 		<div id="page">
 			<div class="header">
 				<a href="#menu"><span></span></a>
-				핫 커뮤니티
+				<span id="hotsubject">핫 커뮤니티</span>
 			</div>
 
 			<div class="wrap">
@@ -383,7 +401,9 @@
 						<a href="javascript:openMoreLayer();">▼</a>
 					</div>
 
-			    </div>
+				</div>
+				
+				<ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-qhnuhz7gsdva" data-ad-width="320" data-ad-height="50"></ins> 
 
 				<div class="content">
 					<input id="current_key" type="hidden" name="current_key" />
@@ -393,6 +413,9 @@
 					<ul id="comm_list" data-role="listview" data-inset="true">
 
 					</ul>
+
+					<ins class="kakao_ad_area" style="display:none;" data-ad-unit = "DAN-u82ciuvx66gn" data-ad-width   = "320" data-ad-height  = "50"></ins> 
+
 					<a href="javascript:goMore();"><div class="more">더보기</div></a>
 				</div>
 
@@ -401,6 +424,7 @@
 
 					</ul>
 				</div>
+				
 			</div>
 
 			<nav id="menu"><ul></ul></nav>
