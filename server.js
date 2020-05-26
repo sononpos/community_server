@@ -20,9 +20,20 @@ app.listen(process.env.PORT || 3000, function () {
 });
 
 var community = {
+	
+  /*
   issuelink : {
     name : "이슈링크(종합)",
     site_url : "https://www.issuelink.co.kr/community/listview/all/3/adj/_self/blank/blank/blank/",
+    page_param : "",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  */
+   nodabnet_ssumup : {
+    name : "노답넷(썸업)",
+    site_url : "http://v4boss.info:9999/data/getContentLists/6/1/20/",
     page_param : "",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -44,14 +55,15 @@ var community = {
   //   iphone_view : "web",
   //   android_view : "web",
   // },
-  nodabnet_ssumup : {
-    name : "노답넷(썸업)",
-    site_url : "http://v4boss.info:9999/data/getContentLists/6/1/20/",
-    page_param : "",
-    encoding : "UTF-8",
-    iphone_view : "web",
-    android_view : "web",
-  },
+ 
+  nodame : {
+		name : "커뮤니티 이슈(종합)",
+		site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=bobaedreamBest2|clienPark|eightTwoCook15|humorunivPds|mlbparkBullpen|pgr21Humor|ppomppuFreeboard|ruliwebG005|todayhumorBOB&sortKey=read",
+		page_param : "&page=",
+		encoding : "UTF-8",
+		iphone_view : "web",
+		android_view : "web",
+	},
   bhu_best : {
     name : "엠봉(베스트)",
     site_url : "http://bhu.co.kr/bbs/best.php?device=mobile",
@@ -94,14 +106,7 @@ var community = {
     android_view : "web",
   },
   */
-  nodame : {
-    name : "커뮤니티 이슈(종합)",
-    site_url : "http://noda.me/pyserv.py?mode=article_api&hourWithin=6&bmf=bobaedreamBest2|clienPark|eightTwoCook15|humorunivPds|mlbparkBullpen|pgr21Humor|ppomppuFreeboard|ruliwebG005|todayhumorBOB&sortKey=read",
-    page_param : "&page=",
-    encoding : "UTF-8",
-    iphone_view : "web",
-    android_view : "web",
-  },
+  
   // aagag : {
   //   name : "AAGAG(종합)",
   //   site_url : "https://aagag.com/mirror/",
