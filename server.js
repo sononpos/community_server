@@ -32,8 +32,24 @@ var community = {
   },
   */
    nodabnet_ssumup : {
-    name : "노답넷(썸업)",
+    name : "썸업(종합)",
     site_url : "http://v4boss.info:9999/data/getContentLists/6/1/20/",
+    page_param : "",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  nodabnet_issuelink : {
+    name : "이슈링크(종합)",
+    site_url : "http://v4boss.info:9999/data/getContentLists/7/1/20/",
+    page_param : "",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  nodabnet_aagag : {
+    name : "AAGAG(종합)",
+    site_url : "http://v4boss.info:9999/data/getContentLists/8/1/20/",
     page_param : "",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -106,17 +122,16 @@ var community = {
     android_view : "web",
   },
   */
-  
-  // aagag : {
-  //   name : "AAGAG(종합)",
-  //   site_url : "https://aagag.com/mirror/",
-  //   page_param : "?page=",
-  //   encoding : "UTF-8",
-  //   iphone_view : "web",
-  //   android_view : "web",
-  // },
-  
-  
+  /*
+  aagag : {
+    name : "AAGAG(종합)",
+    site_url : "https://aagag.com/mirror/",
+    page_param : "?page=",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
+  */
   /*
   nodabnet_ggoorr : {
     name : "노답넷(꾸르)",
@@ -201,6 +216,7 @@ var community = {
     iphone_view : "app",
     android_view : "web",
   },
+  /*
   slr : {
     name : "SLR(HOT)",
     site_url : "http://www.slrclub.com/bbs/zboard.php?id=hot_article",
@@ -217,6 +233,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  */
   bullpen : {
     name : "엠팍(불펜)",
     site_url : "http://mlbpark.donga.com/mp/b.php?b=bullpen",
@@ -1119,55 +1136,55 @@ function aagag($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  $("#mList .multi_area tr").each(function() {
+  $("#mList .article").each(function() {
 
-	var head = $(this).find(".rank").attr("class").replace("rank bc_", "");
+    var head = $(this).find(".rank").attr("class").replace("rank bc_", "");
 
-	switch(head) {
-		case "clien":
-			head = "클리앙"
-			break;
-		case "ou":
-			head = "오유"
-			break;
-		case "slrclub":
-			head = "SLR"
-			break;
-		case "ppomppu":
-			head = "뽐뿌"
-			break;
-		case "82cook":
-			head = "82쿡"
-			break;
-		case "mlbpark":
-			head = "엠팍"
-			break;
-		case "bobae":
-			head = "보배"
-			break;
-		case "inven":
-			head = "인벤"
-			break;
-		case "ruli":
-			head = "루리"
-			break;
-		case "humor":
-			head = "웃대"
-			break;
-		case "ddanzi":
-			head = "딴지"
-			break;
-		case "fmkorea":
-			head = "펨코"
-			break;
-		default:
-			head = "유머"
-	}
+    switch(head) {
+      case "clien":
+        head = "클리앙"
+        break;
+      case "ou":
+        head = "오유"
+        break;
+      case "slrclub":
+        head = "SLR"
+        break;
+      case "ppomppu":
+        head = "뽐뿌"
+        break;
+      case "82cook":
+        head = "82쿡"
+        break;
+      case "mlbpark":
+        head = "엠팍"
+        break;
+      case "bobae":
+        head = "보배"
+        break;
+      case "inven":
+        head = "인벤"
+        break;
+      case "ruli":
+        head = "루리"
+        break;
+      case "humor":
+        head = "웃대"
+        break;
+      case "ddanzi":
+        head = "딴지"
+        break;
+      case "fmkorea":
+        head = "펨코"
+        break;
+      default:
+        head = "유머"
+    }
 
-    var title = "[" + head + "] " + $(this).find(".tarea .title").text().trim();
-    var link = $(this).find(".tarea .title").attr("href");
+    var title = "[" + head + "] " + $(this).find(".title").text().trim();
+    var link = $(this).attr("href");
 
-	link = "https://aagag.com" + link;
+	  link = "https://aagag.com" + link;
 
     var notice = $(this).find(".list-symph").text().trim();
 
@@ -1176,7 +1193,10 @@ function aagag($, key, page, recent_url) {
     var regdate = $(this).find(".date").text().trim();
     var viewcnt = $(this).find(".hit").text().trim();
     var commentcnt = $(this).find(".cmt").text().trim();
-	commentcnt = commentcnt.replace("(", "").replace(")", "");
+
+    title = title.replace(commentcnt, "");
+
+	  commentcnt = commentcnt.replace("(", "").replace(")", "");
 
     if(title != "" && notice != "공지") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
@@ -1496,8 +1516,8 @@ function nodabnet_issuegot($, key, page, recent_url) {
     // var viewcnt = json_data[key].content_hits;
     // var commentcnt = json_data[key].content_comments;
 
-    var viewcnt = "****";
-    var commentcnt = "****";
+    var viewcnt = "*";
+    var commentcnt = "*";
 
     list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
   }
@@ -1543,8 +1563,102 @@ function nodabnet_ssumup($, key, page, recent_url) {
     // var viewcnt = json_data[key].content_hits;
     // var commentcnt = json_data[key].content_comments;
 
-    var viewcnt = "****";
-    var commentcnt = "****";
+    var viewcnt = "*";
+    var commentcnt = "*";
+
+    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+  }
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+function nodabnet_issuelink($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  var all_text = $.text();
+
+  var noda_split1 = all_text.split("\"content_subject\": \"");
+
+
+  // 0번째 말고 1번째부터로 하자
+  for(var i=1; i<noda_split1.length; i++) {
+      var noda_title = noda_split1[i].split("\",")[0];
+
+      noda_title_replace = noda_title.replace( /\"/gi, "");
+      noda_title_replace = noda_title_replace.replace( /\'/gi, "");
+
+      all_text = all_text.replace(noda_title, noda_title_replace);
+  }
+
+  var json_data = eval("["+all_text+"]");
+
+  var json_data = json_data[0].contents_list;
+
+  for(key in json_data) {
+
+    var title = json_data[key].content_subject;
+    //var link = "http://v4boss.info:9999/m/freecontent/" + json_data[key].content_id;
+    var link = json_data[key].content_url;
+    var username = json_data[key].content_writer;
+
+    var regdate = json_data[key].content_time;
+    var viewcnt = json_data[key].content_hits;
+    var commentcnt = json_data[key].content_comments;
+
+    // var viewcnt = "*";
+    // var commentcnt = "*";
+
+    list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+  }
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+function nodabnet_aagag($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  var all_text = $.text();
+
+  var noda_split1 = all_text.split("\"content_subject\": \"");
+
+
+  // 0번째 말고 1번째부터로 하자
+  for(var i=1; i<noda_split1.length; i++) {
+      var noda_title = noda_split1[i].split("\",")[0];
+
+      noda_title_replace = noda_title.replace( /\"/gi, "");
+      noda_title_replace = noda_title_replace.replace( /\'/gi, "");
+
+      all_text = all_text.replace(noda_title, noda_title_replace);
+  }
+
+  var json_data = eval("["+all_text+"]");
+
+  var json_data = json_data[0].contents_list;
+
+  for(key in json_data) {
+
+    var title = json_data[key].content_subject;
+    //var link = "http://v4boss.info:9999/m/freecontent/" + json_data[key].content_id;
+    var link = json_data[key].content_url;
+    var username = json_data[key].content_writer;
+
+    var regdate = json_data[key].content_time;
+    var viewcnt = json_data[key].content_hits;
+    var commentcnt = json_data[key].content_comments;
+
+    // var viewcnt = "*";
+    // var commentcnt = "*";
 
     list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
   }
