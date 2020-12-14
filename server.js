@@ -96,6 +96,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  /*
   jamnan_all : {
     name : "잼난다(종합)",
     site_url : "https://www.jamnanda.com/commbest",
@@ -104,7 +105,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  beobe : {
+    beobe : {
     name : "베오베(종합)",
     site_url : "https://beobe.ai/",
     page_param : "",
@@ -112,8 +113,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  /*
-  ssumup : {
+    ssumup : {
     name : "썸업(종합)",
     site_url : "https://ssumup.com/api/posts?filter=cl&filter=pp&filter=oh&filter=hu&filter=dz&filter=sl&filter=ml&filter=fm&filter=rw&filter=iv&filter=bd&filter=iz&filter=dq&filter=dc&filter=ck&filter=bz&filter=pk&&sort=count&datetime=12",
     page_param : "&page=",
@@ -2154,7 +2154,7 @@ function bullpen($, key, page, recent_url) {
     commentcnt = commentcnt.replace("[", "");
     commentcnt = commentcnt.replace("]", "");
 
-    if(title != "" && username != "담당자" && username != "엠팍제휴팀") {
+    if(title != "" && username != "담당자" && username != "엠팍제휴팀" && username != "포인트관리자") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
 
@@ -2186,7 +2186,7 @@ function kbotown($, key, page, recent_url) {
     commentcnt = commentcnt.replace("[", "");
     commentcnt = commentcnt.replace("]", "");
 
-    if(title != "" && username != "담당자" && username != "엠팍제휴팀") {
+    if(title != "" && username != "담당자" && username != "엠팍제휴팀" && username != "포인트관리자") {
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
 
@@ -2993,9 +2993,9 @@ function ddanzi($, key, page, recent_url) {
       var title = $(this).find(".title a").eq(0).text().trim();
       var link = $(this).find(".title a").eq(0).attr("href");
       link = link + "";
-      //var id = getParameterByName("document_srl", link);
-      var id = link.replace("http://www.ddanzi.com/free/", "");
-      link = "http://www.ddanzi.com/index.php?mid=free&document_srl=" + id;
+      // //var id = getParameterByName("document_srl", link);
+      // var id = link.replace("https://www.ddanzi.com/free/", "");
+      // link = "http://www.ddanzi.com/free&document_srl=" + id;
 
       var username = $(this).find(".author").text().trim();
       if(username.length > 8) {
