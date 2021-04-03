@@ -33,7 +33,7 @@ var community = {
   */
    nodabnet_ssumup : {
     name : "썸업(종합)",
-    site_url : "http://v4boss.info:9999/data/getContentLists/6/1/20/",
+    site_url : "http://kingcats.net:9999/data/getContentLists/6/1/20/",
     page_param : "",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -41,7 +41,7 @@ var community = {
   },
   nodabnet_issuelink : {
     name : "이슈링크(종합)",
-    site_url : "http://v4boss.info:9999/data/getContentLists/7/1/20/",
+    site_url : "http://kingcats.net:9999/data/getContentLists/7/1/20/",
     page_param : "",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -50,7 +50,7 @@ var community = {
   /*
   nodabnet_aagag : {
     name : "AAGAG(종합)",
-    site_url : "http://v4boss.info:9999/data/getContentLists/8/1/20/",
+    site_url : "http://kingcats.net:9999/data/getContentLists/8/1/20/",
     page_param : "",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -59,7 +59,7 @@ var community = {
   */
   nodabnet_issuegot : {
     name : "노답넷(이슈갓)",
-    site_url : "http://v4boss.info:9999/data/getContentLists/5/1/20/",
+    site_url : "http://kingcats.net:9999/data/getContentLists/5/1/20/",
     page_param : "",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -67,7 +67,7 @@ var community = {
   },
   // nodabnet_bhu : {
   //   name : "노답넷(BHU)",
-  //   site_url : "http://v4boss.info:9999/data/getContentLists/1/1/20/",
+  //   site_url : "http://kingcats.net:9999/data/getContentLists/1/1/20/",
   //   page_param : "",
   //   encoding : "UTF-8",
   //   iphone_view : "web",
@@ -137,7 +137,7 @@ var community = {
   /*
   nodabnet_ggoorr : {
     name : "노답넷(꾸르)",
-    site_url : "http://v4boss.info:9999/data/getContentLists/4/1/20/",
+    site_url : "http://kingcats.net:9999/data/getContentLists/4/1/20/",
     page_param : "",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -1471,7 +1471,7 @@ function nodabnet_bhu($, key, page, recent_url) {
   for(key in json_data) {
 
     var title = json_data[key].content_subject;
-	  var link = "http://v4boss.info:9999/m/freecontent/" + json_data[key].content_id;
+	  var link = "http://kingcats.net:9999/m/freecontent/" + json_data[key].content_id;
     var username = "노답넷";
 
     var regdate = json_data[key].content_time;
@@ -1514,7 +1514,7 @@ function nodabnet_issuegot($, key, page, recent_url) {
   for(key in json_data) {
 
     var title = json_data[key].content_subject;
-	  var link = "http://v4boss.info:9999/m/freecontent/" + json_data[key].content_id;
+	  var link = "http://kingcats.net:9999/m/freecontent/" + json_data[key].content_id;
     var username = "노답넷";
 
     var regdate = json_data[key].content_time;
@@ -1560,7 +1560,7 @@ function nodabnet_ssumup($, key, page, recent_url) {
   for(key in json_data) {
 
     var title = json_data[key].content_subject;
-    //var link = "http://v4boss.info:9999/m/freecontent/" + json_data[key].content_id;
+    //var link = "http://kingcats.net:9999/m/freecontent/" + json_data[key].content_id;
     var link = json_data[key].content_url;
     var username = "노답넷";
 
@@ -1607,7 +1607,7 @@ function nodabnet_issuelink($, key, page, recent_url) {
   for(key in json_data) {
 
     var title = json_data[key].content_subject;
-    //var link = "http://v4boss.info:9999/m/freecontent/" + json_data[key].content_id;
+    //var link = "http://kingcats.net:9999/m/freecontent/" + json_data[key].content_id;
     var link = json_data[key].content_url;
     var username = json_data[key].content_writer;
 
@@ -1654,7 +1654,7 @@ function nodabnet_aagag($, key, page, recent_url) {
   for(key in json_data) {
 
     var title = json_data[key].content_subject;
-    //var link = "http://v4boss.info:9999/m/freecontent/" + json_data[key].content_id;
+    //var link = "http://kingcats.net:9999/m/freecontent/" + json_data[key].content_id;
     var link = json_data[key].content_url;
     var username = json_data[key].content_writer;
 
@@ -1701,7 +1701,7 @@ function nodabnet_ggoorr($, key, page, recent_url) {
   for(key in json_data) {
 
     var title = json_data[key].content_subject;
-	  var link = "http://v4boss.info:9999/m/freecontent/" + json_data[key].content_id;
+	  var link = "http://kingcats.net:9999/m/freecontent/" + json_data[key].content_id;
     var username = "노답넷";
 
     var regdate = json_data[key].content_time;
