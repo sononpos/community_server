@@ -47,6 +47,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  /*
   nodabnet_aagag : {
     name : "AAGAG(종합)",
     site_url : "http://v4boss.info:9999/data/getContentLists/8/1/20/",
@@ -55,6 +56,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  */
   nodabnet_issuegot : {
     name : "노답넷(이슈갓)",
     site_url : "http://v4boss.info:9999/data/getContentLists/5/1/20/",
@@ -394,9 +396,10 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  /*
   dcinside : {
     name : "디씨(초개념)",
-    site_url : "http://m.dcinside.com/list.php?id=superidea",
+    site_url : "http://m.dcinside.com/board/superidea",
     page_param : "&page=",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -410,6 +413,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  */
   instiz : {
     name : "인스티즈(최신)",
     site_url : "https://www.instiz.net/bbs/list.php?id=pt",
@@ -695,6 +699,7 @@ app.get('/iphone/:key/:linkencoding', function(req, res) {
       "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
     }
     ,encoding: null
+    ,rejectUnauthorized: false
   };
 
   // URL 호출부
@@ -2142,22 +2147,29 @@ function bullpen($, key, page, recent_url) {
 
   $(".tbl_type01 tbody tr").each(function(i) {
 
-    var title = $(this).find("td").eq(1).find("a").attr("title");
-    var link = $(this).find("td").eq(1).find("a").attr("href");
-    var id = getParameterByName("id", link);
-    link =  "http://mlbpark.donga.com/mp/b.php?p=1&b=bullpen&id=" + id;
+    if(!isNaN($(this).find("td").eq(0).text())) {
+      var category = $(this).find("td").eq(1).find("a").eq(0).text();
+      var title = "[" + category + "] " + $(this).find("div").eq(0).find("a").text();
 
-    var username = $(this).find(".nick").text().trim();
-    var regdate = $(this).find(".date").text().trim();
-    var viewcnt = $(this).find(".viewV").text().trim();
-    var commentcnt = $(this).find(".replycnt").text().trim();
-    commentcnt = commentcnt.replace("[", "");
-    commentcnt = commentcnt.replace("]", "");
+      var link = $(this).find("div").eq(0).find("a").attr("href");
+      var id = getParameterByName("id", link);
 
-    if(title != "" && username != "담당자" && username != "엠팍제휴팀" && username != "포인트관리자") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+      console.log(title);
+      console.log(link);
+
+      link =  "http://mlbpark.donga.com/mp/b.php?p=1&b=bullpen&id=" + id;
+
+      var username = $(this).find(".nick").text().trim();
+      var regdate = $(this).find(".date").text().trim();
+      var viewcnt = $(this).find(".viewV").text().trim();
+      var commentcnt = $(this).find(".replycnt").text().trim();
+      commentcnt = commentcnt.replace("[", "");
+      commentcnt = commentcnt.replace("]", "");
+
+      if(title != "" && username != "담당자" && username != "엠팍제휴팀" && username != "포인트관리자") {
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+      }
     }
-
   });
 
   var next_url = parseInt(page)+30;
@@ -2174,20 +2186,28 @@ function kbotown($, key, page, recent_url) {
 
   $(".tbl_type01 tbody tr").each(function(i) {
 
-    var title = $(this).find("td").eq(1).find("a").attr("title");
-    var link = $(this).find("td").eq(1).find("a").attr("href");
-    var id = getParameterByName("id", link);
-    link =  "http://mlbpark.donga.com/mp/b.php?p=1&b=bullpen&id=" + id;
+    if(!isNaN($(this).find("td").eq(0).text())) {
+      var category = $(this).find("td").eq(1).find("a").eq(0).text();
+      var title = "[" + category + "] " + $(this).find("div").eq(0).find("a").text();
 
-    var username = $(this).find(".nick").text().trim();
-    var regdate = $(this).find(".date").text().trim();
-    var viewcnt = $(this).find(".viewV").text().trim();
-    var commentcnt = $(this).find(".replycnt").text().trim();
-    commentcnt = commentcnt.replace("[", "");
-    commentcnt = commentcnt.replace("]", "");
+      var link = $(this).find("div").eq(0).find("a").attr("href");
+      var id = getParameterByName("id", link);
 
-    if(title != "" && username != "담당자" && username != "엠팍제휴팀" && username != "포인트관리자") {
-      list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+      console.log(title);
+      console.log(link);
+
+      link =  "http://mlbpark.donga.com/mp/b.php?p=1&b=bullpen&id=" + id;
+
+      var username = $(this).find(".nick").text().trim();
+      var regdate = $(this).find(".date").text().trim();
+      var viewcnt = $(this).find(".viewV").text().trim();
+      var commentcnt = $(this).find(".replycnt").text().trim();
+      commentcnt = commentcnt.replace("[", "");
+      commentcnt = commentcnt.replace("]", "");
+
+      if(title != "" && username != "담당자" && username != "엠팍제휴팀" && username != "포인트관리자") {
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+      }
     }
 
   });
