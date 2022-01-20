@@ -7,16 +7,11 @@ const Entities = require('html-entities').XmlEntities;
  
 const entities = new Entities();
 
-// 노드 캐시
-const NodeCache = require( "node-cache" );
-const myCache = new NodeCache( { stdTTL: 100, checkperiod: 120 } );
-
-
 var app = express();
 
 //app.use(morgan('combined'));
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 app.use('/static', express.static('public'));
 
@@ -26,6 +21,7 @@ app.listen(process.env.PORT || 3000, function () {
 
 var community = {
 	
+  /*
   issuelink : {
     name : "이슈링크(종합)",
     site_url : "https://www.issuelink.co.kr/community/listview/all/3/adj/_self/blank/blank/blank/",
@@ -34,6 +30,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
+  */
   /*
    nodabnet_ssumup : {
     name : "썸업(종합)",
@@ -44,14 +41,14 @@ var community = {
     android_view : "web",
   },
   */
-  // nodabnet_issuelink : {
-  //   name : "이슈링크(종합)",
-  //   site_url : "http://kingcats.net:9999/data/getContentLists/7/1/20/",
-  //   page_param : "",
-  //   encoding : "UTF-8",
-  //   iphone_view : "web",
-  //   android_view : "web",
-  // },
+  nodabnet_issuelink : {
+    name : "이슈링크(종합)",
+    site_url : "http://kingcats.net:9999/data/getContentLists/7/1/20/",
+    page_param : "",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
   /*
   nodabnet_aagag : {
     name : "AAGAG(종합)",
@@ -103,24 +100,23 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  
+  /*
   jamnan_all : {
     name : "잼난다(종합)",
-    site_url : "https://www.jamnanda.com/commbest/",
+    site_url : "https://www.jamnanda.com/commbest",
     page_param : "?page=",
     encoding : "UTF-8",
     iphone_view : "web",
     android_view : "web",
   },
-  // beobe : {
-  //   name : "베오베(종합)",
-  //   site_url : "https://beobe.ai/",
-  //   page_param : "",
-  //   encoding : "UTF-8",
-  //   iphone_view : "web",
-  //   android_view : "web",
-  // },
-  /*
+    beobe : {
+    name : "베오베(종합)",
+    site_url : "https://beobe.ai/",
+    page_param : "",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
     ssumup : {
     name : "썸업(종합)",
     site_url : "https://ssumup.com/api/posts?filter=cl&filter=pp&filter=oh&filter=hu&filter=dz&filter=sl&filter=ml&filter=fm&filter=rw&filter=iv&filter=bd&filter=iz&filter=dq&filter=dc&filter=ck&filter=bz&filter=pk&&sort=count&datetime=12",
@@ -352,8 +348,7 @@ var community = {
     android_view : "web",
   },
   */
-
-  
+  /*
   ygosu : {
     name : "와이고수",
     site_url : "http://www.ygosu.com/community/real_article",
@@ -362,7 +357,7 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  
+  */
   // ppomppu : {
   //   name : "뽐뿌(유머/감동)",
   //   site_url : "http://www.ppomppu.co.kr/zboard/zboard.php?id=humor",
@@ -431,7 +426,7 @@ var community = {
   },
   instizhot : {
     name : "인스티즈(인기)",
-    site_url : "https://www.instiz.net/pt?srt=3&srd=2",
+    site_url : "https://www.instiz.net/bbs/list.php?id=pt&srt=3&k=&srd=1",
     page_param : "&page=",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -439,7 +434,7 @@ var community = {
   },
   inven : {
     name : "인벤",
-    site_url : "https://m.inven.co.kr/board/webzine/2097?my=chu",
+    site_url : "http://m.inven.co.kr/board/powerbbs.php?come_idx=2097&my=chu",
     page_param : "&p=",
     encoding : "UTF-8",
     iphone_view : "web",
@@ -718,7 +713,7 @@ app.get('/iphone/:key/:linkencoding', function(req, res) {
         callback(err);
       }
 
-      var strContents = new Buffer.from(body);
+      var strContents = new Buffer(body);
    	  //console.log(iconv.decode(strContents, community[key].encoding).toString());
 
       //var $ = cheerio.load(iconv.decode(strContents, community[key].encoding).toString());
@@ -769,7 +764,7 @@ app.get('/bestiz/:key/:page', function(req, res) {
           callback(err);
         }
 
-        var strContents = new Buffer.from(body);
+        var strContents = new Buffer(body);
      	  //console.log(iconv.decode(strContents, bestiz_list[key].encoding).toString());
 
         var $ = cheerio.load(iconv.decode(strContents, bestiz_list[key].encoding).toString());
@@ -812,7 +807,7 @@ app.get('/bestizView/:ser/:id/:no', function(req, res) {
 
   request(requestOptions, function(error, response, body) {
     try {
-      var strContents = new Buffer.from(body);
+      var strContents = new Buffer(body);
       var $ = cheerio.load(iconv.decode(strContents, community["bestiz"].encoding).toString());
 
       var html = null;
@@ -837,35 +832,12 @@ app.get('/:key/:page', function(req, res) {
   var page = req.params.page;
 
   try {
-    cache_get_result = myCache.get(key+':'+page);
-    
-    if(cache_get_result && cache_get_result != undefined) {
-      console.log(key+':'+page + ' - ' + 'cache_get_result - true');
-      res.send(cache_get_result);
-    } else {
-      // 보내줄 리스트 데이터
-      getListData(key, page, function(result) {
+    // 보내줄 리스트 데이터
+    getListData(key, page, function(result) {
 
-        //리스트가 없으면 점검중으로 나오게 하자
-        try {
-          if(result[0].list.length == 0) {
-            result = [];
-            list = [];
-
-            for(var i=0; i<20; i++) {
-              list.push({title:"점검중 입니다.", link:"#", username:"관리자", regdate:"", viewcnt:"0", commentcnt:""});
-            }
-            result.push({next_url:"1", list:list});
-            res.send(result);
-          } else {
-            // 이거이 정상
-            // 캐시에 저장해주자
-            cache_set_result = myCache.set(key+':'+page, result, 60 );
-            console.log(key+':'+page + ' - ' + cache_set_result);
-            res.send(result);
-          }
-        } catch(err) {
-
+      //리스트가 없으면 점검중으로 나오게 하자
+      try {
+        if(result[0].list.length == 0) {
           result = [];
           list = [];
 
@@ -874,11 +846,22 @@ app.get('/:key/:page', function(req, res) {
           }
           result.push({next_url:"1", list:list});
           res.send(result);
+        } else {
+          // 이거이 정상
+          res.send(result);
         }
-      });
+      } catch(err) {
 
-    }
-    
+        result = [];
+        list = [];
+
+        for(var i=0; i<20; i++) {
+          list.push({title:"점검중 입니다.", link:"#", username:"관리자", regdate:"", viewcnt:"0", commentcnt:""});
+        }
+        result.push({next_url:"1", list:list});
+        res.send(result);
+      }
+    });
   } catch(err) {
     console.log(err);
     res.end(err);
@@ -922,7 +905,7 @@ app.get('/check_ad', function(req, res) {
 			res.send(ad_result);
 		  }
 
-		  var strContents = new Buffer.from(body);
+		  var strContents = new Buffer(body);
 		  var result_json = JSON.parse(strContents.toString());
 		  var countryCode = result_json.whois.countryCode.toUpperCase();
 
@@ -986,7 +969,7 @@ var getListData = function(key, page, callback) {
     user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36";
     url = community[key].site_url + (page-1);
     cookie = "hour=9; _ga=GA1.2.2127292808.1489202866; _gat=1; comm=CLN%2CTHR%2CSLR%2CPMP%2CC82%2CMLB%2CBDM%2CRLW%2CHUV%2CDNZ%2CPKZ%2CITZ%2CYGS%2CIVN%2CDCS%2CDGD%2CTQO%2CEXM%2CDPR%2CDBD%2CSCC%2CFMK";
-} else if(key == "dcinside" || key == "dcinsidehit" || key == "bobaedream" || key == "inven" || key == "jamnan_all") {
+} else if(key == "dcinside" || key == "dcinsidehit" || key == "bobaedream" || key == "inven") {
     user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36";
 }
 
@@ -1010,7 +993,7 @@ var getListData = function(key, page, callback) {
         callback(err);
       }
 
-      var strContents = new Buffer.from(body);
+      var strContents = new Buffer(body);
    	  //console.log(iconv.decode(strContents, community[key].encoding).toString());
 
       var $ = cheerio.load(iconv.decode(strContents, community[key].encoding).toString());
@@ -1741,21 +1724,23 @@ function jamnan_all($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  $("#kt_content_container").find(".card").each(function() {
-    var title_txt = $(this).find(".contents_link").text().trim();
-    var head = $(this).find(".text-gray-900").text().trim();
-    var title = "[" + head + "] " + title_txt;
-    var link = $(this).find(".contents_link").attr("href");
+  $(".content table").eq(0).find("tr").each(function() {
+    var head = $(this).find("small").text().trim();
+    var title = "[" + head + "] " + $(this).find("td").eq(2).find("a > div > div").eq(0).text().trim();
+    var link = $(this).find("td").eq(2).find("a").attr("href");
 
     var username = "잼난다";
-    var regdate = $(this).find(".text-muted").text().trim();
-    var viewcnt = "";
-    var commentcnt = $(this).find(".bg-light-success").text().trim();
+    var regdate = $(this).find(".font-11").text().trim();
+    var viewcnt = $(this).find(".hit").text().trim();
+    var commentcnt = "";
 
+	
     if(title != "" && regdate != "") {
       link = link.replace("http://pann.nate.com", "https://m.pann.nate.com");
       link = link.replace("http://www.bobaedream.co.kr/view?code=strange&No=", "https://m.bobaedream.co.kr/board/bbs_view/strange/");
       link = link.replace("&bm=1", "");
+
+      
 
       list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
     }
@@ -2609,8 +2594,8 @@ function ygosu($, key, page, recent_url) {
 
     var title = $(this).find(".tit a").text().trim();
     var link = $(this).find(".tit a").attr("href");
-    var category = link.replace("https://ygosu.com/community/real_article/", "").split("/")[0];
-    var id = link.replace("https://ygosu.com/community/real_article/", "").split("/")[1];
+    var category = link.replace("http://www.ygosu.com/community/real_article/", "").split("/")[0];
+    var id = link.replace("http://www.ygosu.com/community/real_article/", "").split("/")[1];
     link = "http://m.ygosu.com/board/?bid="+category+"&idx="+id+"&m3=real_article&frombest=Y&page=";
 
     var username = $(this).find(".name a").text().trim();
@@ -2920,17 +2905,17 @@ function inven($, key, page, recent_url) {
   var result = [];
   var list = [];
 
-  $(".mo-board-list ul li").each(function(i) {
-    var title = $(this).find(".subject").text().trim();
-    var link = $(this).find(".contentLink").attr("href");
+  $("#boardList li").each(function(i) {
+    var title = $(this).find(".title").text().trim();
+    var link = $(this).find(".subject").attr("href");
 
     //var id = getParameterByName("l", link);
     //link = "http://m.inven.co.kr/board/powerbbs.php?come_idx=2097&my=chu&l=" + id;
-    var username = $(this).find(".layerNickName").text().trim();
-    var regdate = $(this).find(".time").text().trim();
-    var viewcnt = $(this).find(".view").text().trim();
-    viewcnt = viewcnt.replace("조회 ", "");
-    var commentcnt = $(this).find(".com-btn .num").text().trim();
+    var username = $(this).find(".writer").text().trim();
+    var regdate = $(this).find(".postdate").text().trim();
+    var viewcnt = $(this).find(".hit").text().trim();
+    viewcnt = viewcnt.replace("조회:", "");
+    var commentcnt = $(this).find(".cmtWrapForList").text().trim();
 
     //console.log(title);
     
