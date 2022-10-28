@@ -121,7 +121,14 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-
+  navool : {
+    name : "쁨나무(종합)",
+    site_url : "http://www.navool.com/index.php?pagination=1",
+    page_param : "&page=",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
   moabbs_univ : {
     name : "웃대",
     site_url : "http://www.moabbs.com/board/cboard?cid=20",
@@ -1817,6 +1824,47 @@ function moabbs($, key, page, recent_url) {
 
   return result;
 }
+
+function navool($, key, page, recent_url) {
+  var result = [];
+  var list = [];
+
+  $(".table-striped").find("tr").each(function() {
+
+    if($(this)[0].attribs.onclick != undefined) {
+      var head = $(this).find("td").eq(1).find("span").eq(0).text().trim();
+      var title_txt = $(this).find("td").eq(1).text().split("[")[0].trim();
+      var title = "[" + head + "] " + title_txt;
+      var link = $(this)[0].attribs.onclick.replace("location.href='", "").replace("\'", "");
+
+      var username = "nodab";
+      var regdate = $(this).find("td").eq(1).find(".badge-info").text().trim();
+      
+      var viewcomment = $(this).find("td").eq(1).find(".badge-light").text();
+
+      var viewcnt = viewcomment.split("|")[0]
+      var commentcnt = viewcomment.split("|")[1]
+      viewcnt = viewcnt.replace("조회수 ", "").trim()
+      commentcnt = commentcnt.replace("추천수 ", "").trim()
+      
+      if(title != "" && regdate != "") {
+        list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+      }
+
+    }
+
+    
+  });
+
+  var next_url = parseInt(page)+1;
+
+  result.push({next_url:next_url, list:list});
+
+  return result;
+}
+
+
+
 
 function moabbs_univ($, key, page, recent_url) {
   var result = [];
