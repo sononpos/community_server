@@ -113,14 +113,14 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  moabbs : {
-    name : "모아봐(종합)",
-    site_url : "http://www.moabbs.com/board/cboard",
-    page_param : "?page=",
-    encoding : "UTF-8",
-    iphone_view : "web",
-    android_view : "web",
-  },
+//   moabbs : {
+//     name : "모아봐(종합)",
+//     site_url : "http://www.moabbs.com/board/cboard",
+//     page_param : "?page=",
+//     encoding : "UTF-8",
+//     iphone_view : "web",
+//     android_view : "web",
+//   },
   navool : {
     name : "쁨나무(종합)",
     site_url : "http://www.navool.com/index.php?pagination=1",
@@ -129,14 +129,14 @@ var community = {
     iphone_view : "web",
     android_view : "web",
   },
-  moabbs_univ : {
-    name : "웃대",
-    site_url : "http://www.moabbs.com/board/cboard?cid=20",
-    page_param : "?page=",
-    encoding : "UTF-8",
-    iphone_view : "web",
-    android_view : "web",
-  },
+//   moabbs_univ : {
+//     name : "웃대",
+//     site_url : "http://www.moabbs.com/board/cboard?cid=20",
+//     page_param : "?page=",
+//     encoding : "UTF-8",
+//     iphone_view : "web",
+//     android_view : "web",
+//   },
 
   // beobe : {
   //   name : "베오베(종합)",
