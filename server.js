@@ -416,14 +416,14 @@ var community = {
   //   iphone_view : "web",
   //   android_view : "web",
   // },
-  bboom : {
-    name : "네이버뿜",
-    site_url : "http://m.bboom.naver.com/best/moreList.json?likeBandNo=&&viewTypeNo=2&length=100&limit=0",
-    page_param : "&page=",
-    encoding : "UTF-8",
-    iphone_view : "web",
-    android_view : "web",
-  },
+//   bboom : {
+//     name : "네이버뿜",
+//     site_url : "http://m.bboom.naver.com/best/moreList.json?likeBandNo=&&viewTypeNo=2&length=100&limit=0",
+//     page_param : "&page=",
+//     encoding : "UTF-8",
+//     iphone_view : "web",
+//     android_view : "web",
+//   },
   pann : {
     name : "네이트판(실시간)",
     site_url : "https://m.pann.nate.com/talk/talker",
