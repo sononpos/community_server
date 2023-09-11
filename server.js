@@ -121,6 +121,14 @@ var community = {
 //     iphone_view : "web",
 //     android_view : "web",
 //   },
+  gorani : {
+    name : "고라니(종합)",
+    site_url : "https://gorani.kr/popular",
+    page_param : "&page=",
+    encoding : "UTF-8",
+    iphone_view : "web",
+    android_view : "web",
+  },
   navool : {
     name : "쁨나무(종합)",
     site_url : "http://www.navool.com/index.php?pagination=1",
@@ -1863,7 +1871,35 @@ function navool($, key, page, recent_url) {
   return result;
 }
 
+function gorani($, key, page, recent_url) {
+    var result = [];
+    var list = [];
+  
+    $(".common_list").find("li").each(function() {
+        var head = $(this).find(".badge").text().trim();
+        var title_txt = $(this).find("a").text().trim();
+        var title = "[" + head + "] " + title_txt;
+        var link = $(this).find("a").attr("href");
 
+        console.log(link);
+  
+        var username = "nodab";
+        var regdate = "";
+        var viewcnt = ""
+        var commentcnt = ""
+        
+        if(title != "") {
+          list.push({title:title, link:link, username:username, regdate:regdate, viewcnt:viewcnt, commentcnt:commentcnt, linkencoding:encodeURIComponent(link)});
+        }
+  
+    });
+  
+    var next_url = parseInt(page)+1;
+  
+    result.push({next_url:next_url, list:list});
+  
+    return result;
+}
 
 
 function moabbs_univ($, key, page, recent_url) {
